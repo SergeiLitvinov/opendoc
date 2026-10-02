@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "opendoc"
+version = "0.1.0"
+description = "Independent document structures, serialization and structural comparison"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+dependencies = []
+
+[project.optional-dependencies]
+math = ["lxml>=5.0.0"]
+dev = ["pytest>=8.0", "ruff>=0.9.0"]
+docs = ["mkdocs>=1.6,<2"]
+
+[tool.ruff]
+line-length = 130
+target-version = "py311"
+exclude = ["build", ".venv", ".opendoc"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "BLE", "ANN"]
+ignore = ["ANN401"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["ANN"]
+"tools/**" = ["ANN"]
+"examples/**" = ["ANN"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+opendoc = ["py.typed"]

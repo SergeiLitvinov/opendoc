@@ -1,0 +1,48 @@
+site_name: OpenDoc — документация
+site_description: Структуры документов, руководство и навигатор по коду
+docs_dir: .opendoc/docs-source
+site_dir: .opendoc/docs-site
+theme:
+  name: mkdocs
+  custom_dir: docs/theme
+  locale: ru
+  highlightjs: false
+plugins:
+  - search:
+      lang: [ru, en]
+extra_css: [docs/assets/documentation.css]
+extra_javascript: [docs/assets/documentation.js]
+markdown_extensions:
+  - tables
+  - fenced_code
+  - toc:
+      slugify: !!python/name:markdown.extensions.toc.slugify_unicode
+hooks: [tools/docs_hook.py]
+watch: [src, docs, examples, README.md, TODO.md, AGENTS.md]
+validation:
+  links:
+    anchors: warn
+nav:
+  - Главная: README.md
+  - Руководство:
+      - Навигация: docs/reference/user-guide.md
+      - Работа с библиотекой: docs/guide/index.md
+      - Совместимость: docs/guide/compatibility.md
+      - JSON и ошибки: docs/guide/json.md
+      - Лимиты документа: docs/guide/limits.md
+      - Валидация модели: docs/guide/validation.md
+      - Сравнение и качество: docs/guide/quality.md
+      - Формулы и optional math: docs/guide/formulas.md
+      - Обход и поиск: docs/guide/traversal.md
+      - Копирование и изменения: docs/guide/operations.md
+      - Объединение и извлечение: docs/guide/composition.md
+      - Изменения: docs/guide/changes.md
+  - Справочник:
+      - API: docs/reference/api.md
+      - Навигатор по коду: docs/reference/code.md
+  - Разработка:
+      - Документация и проверки: docs/development/documentation.md
+      - Контракт разработки: AGENTS.md
+      - Стандарты кодирования: CODING_STANDARDS.md
+      - Проверка стандартов: docs/development/code-audit.md
+  - Развитие библиотеки: TODO.md
