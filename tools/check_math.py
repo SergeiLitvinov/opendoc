@@ -87,7 +87,7 @@ print('Installed math boundary: lazy imports, core operations and ' + ('XML enab
 def verify(python, with_math=False):
     with tempfile.TemporaryDirectory(prefix="opendoc-math-probe-") as directory:
         subprocess.run(
-            [str(Path(python).resolve()), "-I", "-c", PROBE, "math" if with_math else "core"], cwd=directory, check=True
+            [str(Path(python).absolute()), "-I", "-c", PROBE, "math" if with_math else "core"], cwd=directory, check=True
         )
 
 

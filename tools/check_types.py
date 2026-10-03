@@ -36,7 +36,7 @@ def expected_errors(source):
 
 
 def verify(python):
-    python = str(Path(python).resolve())
+    python = str(Path(python).absolute())
     with tempfile.TemporaryDirectory(prefix="typed-consumer-", dir=ROOT / ".opendoc") as directory:
         working = Path(directory)
         environment = dict(os.environ)

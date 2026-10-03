@@ -253,7 +253,7 @@ print('Independent wheel: extensions, packages, model, traversal, operations, co
 
 def verify(python: str) -> None:
     with tempfile.TemporaryDirectory(prefix="document-core-probe-") as directory:
-        subprocess.run([str(Path(python).resolve()), "-I", "-c", PROBE], cwd=directory, check=True)
+        subprocess.run([str(Path(python).absolute()), "-I", "-c", PROBE], cwd=directory, check=True)
     verify_math(python)
 
 
