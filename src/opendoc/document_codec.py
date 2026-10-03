@@ -38,6 +38,7 @@ from opendoc.document_model import (
     TextStyle,
     VisualSurrogate,
 )
+from opendoc.footnotes import FOOTNOTES_PROPERTY, _decode_notes, _encode_notes
 from opendoc.limits import DocumentLimits, _check_json_text, _quota, _resolve_limits, _utf8_size
 from opendoc.properties import PROPERTY_SCHEMA_VERSION, VersionedProperties
 
@@ -53,6 +54,9 @@ def document_to_dict(document: DocumentModel, *, limits: DocumentLimits | None =
     errors = _validate_model(document, budget)
     if errors:
         raise ValueError("invalid document model: " + "; ".join(errors))
+    metadata = _properties_to_dict(document.metadata)
+    if document.footnotes or document.footnote_properties or document.footnote_extensions:
+        metadata[FOOTNOTES_PROPERTY] = _encode_notes(document)
     payload = {
         "format": FORMAT_NAME,
         "version": FORMAT_VERSION,
@@ -60,7 +64,7 @@ def document_to_dict(document: DocumentModel, *, limits: DocumentLimits | None =
             "property_schema_version": PROPERTY_SCHEMA_VERSION,
             "mode": document.mode.value,
             "source_format": document.source_format,
-            "metadata": _properties_to_dict(document.metadata),
+            "metadata": metadata,
             "package": _package_to_dict(document.package),
             "styles": {key: _style_to_dict(value) for key, value in document.styles.items()},
             "resources": {key: _resource_to_dict(value) for key, value in document.resources.items()},
@@ -77,16 +81,23 @@ def document_from_dict(payload: dict[str, Any], *, limits: DocumentLimits | None
     budget = _resolve_limits(limits)
     _validate_payload(payload, budget)
     raw = payload["document"]
+    metadata = dict(raw.get("metadata", {}))
+    notes = _decode_notes(metadata.get(FOOTNOTES_PROPERTY), f"$.document.metadata[{FOOTNOTES_PROPERTY!r}]")
+    if notes is not None:
+        del metadata[FOOTNOTES_PROPERTY]
 
     document = DocumentModel(
         sections=[_section_from_dict(value) for value in raw.get("sections", [])],
         resources={key: _resource_from_dict(value) for key, value in raw.get("resources", {}).items()},
         styles={key: _style_from_dict(value) for key, value in raw.get("styles", {}).items()},
-        metadata=dict(raw.get("metadata", {})),
+        metadata=metadata,
         package=_package_from_dict(raw.get("package")),
         mode=ConversionMode(raw.get("mode", ConversionMode.BALANCED.value)),
         source_format=raw.get("source_format"),
         version=FORMAT_VERSION,
+        footnotes=notes[0] if notes is not None else [],
+        footnote_properties=notes[1] if notes is not None else {},
+        footnote_extensions=notes[2] if notes is not None else {},
     )
     # Input quotas have already been checked. Constructor defaults must not
     # charge extra nodes against the accepted serialized representation.

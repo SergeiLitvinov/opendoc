@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from opendoc.diagnostics import CheckResult, ConversionReport, IssueSeverity
+from opendoc.footnotes import _note_content_available
 from opendoc.object_inventory import OBJECT_INVENTORY_SCOPE
 from opendoc.text_edit_budget import evaluate_text_edit_budget
 from opendoc.text_flow import TEXT_FLOW_VERSION
@@ -38,6 +39,8 @@ class TextPreservationPolicy:
         if self.mode == "flow":
             return self._evaluate_flow(report, comparison)
         available = comparison is not None and comparison.valid
+        if available:
+            available = _note_content_available(comparison.source.metadata, comparison.target.metadata)
         if available:
             available = all(
                 side.metadata.get("object_inventory_scope") == OBJECT_INVENTORY_SCOPE
@@ -82,6 +85,7 @@ class TextPreservationPolicy:
         available = (
             comparison is not None
             and comparison.valid
+            and _note_content_available(comparison.source.metadata, comparison.target.metadata)
             and all(
                 side.metadata.get("object_inventory_scope") == OBJECT_INVENTORY_SCOPE
                 and isinstance(flow, dict)

@@ -8,6 +8,7 @@ from typing import TypeVar, cast
 
 from opendoc.document_model import (
     DocumentModel,
+    Footnote,
     Formula,
     Image,
     Section,
@@ -210,7 +211,7 @@ def extract_text(
         parent = reference.parent
         if parent is not None:
             separator = None
-            if isinstance(parent.node, (DocumentModel, Section, TableCell)):
+            if isinstance(parent.node, (DocumentModel, Section, TableCell, Footnote)):
                 separator = block_separator
             elif isinstance(parent.node, Table):
                 separator = row_separator

@@ -9,6 +9,7 @@ from typing import Generic, Literal, TypeAlias, TypeVar, cast
 from opendoc.document_model import (
     Block,
     DocumentModel,
+    Footnote,
     Formula,
     Image,
     Inline,
@@ -32,15 +33,15 @@ SECTION_CONTENT_FIELDS = (
     "even_page_footers",
 )
 Element: TypeAlias = Block | TextRun
-ModelNode: TypeAlias = DocumentModel | Section | TableRow | TableCell | Element
-NodeKind: TypeAlias = Literal["document", "section", "block", "inline", "row", "cell"]
+ModelNode: TypeAlias = DocumentModel | Section | TableRow | TableCell | Element | Footnote
+NodeKind: TypeAlias = Literal["document", "section", "block", "inline", "row", "cell", "footnote"]
 ResourceReferenceKind: TypeAlias = Literal["image", "fallback", "surrogate", "text"]
 _NodeT = TypeVar("_NodeT", bound=ModelNode, covariant=True)
 _ElementT = TypeVar("_ElementT", bound=Element)
 _ErrorHandler: TypeAlias = Callable[[str, str], None]
 _ChildSpec: TypeAlias = tuple[str, tuple[type[ModelNode], ...], NodeKind]
 _ELEMENT_TYPES = (Paragraph, Table, TextRun, Formula, Image)
-_NODE_TYPES = (DocumentModel, Section, TableRow, TableCell, *_ELEMENT_TYPES)
+_NODE_TYPES = (DocumentModel, Section, TableRow, TableCell, *_ELEMENT_TYPES, Footnote)
 
 
 @dataclass(frozen=True, eq=False, slots=True)
@@ -96,7 +97,9 @@ def _join(path: str, name: str) -> str:
 
 def _child_fields(node: ModelNode) -> tuple[_ChildSpec, ...]:
     if isinstance(node, DocumentModel):
-        return (("sections", (Section,), "section"),)
+        return (("sections", (Section,), "section"), ("footnotes", (Footnote,), "footnote"))
+    if isinstance(node, Footnote):
+        return (("blocks", (Paragraph, Table, Image, Formula), "block"),)
     if isinstance(node, Section):
         return tuple((name, (Paragraph, Table, Image, Formula), "block") for name in SECTION_CONTENT_FIELDS)
     if isinstance(node, Table):
@@ -129,6 +132,8 @@ def _children(reference: NodeLocation[ModelNode], on_error: _ErrorHandler | None
 def _root_kind(root: ModelNode) -> NodeKind:
     if isinstance(root, DocumentModel):
         return "document"
+    if isinstance(root, Footnote):
+        return "footnote"
     if isinstance(root, Section):
         return "section"
     if isinstance(root, TableRow):

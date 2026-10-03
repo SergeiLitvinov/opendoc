@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import math
 from collections import deque
+from dataclasses import fields
 from typing import Any
 
 from opendoc._json_validation import _color, _json_tree
@@ -13,6 +14,7 @@ from opendoc.document_model import (
     Box,
     ConversionMode,
     DocumentModel,
+    Footnote,
     Formula,
     FormulaFormat,
     Image,
@@ -35,12 +37,41 @@ from opendoc.document_model import (
     TextStyle,
     VisualSurrogate,
 )
+from opendoc.footnotes import FOOTNOTE_REFERENCE_PROPERTY, FOOTNOTES_PROPERTY, _reference_payload
 from opendoc.limits import DocumentLimits, _guard_model, _resolve_limits
 from opendoc.lists import LIST_PROPERTY, _list_payload
 from opendoc.properties import VersionedProperties
+from opendoc.references import ANCHOR_PROPERTY, INTERNAL_LINK_PROPERTY, Anchor, InternalLink, _payload
 from opendoc.semantics import HEADING_PROPERTY, _heading_payload
 from opendoc.storage import ArtifactLimitError
 from opendoc.traversal import _resource_slots, _walk_locations
+
+_SERIALIZED_TYPES = (
+    DocumentModel,
+    Section,
+    Footnote,
+    Paragraph,
+    Table,
+    TableRow,
+    TableCell,
+    TextRun,
+    Formula,
+    Image,
+    TextStyle,
+    Resource,
+    PackageGraph,
+    PackagePart,
+    PackageRelationship,
+    Box,
+    ImageCrop,
+    Length,
+    PageSettings,
+    Provenance,
+    ProvenanceEvent,
+    VisualSurrogate,
+    ColorValue,
+)
+_STATE_FIELDS = {kind: frozenset(item.name for item in fields(kind)) for kind in _SERIALIZED_TYPES}
 
 
 class _Validator:
@@ -58,6 +89,10 @@ class _Validator:
         self.styles = styles or {}
         self.pending: deque[tuple[str, Any, str]] = deque()
         self.list_configs: dict[tuple[str, int], tuple[str, int]] = {}
+        self.anchors: dict[str, str] = {}
+        self.internal_links: list[tuple[str, str]] = []
+        self.footnotes: dict[str, str] = {}
+        self.footnote_references: list[tuple[str, str]] = []
 
     def error(
         self,
@@ -91,10 +126,36 @@ class _Validator:
 
     def instance(self, value: Any, expected: type[Any] | tuple[type[Any], ...], path: str) -> bool:
         if isinstance(value, expected):
+            if not self.serialized_state(value, path):
+                return False
             return True
         names = ", ".join(item.__name__ for item in expected) if isinstance(expected, tuple) else expected.__name__
         self.error(path, f"expected {names}", code="model.type", measurement={"expected": names})
         return False
+
+    def serialized_state(self, value: Any, path: str) -> bool:
+        known = _STATE_FIELDS.get(type(value))
+        if known is None:
+            base = next((kind for kind in _SERIALIZED_TYPES if isinstance(value, kind)), None)
+            if base is None:
+                return True
+            self.error(
+                path,
+                "unsupported serialized model type",
+                code="model.type.unsupported",
+                measurement={"type": type(value).__name__, "supported": base.__name__},
+            )
+            return False
+        extra = {name for name in getattr(value, "__dict__", {}) if name not in known and not name.startswith("_")}
+        if extra:
+            self.error(
+                path,
+                "extra model state must be stored in properties/metadata",
+                code="model.state.unsupported",
+                measurement={"fields": sorted(extra)},
+            )
+            return False
+        return True
 
     def string(self, value: Any, path: str, *, nullable: bool = False, nonempty: bool = False) -> bool:
         if value is None and nullable:
@@ -236,6 +297,28 @@ class _Validator:
 
     def element(self, value: Any, path: str) -> None:
         properties = self.properties(value.properties, f"{path}.properties")
+        for key in (ANCHOR_PROPERTY, INTERNAL_LINK_PROPERTY):
+            if key == INTERNAL_LINK_PROPERTY and not isinstance(value, TextRun):
+                continue
+            location = f"{path}.properties[{key!r}]"
+            try:
+                item = _payload(properties.get(key), location, key)
+                if isinstance(item, Anchor):
+                    if item.id in self.anchors:
+                        self.error(
+                            f"{location}.id",
+                            f"duplicate anchor {item.id!r}",
+                            code="semantic.anchor.duplicate",
+                            measurement={"first_location": self.anchors[item.id]},
+                        )
+                    else:
+                        self.anchors[item.id] = path
+                elif isinstance(item, InternalLink):
+                    self.internal_links.append((item.target_id, f"{location}.target_id"))
+                    if value.link is not None:
+                        self.error(location, "internal link conflicts with TextRun.link", code="semantic.link.conflict")
+            except ValueError as error:
+                self.capture(error, location)
         self.provenance(value.provenance, f"{path}.provenance")
         self.surrogate(value.visual_surrogate, f"{path}.visual_surrogate")
         for name, resource_id, kind in _resource_slots(value):
@@ -247,6 +330,18 @@ class _Validator:
             }[kind]
             self.reference(resource_id, f"{path}.{name}", label, legacy_path=None if kind == "text" else path, nullable=False)
         if isinstance(value, TextRun):
+            note_path = f"{path}.properties[{FOOTNOTE_REFERENCE_PROPERTY!r}]"
+            try:
+                note_reference = _reference_payload(properties.get(FOOTNOTE_REFERENCE_PROPERTY), note_path)
+                if note_reference is not None:
+                    self.footnote_references.append((note_reference.note_id, f"{note_path}.note_id"))
+                    internal = _payload(properties.get(INTERNAL_LINK_PROPERTY), note_path, INTERNAL_LINK_PROPERTY)
+                    if value.link is not None or internal is not None:
+                        self.error(
+                            note_path, "footnote reference conflicts with another link role", code="semantic.footnote.conflict"
+                        )
+            except ValueError as error:
+                self.capture(error, note_path)
             self.string(value.text, f"{path}.text")
             self.string(value.link, f"{path}.link", nullable=True)
             if self.instance(value.style, TextStyle, f"{path}.style"):
@@ -299,6 +394,24 @@ class _Validator:
     def row(self, value: TableRow, path: str) -> None:
         self.properties(value.properties, f"{path}.properties")
 
+    def footnote(self, value: Footnote, path: str) -> None:
+        if self.string(value.id, f"{path}.id", nonempty=True):
+            if value.id in self.footnotes:
+                self.error(
+                    f"{path}.id",
+                    f"duplicate footnote {value.id!r}",
+                    code="semantic.footnote.duplicate",
+                    measurement={"first_location": self.footnotes[value.id]},
+                )
+            else:
+                self.footnotes[value.id] = path
+        self.properties(value.properties, f"{path}.properties")
+        extensions = self.properties(value.extensions, f"{path}.extensions")
+        if {"id", "blocks", "properties"}.intersection(extensions):
+            self.error(
+                f"{path}.extensions", "reserved footnote fields in extensions", code="semantic.footnote.extension-conflict"
+            )
+
     def cell(self, value: TableCell, path: str) -> None:
         for name in ("row_span", "column_span"):
             item = getattr(value, name)
@@ -343,6 +456,8 @@ class _Validator:
         return True
 
     def package(self, value: PackageGraph, path: str) -> None:
+        if not self.serialized_state(value, path):
+            return
         self.string(value.format, f"{path}.format")
         self.package_name(value.root, f"{path}.root", root=True)
         parts = value.parts if self.instance(value.parts, dict, f"{path}.parts") else {}
@@ -433,6 +548,21 @@ def _validate_model(
     if type(document.version) is not int or document.version not in {1, 2}:
         validator.error("version", "unsupported model version")
     validator.properties(document.metadata, "metadata")
+    validator.properties(document.footnote_properties, "footnote_properties")
+    extensions = validator.properties(document.footnote_extensions, "footnote_extensions")
+    if {"format", "version", "notes", "properties"}.intersection(extensions):
+        validator.error(
+            "footnote_extensions", "reserved registry fields in extensions", code="semantic.footnote.extension-conflict"
+        )
+    if isinstance(document.metadata, dict) and FOOTNOTES_PROPERTY in document.metadata:
+        raw_notes = document.metadata[FOOTNOTES_PROPERTY]
+        tagged = isinstance(raw_notes, dict) and raw_notes.get("format") == FOOTNOTES_PROPERTY
+        if tagged or document.footnotes or document.footnote_properties or document.footnote_extensions:
+            validator.error(
+                f"metadata[{FOOTNOTES_PROPERTY!r}]",
+                "serialized footnotes metadata is reserved; use the model footnotes collection",
+                code="semantic.footnote.metadata-conflict",
+            )
     validator.resources = validator.mapping(document.resources, Resource, "resources", "resource")
     validator.styles = validator.mapping(document.styles, TextStyle, "styles", "style")
     if document.package is not None and validator.instance(document.package, PackageGraph, "package"):
@@ -440,8 +570,12 @@ def _validate_model(
     validator.run()
     for reference in _walk_locations(document, validator.limits, on_error=validator.error):
         node, path = reference.node, reference.path
+        if node is not document and not validator.serialized_state(node, path):
+            continue
         if isinstance(node, Section):
             validator.section(node, path)
+        elif isinstance(node, Footnote):
+            validator.footnote(node, path)
         elif isinstance(node, TableRow):
             validator.row(node, path)
         elif isinstance(node, TableCell):
@@ -449,6 +583,22 @@ def _validate_model(
         elif isinstance(node, (Paragraph, Table, TextRun, Image, Formula)):
             validator.element(node, path)
     validator.style_cycles()
+    for identifier, path in validator.internal_links:
+        if identifier not in validator.anchors:
+            validator.error(
+                path,
+                f"unknown anchor {identifier!r}",
+                code="semantic.anchor.missing",
+                measurement={"identifier": identifier},
+            )
+    for identifier, path in validator.footnote_references:
+        if identifier not in validator.footnotes:
+            validator.error(
+                path,
+                f"unknown footnote {identifier!r}",
+                code="semantic.footnote.missing",
+                measurement={"identifier": identifier},
+            )
     return validator.errors
 
 

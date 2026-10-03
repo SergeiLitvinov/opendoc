@@ -21,6 +21,8 @@ def _default(value):
         return None
     if type(value) is object:
         return "<object sentinel>"
+    if isinstance(value, frozenset):
+        return "frozenset({" + ", ".join(sorted(repr(item) for item in value)) + "})" if value else "frozenset()"
     return repr(value)
 
 

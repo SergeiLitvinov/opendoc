@@ -7,17 +7,17 @@
 | Имя | Модуль | Объявление |
 |---|---|---|
 | `CheckPolicy` | `opendoc.checks` | [src/opendoc/checks.py](../../src/opendoc/checks.py) |
-| `check_document` | `opendoc.checks` | [src/opendoc/checks.py](../../src/opendoc/checks.py#L38) |
-| `compare_documents` | `opendoc.checks` | [src/opendoc/checks.py](../../src/opendoc/checks.py#L96) |
+| `check_document` | `opendoc.checks` | [src/opendoc/checks.py](../../src/opendoc/checks.py#L39) |
+| `compare_documents` | `opendoc.checks` | [src/opendoc/checks.py](../../src/opendoc/checks.py#L134) |
 | `ColorSpace` | `opendoc.color` | [src/opendoc/color.py](../../src/opendoc/color.py#L13) |
 | `ColorValue` | `opendoc.color` | [src/opendoc/color.py](../../src/opendoc/color.py#L19) |
-| `DocumentIdMap` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py#L46) |
-| `DocumentMerge` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py#L55) |
+| `DocumentIdMap` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py#L56) |
+| `DocumentMerge` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py#L67) |
 | `IdentifierConflictPolicy` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py) |
 | `MetadataConflictPolicy` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py) |
 | `PackagePolicy` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py) |
-| `extract_document` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py#L371) |
-| `merge_documents` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py#L230) |
+| `extract_document` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py#L504) |
+| `merge_documents` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py#L272) |
 | `CheckResult` | `opendoc.diagnostics` | [src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L95) |
 | `ConversionIssue` | `opendoc.diagnostics` | [src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L23) |
 | `ConversionReport` | `opendoc.diagnostics` | [src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L31) |
@@ -25,53 +25,76 @@
 | `IssueSeverity` | `opendoc.diagnostics` | [src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L15) |
 | `FORMAT_NAME` | `opendoc.document_codec` | [src/opendoc/document_codec.py](../../src/opendoc/document_codec.py) |
 | `FORMAT_VERSION` | `opendoc.document_codec` | [src/opendoc/document_codec.py](../../src/opendoc/document_codec.py) |
-| `document_from_dict` | `opendoc.document_codec` | [src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L74) |
-| `document_from_json` | `opendoc.document_codec` | [src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L103) |
-| `document_to_dict` | `opendoc.document_codec` | [src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L49) |
-| `document_to_json` | `opendoc.document_codec` | [src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L99) |
-| `load_document` | `opendoc.document_codec` | [src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L143) |
-| `save_document` | `opendoc.document_codec` | [src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L132) |
+| `document_from_dict` | `opendoc.document_codec` | [src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L78) |
+| `document_from_json` | `opendoc.document_codec` | [src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L114) |
+| `document_to_dict` | `opendoc.document_codec` | [src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L50) |
+| `document_to_json` | `opendoc.document_codec` | [src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L110) |
+| `load_document` | `opendoc.document_codec` | [src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L154) |
+| `save_document` | `opendoc.document_codec` | [src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L143) |
 | `VECTOR_IMAGE_MEDIA_TYPES` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py) |
 | `Block` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py) |
-| `Box` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L108) |
-| `ConversionMode` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L29) |
-| `DocumentModel` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L385) |
-| `Formula` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L238) |
-| `FormulaFormat` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L45) |
-| `Image` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L250) |
-| `ImageCrop` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L119) |
+| `Box` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L109) |
+| `ConversionMode` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L30) |
+| `DocumentModel` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L455) |
+| `Footnote` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L394) |
+| `Formula` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L298) |
+| `FormulaFormat` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L46) |
+| `Image` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L310) |
+| `ImageCrop` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L120) |
 | `ImageProperties` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py) |
 | `Inline` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py) |
-| `Length` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L101) |
-| `PackageGraph` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L190) |
-| `PackagePart` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L166) |
-| `PackageRelationship` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L179) |
-| `PageSettings` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L357) |
-| `Paragraph` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L268) |
+| `Length` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L102) |
+| `PackageGraph` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L191) |
+| `PackagePart` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L167) |
+| `PackageRelationship` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L180) |
+| `PageSettings` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L427) |
+| `Paragraph` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L328) |
 | `ParagraphProperties` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py) |
-| `Provenance` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L61) |
-| `ProvenanceEvent` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L52) |
-| `Resource` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L148) |
-| `ResourceKind` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L35) |
-| `Section` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L367) |
+| `Provenance` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L62) |
+| `ProvenanceEvent` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L53) |
+| `Resource` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L149) |
+| `ResourceKind` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L36) |
+| `Section` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L437) |
 | `SectionProperties` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py) |
-| `Table` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L317) |
-| `TableCell` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L295) |
+| `Table` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L377) |
+| `TableCell` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L355) |
 | `TableCellProperties` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py) |
 | `TableProperties` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py) |
-| `TableRow` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L307) |
+| `TableRow` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L367) |
 | `TableRowProperties` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py) |
-| `TextRun` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L228) |
-| `TextStyle` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L129) |
+| `TextRun` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L288) |
+| `TextStyle` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L130) |
 | `TextStyleProperties` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py) |
-| `VisualSurrogate` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L83) |
-| `attach_visual_surrogate` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L333) |
-| `EmphasisLossPolicy` | `opendoc.emphasis_quality` | [src/opendoc/emphasis_quality.py](../../src/opendoc/emphasis_quality.py#L98) |
-| `FormulaLossPolicy` | `opendoc.formula_quality_policy` | [src/opendoc/formula_quality_policy.py](../../src/opendoc/formula_quality_policy.py#L69) |
-| `DocumentComparison` | `opendoc.inspection` | [src/opendoc/inspection.py](../../src/opendoc/inspection.py#L91) |
-| `DocumentInspection` | `opendoc.inspection` | [src/opendoc/inspection.py](../../src/opendoc/inspection.py#L41) |
-| `compare_inspections` | `opendoc.inspection` | [src/opendoc/inspection.py](../../src/opendoc/inspection.py#L138) |
-| `inspect_document_model` | `opendoc.inspection` | [src/opendoc/inspection.py](../../src/opendoc/inspection.py#L704) |
+| `VisualSurrogate` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L84) |
+| `attach_visual_surrogate` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L403) |
+| `EmphasisLossPolicy` | `opendoc.emphasis_quality` | [src/opendoc/emphasis_quality.py](../../src/opendoc/emphasis_quality.py#L99) |
+| `ExtensionCallback` | `opendoc.extensions` | [src/opendoc/extensions.py](../../src/opendoc/extensions.py) |
+| `ExtensionContext` | `opendoc.extensions` | [src/opendoc/extensions.py](../../src/opendoc/extensions.py#L55) |
+| `ExtensionSchema` | `opendoc.extensions` | [src/opendoc/extensions.py](../../src/opendoc/extensions.py#L70) |
+| `ExtensionScope` | `opendoc.extensions` | [src/opendoc/extensions.py](../../src/opendoc/extensions.py) |
+| `ExtensionValue` | `opendoc.extensions` | [src/opendoc/extensions.py](../../src/opendoc/extensions.py#L45) |
+| `UnknownExtensionPolicy` | `opendoc.extensions` | [src/opendoc/extensions.py](../../src/opendoc/extensions.py) |
+| `check_extensions` | `opendoc.extensions` | [src/opendoc/extensions.py](../../src/opendoc/extensions.py#L285) |
+| `get_extension` | `opendoc.extensions` | [src/opendoc/extensions.py](../../src/opendoc/extensions.py#L105) |
+| `remove_extension` | `opendoc.extensions` | [src/opendoc/extensions.py](../../src/opendoc/extensions.py#L132) |
+| `set_extension` | `opendoc.extensions` | [src/opendoc/extensions.py](../../src/opendoc/extensions.py#L116) |
+| `FOOTNOTE_REFERENCE_PROPERTY` | `opendoc.footnotes` | [src/opendoc/footnotes.py](../../src/opendoc/footnotes.py) |
+| `FOOTNOTES_PROPERTY` | `opendoc.footnotes` | [src/opendoc/footnotes.py](../../src/opendoc/footnotes.py) |
+| `FootnoteNumber` | `opendoc.footnotes` | [src/opendoc/footnotes.py](../../src/opendoc/footnotes.py#L34) |
+| `FootnoteReference` | `opendoc.footnotes` | [src/opendoc/footnotes.py](../../src/opendoc/footnotes.py#L24) |
+| `get_footnote` | `opendoc.footnotes` | [src/opendoc/footnotes.py](../../src/opendoc/footnotes.py#L117) |
+| `get_footnote_reference` | `opendoc.footnotes` | [src/opendoc/footnotes.py](../../src/opendoc/footnotes.py#L50) |
+| `iter_footnote_numbers` | `opendoc.footnotes` | [src/opendoc/footnotes.py](../../src/opendoc/footnotes.py#L101) |
+| `iter_footnote_references` | `opendoc.footnotes` | [src/opendoc/footnotes.py](../../src/opendoc/footnotes.py#L94) |
+| `iter_footnotes` | `opendoc.footnotes` | [src/opendoc/footnotes.py](../../src/opendoc/footnotes.py#L87) |
+| `remove_footnote` | `opendoc.footnotes` | [src/opendoc/footnotes.py](../../src/opendoc/footnotes.py#L159) |
+| `set_footnote` | `opendoc.footnotes` | [src/opendoc/footnotes.py](../../src/opendoc/footnotes.py#L131) |
+| `set_footnote_reference` | `opendoc.footnotes` | [src/opendoc/footnotes.py](../../src/opendoc/footnotes.py#L62) |
+| `FormulaLossPolicy` | `opendoc.formula_quality_policy` | [src/opendoc/formula_quality_policy.py](../../src/opendoc/formula_quality_policy.py#L70) |
+| `DocumentComparison` | `opendoc.inspection` | [src/opendoc/inspection.py](../../src/opendoc/inspection.py#L94) |
+| `DocumentInspection` | `opendoc.inspection` | [src/opendoc/inspection.py](../../src/opendoc/inspection.py#L44) |
+| `compare_inspections` | `opendoc.inspection` | [src/opendoc/inspection.py](../../src/opendoc/inspection.py#L141) |
+| `inspect_document_model` | `opendoc.inspection` | [src/opendoc/inspection.py](../../src/opendoc/inspection.py#L724) |
 | `DocumentLimits` | `opendoc.limits` | [src/opendoc/limits.py](../../src/opendoc/limits.py#L15) |
 | `LIST_PROPERTY` | `opendoc.lists` | [src/opendoc/lists.py](../../src/opendoc/lists.py) |
 | `ListItem` | `opendoc.lists` | [src/opendoc/lists.py](../../src/opendoc/lists.py#L38) |
@@ -82,14 +105,25 @@
 | `iter_list_numbers` | `opendoc.lists` | [src/opendoc/lists.py](../../src/opendoc/lists.py#L142) |
 | `set_list_item` | `opendoc.lists` | [src/opendoc/lists.py](../../src/opendoc/lists.py#L111) |
 | `ObjectLossPolicy` | `opendoc.object_quality_policy` | [src/opendoc/object_quality_policy.py](../../src/opendoc/object_quality_policy.py#L14) |
-| `clone_model` | `opendoc.operations` | [src/opendoc/operations.py](../../src/opendoc/operations.py#L31) |
-| `extract_text` | `opendoc.operations` | [src/opendoc/operations.py](../../src/opendoc/operations.py#L171) |
-| `insert_node` | `opendoc.operations` | [src/opendoc/operations.py](../../src/opendoc/operations.py#L115) |
-| `remove_node` | `opendoc.operations` | [src/opendoc/operations.py](../../src/opendoc/operations.py#L159) |
-| `replace_node` | `opendoc.operations` | [src/opendoc/operations.py](../../src/opendoc/operations.py#L139) |
-| `transform_elements` | `opendoc.operations` | [src/opendoc/operations.py](../../src/opendoc/operations.py#L235) |
+| `clone_model` | `opendoc.operations` | [src/opendoc/operations.py](../../src/opendoc/operations.py#L32) |
+| `extract_text` | `opendoc.operations` | [src/opendoc/operations.py](../../src/opendoc/operations.py#L172) |
+| `insert_node` | `opendoc.operations` | [src/opendoc/operations.py](../../src/opendoc/operations.py#L116) |
+| `remove_node` | `opendoc.operations` | [src/opendoc/operations.py](../../src/opendoc/operations.py#L160) |
+| `replace_node` | `opendoc.operations` | [src/opendoc/operations.py](../../src/opendoc/operations.py#L140) |
+| `transform_elements` | `opendoc.operations` | [src/opendoc/operations.py](../../src/opendoc/operations.py#L236) |
 | `PROPERTY_SCHEMA_VERSION` | `opendoc.properties` | [src/opendoc/properties.py](../../src/opendoc/properties.py) |
 | `QualityPolicy` | `opendoc.quality_policy` | [src/opendoc/quality_policy.py](../../src/opendoc/quality_policy.py#L11) |
+| `ANCHOR_PROPERTY` | `opendoc.references` | [src/opendoc/references.py](../../src/opendoc/references.py) |
+| `INTERNAL_LINK_PROPERTY` | `opendoc.references` | [src/opendoc/references.py](../../src/opendoc/references.py) |
+| `Anchor` | `opendoc.references` | [src/opendoc/references.py](../../src/opendoc/references.py#L29) |
+| `InternalLink` | `opendoc.references` | [src/opendoc/references.py](../../src/opendoc/references.py#L39) |
+| `get_anchor` | `opendoc.references` | [src/opendoc/references.py](../../src/opendoc/references.py#L102) |
+| `get_internal_link` | `opendoc.references` | [src/opendoc/references.py](../../src/opendoc/references.py#L112) |
+| `iter_anchors` | `opendoc.references` | [src/opendoc/references.py](../../src/opendoc/references.py#L122) |
+| `iter_internal_links` | `opendoc.references` | [src/opendoc/references.py](../../src/opendoc/references.py#L129) |
+| `resolve_anchor` | `opendoc.references` | [src/opendoc/references.py](../../src/opendoc/references.py#L136) |
+| `set_anchor` | `opendoc.references` | [src/opendoc/references.py](../../src/opendoc/references.py#L107) |
+| `set_internal_link` | `opendoc.references` | [src/opendoc/references.py](../../src/opendoc/references.py#L117) |
 | `ResourceConflictPolicy` | `opendoc.resources` | [src/opendoc/resources.py](../../src/opendoc/resources.py) |
 | `add_resource` | `opendoc.resources` | [src/opendoc/resources.py](../../src/opendoc/resources.py#L62) |
 | `embed_resources` | `opendoc.resources` | [src/opendoc/resources.py](../../src/opendoc/resources.py#L229) |
@@ -105,29 +139,29 @@
 | `ArtifactLimitError` | `opendoc.storage` | [src/opendoc/storage.py](../../src/opendoc/storage.py#L10) |
 | `effective_text_style` | `opendoc.styles` | [src/opendoc/styles.py](../../src/opendoc/styles.py#L87) |
 | `resolve_style` | `opendoc.styles` | [src/opendoc/styles.py](../../src/opendoc/styles.py#L62) |
-| `TextPreservationPolicy` | `opendoc.text_quality_policy` | [src/opendoc/text_quality_policy.py](../../src/opendoc/text_quality_policy.py#L17) |
+| `TextPreservationPolicy` | `opendoc.text_quality_policy` | [src/opendoc/text_quality_policy.py](../../src/opendoc/text_quality_policy.py#L18) |
 | `SECTION_CONTENT_FIELDS` | `opendoc.traversal` | [src/opendoc/traversal.py](../../src/opendoc/traversal.py) |
 | `Element` | `opendoc.traversal` | [src/opendoc/traversal.py](../../src/opendoc/traversal.py) |
 | `ModelNode` | `opendoc.traversal` | [src/opendoc/traversal.py](../../src/opendoc/traversal.py) |
 | `NodeKind` | `opendoc.traversal` | [src/opendoc/traversal.py](../../src/opendoc/traversal.py) |
-| `NodeLocation` | `opendoc.traversal` | [src/opendoc/traversal.py](../../src/opendoc/traversal.py#L47) |
-| `ResourceReference` | `opendoc.traversal` | [src/opendoc/traversal.py](../../src/opendoc/traversal.py#L77) |
+| `NodeLocation` | `opendoc.traversal` | [src/opendoc/traversal.py](../../src/opendoc/traversal.py#L48) |
+| `ResourceReference` | `opendoc.traversal` | [src/opendoc/traversal.py](../../src/opendoc/traversal.py#L78) |
 | `ResourceReferenceKind` | `opendoc.traversal` | [src/opendoc/traversal.py](../../src/opendoc/traversal.py) |
-| `iter_blocks` | `opendoc.traversal` | [src/opendoc/traversal.py](../../src/opendoc/traversal.py#L195) |
-| `iter_elements` | `opendoc.traversal` | [src/opendoc/traversal.py](../../src/opendoc/traversal.py#L209) |
-| `iter_inlines` | `opendoc.traversal` | [src/opendoc/traversal.py](../../src/opendoc/traversal.py#L202) |
-| `iter_resource_references` | `opendoc.traversal` | [src/opendoc/traversal.py](../../src/opendoc/traversal.py#L248) |
-| `iter_sections` | `opendoc.traversal` | [src/opendoc/traversal.py](../../src/opendoc/traversal.py#L188) |
-| `walk_model` | `opendoc.traversal` | [src/opendoc/traversal.py](../../src/opendoc/traversal.py#L173) |
+| `iter_blocks` | `opendoc.traversal` | [src/opendoc/traversal.py](../../src/opendoc/traversal.py#L200) |
+| `iter_elements` | `opendoc.traversal` | [src/opendoc/traversal.py](../../src/opendoc/traversal.py#L214) |
+| `iter_inlines` | `opendoc.traversal` | [src/opendoc/traversal.py](../../src/opendoc/traversal.py#L207) |
+| `iter_resource_references` | `opendoc.traversal` | [src/opendoc/traversal.py](../../src/opendoc/traversal.py#L253) |
+| `iter_sections` | `opendoc.traversal` | [src/opendoc/traversal.py](../../src/opendoc/traversal.py#L193) |
+| `walk_model` | `opendoc.traversal` | [src/opendoc/traversal.py](../../src/opendoc/traversal.py#L178) |
 
 ## Объявления
 
 ### check_document
 
-[src/opendoc/checks.py](../../src/opendoc/checks.py#L38)
+[src/opendoc/checks.py](../../src/opendoc/checks.py#L39)
 
 ```python
-check_document(document: DocumentModel, *, limits: DocumentLimits | None=None)
+check_document(document: DocumentModel, *, limits: DocumentLimits | None=None, extensions: Iterable[ExtensionSchema] | None=None, unknown_extensions: UnknownExtensionPolicy='error')
 ```
 
 Validate and inspect without any filesystem lookup or output path.
@@ -138,10 +172,10 @@ and hashes. DocumentLimits exhaustion continues to raise ArtifactLimitError.
 
 ### compare_documents
 
-[src/opendoc/checks.py](../../src/opendoc/checks.py#L96)
+[src/opendoc/checks.py](../../src/opendoc/checks.py#L134)
 
 ```python
-compare_documents(source: DocumentModel, target: DocumentModel, *, policies: Iterable[CheckPolicy] | None=None, limits: DocumentLimits | None=None)
+compare_documents(source: DocumentModel, target: DocumentModel, *, policies: Iterable[CheckPolicy] | None=None, limits: DocumentLimits | None=None, extensions: Iterable[ExtensionSchema] | None=None, unknown_extensions: UnknownExtensionPolicy='error')
 ```
 
 Compare entire models in memory and apply explicit policies in order.
@@ -161,19 +195,19 @@ Existing ConversionReport usage and policy return values remain supported.
 
 ### DocumentIdMap
 
-[src/opendoc/composition.py](../../src/opendoc/composition.py#L46)
+[src/opendoc/composition.py](../../src/opendoc/composition.py#L56)
 
 Original-to-result identifiers for one input, including unchanged IDs.
 
 ### DocumentMerge
 
-[src/opendoc/composition.py](../../src/opendoc/composition.py#L55)
+[src/opendoc/composition.py](../../src/opendoc/composition.py#L67)
 
 Independent merged model and per-input identifier snapshots.
 
 ### extract_document
 
-[src/opendoc/composition.py](../../src/opendoc/composition.py#L371)
+[src/opendoc/composition.py](../../src/opendoc/composition.py#L504)
 
 ```python
 extract_document(document: DocumentModel, location: NodeLocation[ModelNode], *, package_policy: PackagePolicy='error', additional_styles: Iterable[str]=(), additional_resources: Iterable[str]=(), limits: DocumentLimits | None=None)
@@ -189,7 +223,7 @@ partial extraction and keeps the entire opaque graph, without pruning bytes.
 
 ### merge_documents
 
-[src/opendoc/composition.py](../../src/opendoc/composition.py#L230)
+[src/opendoc/composition.py](../../src/opendoc/composition.py#L272)
 
 ```python
 merge_documents(documents: Iterable[DocumentModel], *, conflicts: IdentifierConflictPolicy='error', metadata_conflicts: MetadataConflictPolicy='error', package_policy: PackagePolicy='error', mode: ConversionMode | None=None, limits: DocumentLimits | None=None)
@@ -232,7 +266,7 @@ Machine-readable issue; the message is explanatory, never a parser input.
 
 ### document_from_dict
 
-[src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L74)
+[src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L78)
 
 ```python
 document_from_dict(payload: dict[str, Any], *, limits: DocumentLimits | None=None)
@@ -242,7 +276,7 @@ document_from_dict(payload: dict[str, Any], *, limits: DocumentLimits | None=Non
 
 ### document_from_json
 
-[src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L103)
+[src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L114)
 
 ```python
 document_from_json(value: str | bytes, *, limits: DocumentLimits | None=None)
@@ -250,7 +284,7 @@ document_from_json(value: str | bytes, *, limits: DocumentLimits | None=None)
 
 ### document_to_dict
 
-[src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L49)
+[src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L50)
 
 ```python
 document_to_dict(document: DocumentModel, *, limits: DocumentLimits | None=None)
@@ -260,7 +294,7 @@ document_to_dict(document: DocumentModel, *, limits: DocumentLimits | None=None)
 
 ### document_to_json
 
-[src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L99)
+[src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L110)
 
 ```python
 document_to_json(document: DocumentModel, *, indent: int | None=None, limits: DocumentLimits | None=None)
@@ -268,7 +302,7 @@ document_to_json(document: DocumentModel, *, indent: int | None=None, limits: Do
 
 ### load_document
 
-[src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L143)
+[src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L154)
 
 ```python
 load_document(path: str | Path, *, limits: DocumentLimits | None=None)
@@ -276,7 +310,7 @@ load_document(path: str | Path, *, limits: DocumentLimits | None=None)
 
 ### save_document
 
-[src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L132)
+[src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L143)
 
 ```python
 save_document(document: DocumentModel, path: str | Path, *, indent: int | None=2, limits: DocumentLimits | None=None)
@@ -284,123 +318,129 @@ save_document(document: DocumentModel, path: str | Path, *, indent: int | None=2
 
 ### Box
 
-[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L108)
+[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L109)
 
 Геометрия элемента относительно страницы, в пунктах.
 
 ### ConversionMode
 
-[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L29)
+[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L30)
 
 ### DocumentModel
 
-[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L385)
+[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L455)
 
 Каноническое представление редактируемой и визуальной структуры.
 
+### Footnote
+
+[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L394)
+
+Document-local note definition with rich blocks, independent of pagination.
+
 ### Formula
 
-[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L238)
+[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L298)
 
 ### FormulaFormat
 
-[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L45)
+[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L46)
 
 ### Image
 
-[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L250)
+[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L310)
 
 ### ImageCrop
 
-[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L119)
+[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L120)
 
 Обрезка изображения как доля от исходного размера для каждой стороны.
 
 ### Length
 
-[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L101)
+[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L102)
 
 Физическая длина в пунктах (1/72 дюйма).
 
 ### PackageGraph
 
-[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L190)
+[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L191)
 
 Format-specific package topology kept outside semantic resources.
 
 ### PackagePart
 
-[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L166)
+[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L167)
 
 Opaque package part preserved for a format-aware round-trip.
 
 ### PackageRelationship
 
-[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L179)
+[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L180)
 
 Directed relationship between package parts or to an external target.
 
 ### PageSettings
 
-[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L357)
+[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L427)
 
 ### Paragraph
 
-[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L268)
+[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L328)
 
 ### Provenance
 
-[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L61)
+[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L62)
 
 Stable origin pointer plus an append-only transformation history.
 
 ### ProvenanceEvent
 
-[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L52)
+[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L53)
 
 One traceable transformation applied to a model element or resource.
 
 ### Resource
 
-[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L148)
+[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L149)
 
 ### ResourceKind
 
-[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L35)
+[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L36)
 
 ### Section
 
-[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L367)
+[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L437)
 
 ### Table
 
-[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L317)
+[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L377)
 
 ### TableCell
 
-[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L295)
+[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L355)
 
 ### TableRow
 
-[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L307)
+[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L367)
 
 ### TextRun
 
-[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L228)
+[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L288)
 
 ### TextStyle
 
-[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L129)
+[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L130)
 
 ### VisualSurrogate
 
-[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L83)
+[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L84)
 
 Visual companion retained beside a native editable representation.
 
 ### attach_visual_surrogate
 
-[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L333)
+[src/opendoc/document_model.py](../../src/opendoc/document_model.py#L403)
 
 ```python
 attach_visual_surrogate(element: Paragraph | Table | Formula | Image, resource: Resource, *, reason: str, fidelity: float | None=None, operation: str='fallback.visual-surrogate')
@@ -410,23 +450,176 @@ Attach a visual companion and record why the native representation is insufficie
 
 ### EmphasisLossPolicy
 
-[src/opendoc/emphasis_quality.py](../../src/opendoc/emphasis_quality.py#L98)
+[src/opendoc/emphasis_quality.py](../../src/opendoc/emphasis_quality.py#L99)
+
+### ExtensionContext
+
+[src/opendoc/extensions.py](../../src/opendoc/extensions.py#L55)
+
+A validator receives independent data and a location ending in .data.
+
+### ExtensionSchema
+
+[src/opendoc/extensions.py](../../src/opendoc/extensions.py#L70)
+
+One consumer key, explicit supported versions and optional trusted validation code.
+
+### ExtensionValue
+
+[src/opendoc/extensions.py](../../src/opendoc/extensions.py#L45)
+
+Independent JSON data and unknown envelope fields; reading is not semantic verification.
+
+### check_extensions
+
+[src/opendoc/extensions.py](../../src/opendoc/extensions.py#L285)
+
+```python
+check_extensions(document: DocumentModel, schemas: Iterable[ExtensionSchema], *, unknown: UnknownExtensionPolicy='error', limits: DocumentLimits | None=None)
+```
+
+Check the whole model plus declared extension schemas, without global registration.
+
+Callback data/diagnostics are independent snapshots. Callback exceptions
+propagate; no executable names are loaded from JSON. Opaque bytes remain opaque.
+
+### get_extension
+
+[src/opendoc/extensions.py](../../src/opendoc/extensions.py#L105)
+
+```python
+get_extension(bag: Mapping[str, Any], key: str, *, limits: DocumentLimits | None=None)
+```
+
+Read a consumer envelope without inferring semantics or executing validation code.
+
+### remove_extension
+
+[src/opendoc/extensions.py](../../src/opendoc/extensions.py#L132)
+
+```python
+remove_extension(bag: MutableMapping[str, Any], key: str, *, limits: DocumentLimits | None=None)
+```
+
+Remove only a recognized envelope; opaque values are preserved by refusal.
+
+### set_extension
+
+[src/opendoc/extensions.py](../../src/opendoc/extensions.py#L116)
+
+```python
+set_extension(bag: MutableMapping[str, Any], key: str, data: Any, *, version: int=1, limits: DocumentLimits | None=None)
+```
+
+Set independent JSON data atomically, retaining unknown tagged envelope fields.
+
+### FootnoteNumber
+
+[src/opendoc/footnotes.py](../../src/opendoc/footnotes.py#L34)
+
+A reference occurrence and its first-use number in common traversal order.
+
+### FootnoteReference
+
+[src/opendoc/footnotes.py](../../src/opendoc/footnotes.py#L24)
+
+A reference to a definition ID; the run retains its own display text.
+
+### get_footnote
+
+[src/opendoc/footnotes.py](../../src/opendoc/footnotes.py#L117)
+
+```python
+get_footnote(document: DocumentModel, identifier: str, *, limits: DocumentLimits | None=None)
+```
+
+Find a live unique definition; other model semantics are checked separately.
+
+### get_footnote_reference
+
+[src/opendoc/footnotes.py](../../src/opendoc/footnotes.py#L50)
+
+```python
+get_footnote_reference(run: TextRun, *, limits: DocumentLimits | None=None)
+```
+
+Read only explicitly tagged note references.
+
+### iter_footnote_numbers
+
+[src/opendoc/footnotes.py](../../src/opendoc/footnotes.py#L101)
+
+```python
+iter_footnote_numbers(document: DocumentModel, *, limits: DocumentLimits | None=None)
+```
+
+Validate before yielding; number distinct IDs by first reference, starting at one.
+
+### iter_footnote_references
+
+[src/opendoc/footnotes.py](../../src/opendoc/footnotes.py#L94)
+
+```python
+iter_footnote_references(root: ModelNode, *, limits: DocumentLimits | None=None)
+```
+
+Yield every reference occurrence, including references in note bodies.
+
+### iter_footnotes
+
+[src/opendoc/footnotes.py](../../src/opendoc/footnotes.py#L87)
+
+```python
+iter_footnotes(root: ModelNode, *, limits: DocumentLimits | None=None)
+```
+
+Yield live definitions after ordinary sections, with normal rich-block descendants.
+
+### remove_footnote
+
+[src/opendoc/footnotes.py](../../src/opendoc/footnotes.py#L159)
+
+```python
+remove_footnote(document: DocumentModel, identifier: str, *, limits: DocumentLimits | None=None)
+```
+
+Remove an unreferenced definition atomically, returning an independent snapshot.
+
+### set_footnote
+
+[src/opendoc/footnotes.py](../../src/opendoc/footnotes.py#L131)
+
+```python
+set_footnote(document: DocumentModel, note: Footnote, *, limits: DocumentLimits | None=None)
+```
+
+Insert/replace an independent note at its existing position, committing a valid model only.
+
+### set_footnote_reference
+
+[src/opendoc/footnotes.py](../../src/opendoc/footnotes.py#L62)
+
+```python
+set_footnote_reference(run: TextRun, reference: FootnoteReference | None, *, limits: DocumentLimits | None=None)
+```
+
+Assign/remove a role atomically, preserving unknown tagged fields.
 
 ### FormulaLossPolicy
 
-[src/opendoc/formula_quality_policy.py](../../src/opendoc/formula_quality_policy.py#L69)
+[src/opendoc/formula_quality_policy.py](../../src/opendoc/formula_quality_policy.py#L70)
 
 ### DocumentComparison
 
-[src/opendoc/inspection.py](../../src/opendoc/inspection.py#L91)
+[src/opendoc/inspection.py](../../src/opendoc/inspection.py#L94)
 
 ### DocumentInspection
 
-[src/opendoc/inspection.py](../../src/opendoc/inspection.py#L41)
+[src/opendoc/inspection.py](../../src/opendoc/inspection.py#L44)
 
 ### compare_inspections
 
-[src/opendoc/inspection.py](../../src/opendoc/inspection.py#L138)
+[src/opendoc/inspection.py](../../src/opendoc/inspection.py#L141)
 
 ```python
 compare_inspections(source: DocumentInspection, target: DocumentInspection)
@@ -436,7 +629,7 @@ compare_inspections(source: DocumentInspection, target: DocumentInspection)
 
 ### inspect_document_model
 
-[src/opendoc/inspection.py](../../src/opendoc/inspection.py#L704)
+[src/opendoc/inspection.py](../../src/opendoc/inspection.py#L724)
 
 ```python
 inspect_document_model(document: DocumentModel, *, source_path: str | Path | None=None, source_format: str | None=None, limits: DocumentLimits | None=None, check_external_sources: bool=True)
@@ -521,7 +714,7 @@ Do not treat unknown coverage or ambiguous matches as a passed budget.
 
 ### clone_model
 
-[src/opendoc/operations.py](../../src/opendoc/operations.py#L31)
+[src/opendoc/operations.py](../../src/opendoc/operations.py#L32)
 
 ```python
 clone_model(root: _RootT, *, limits: DocumentLimits | None=None)
@@ -535,7 +728,7 @@ Cycles, malformed structure and exhausted budgets fail before copying.
 
 ### extract_text
 
-[src/opendoc/operations.py](../../src/opendoc/operations.py#L171)
+[src/opendoc/operations.py](../../src/opendoc/operations.py#L172)
 
 ```python
 extract_text(root: ModelNode, *, block_separator: str='\n', cell_separator: str='\t', row_separator: str='\n', include_alt_text: bool=True, include_formula_source: bool=False, limits: DocumentLimits | None=None)
@@ -549,7 +742,7 @@ Empty containers retain their structural separators; no XML/I/O is involved.
 
 ### insert_node
 
-[src/opendoc/operations.py](../../src/opendoc/operations.py#L115)
+[src/opendoc/operations.py](../../src/opendoc/operations.py#L116)
 
 ```python
 insert_node(root: ModelNode, parent: NodeLocation[ModelNode], field: str, index: int, node: ModelNode, *, limits: DocumentLimits | None=None)
@@ -562,7 +755,7 @@ Failure restores the collection. Semantic references are checked separately.
 
 ### remove_node
 
-[src/opendoc/operations.py](../../src/opendoc/operations.py#L159)
+[src/opendoc/operations.py](../../src/opendoc/operations.py#L160)
 
 ```python
 remove_node(root: ModelNode, location: NodeLocation[_RootT], *, limits: DocumentLimits | None=None)
@@ -572,7 +765,7 @@ Remove a non-root occurrence in place and return the detached live node.
 
 ### replace_node
 
-[src/opendoc/operations.py](../../src/opendoc/operations.py#L139)
+[src/opendoc/operations.py](../../src/opendoc/operations.py#L140)
 
 ```python
 replace_node(root: ModelNode, location: NodeLocation[ModelNode], node: ModelNode, *, limits: DocumentLimits | None=None)
@@ -582,7 +775,7 @@ Replace a non-root occurrence with an independent copy, in place.
 
 ### transform_elements
 
-[src/opendoc/operations.py](../../src/opendoc/operations.py#L235)
+[src/opendoc/operations.py](../../src/opendoc/operations.py#L236)
 
 ```python
 transform_elements(root: _RootT, types: type[_ElementT] | tuple[type[_ElementT], ...], transform: Callable[[NodeLocation[_ElementT]], Element | None], *, predicate: Callable[[NodeLocation[_ElementT]], bool] | None=None, limits: DocumentLimits | None=None)
@@ -601,6 +794,88 @@ propagate; no partial result is returned, and library edits never touch input.
 [src/opendoc/quality_policy.py](../../src/opendoc/quality_policy.py#L11)
 
 Лимит событий LOSS; не подменяет измерение сохранности объектов.
+
+### Anchor
+
+[src/opendoc/references.py](../../src/opendoc/references.py#L29)
+
+A document-local identity at the beginning of an element occurrence.
+
+### InternalLink
+
+[src/opendoc/references.py](../../src/opendoc/references.py#L39)
+
+A link to an anchor ID; no URI parsing or external lookup is involved.
+
+### get_anchor
+
+[src/opendoc/references.py](../../src/opendoc/references.py#L102)
+
+```python
+get_anchor(node: Element, *, limits: DocumentLimits | None=None)
+```
+
+Read a tagged anchor on a paragraph, table, run, formula or image.
+
+### get_internal_link
+
+[src/opendoc/references.py](../../src/opendoc/references.py#L112)
+
+```python
+get_internal_link(run: TextRun, *, limits: DocumentLimits | None=None)
+```
+
+Read explicit internal link data without interpreting TextRun.link.
+
+### iter_anchors
+
+[src/opendoc/references.py](../../src/opendoc/references.py#L122)
+
+```python
+iter_anchors(root: ModelNode, *, limits: DocumentLimits | None=None)
+```
+
+Yield anchor-bearing occurrences in common order, including tables and all headers.
+
+### iter_internal_links
+
+[src/opendoc/references.py](../../src/opendoc/references.py#L129)
+
+```python
+iter_internal_links(root: ModelNode, *, limits: DocumentLimits | None=None)
+```
+
+Yield tagged run links, leaving external and legacy fragment strings untouched.
+
+### resolve_anchor
+
+[src/opendoc/references.py](../../src/opendoc/references.py#L136)
+
+```python
+resolve_anchor(document: DocumentModel, identifier: str, *, limits: DocumentLimits | None=None)
+```
+
+Resolve a unique ID in a valid document; return None when no anchor has that ID.
+
+### set_anchor
+
+[src/opendoc/references.py](../../src/opendoc/references.py#L107)
+
+```python
+set_anchor(node: Element, anchor: Anchor | None, *, limits: DocumentLimits | None=None)
+```
+
+Set/remove one anchor atomically; document-wide uniqueness is validated separately.
+
+### set_internal_link
+
+[src/opendoc/references.py](../../src/opendoc/references.py#L117)
+
+```python
+set_internal_link(run: TextRun, link: InternalLink | None, *, limits: DocumentLimits | None=None)
+```
+
+Set/remove a run link atomically; target existence is checked on the whole model.
 
 ### add_resource
 
@@ -759,7 +1034,7 @@ and the returned style owns its mutable values.
 
 ### TextPreservationPolicy
 
-[src/opendoc/text_quality_policy.py](../../src/opendoc/text_quality_policy.py#L17)
+[src/opendoc/text_quality_policy.py](../../src/opendoc/text_quality_policy.py#L18)
 
 Check source paragraphs exactly, or the complete whitespace-normalized flow.
 
@@ -771,19 +1046,19 @@ Formula markup is excluded in both modes.
 
 ### NodeLocation
 
-[src/opendoc/traversal.py](../../src/opendoc/traversal.py#L47)
+[src/opendoc/traversal.py](../../src/opendoc/traversal.py#L48)
 
 One occurrence; paths and positions require a fresh walk after structural edits.
 
 ### ResourceReference
 
-[src/opendoc/traversal.py](../../src/opendoc/traversal.py#L77)
+[src/opendoc/traversal.py](../../src/opendoc/traversal.py#L78)
 
 An explicit model resource use, including its owner and exact field path.
 
 ### iter_blocks
 
-[src/opendoc/traversal.py](../../src/opendoc/traversal.py#L195)
+[src/opendoc/traversal.py](../../src/opendoc/traversal.py#L200)
 
 ```python
 iter_blocks(root: ModelNode, *, limits: DocumentLimits | None=None)
@@ -793,7 +1068,7 @@ Yield block occurrences, including nested cells and every section collection.
 
 ### iter_elements
 
-[src/opendoc/traversal.py](../../src/opendoc/traversal.py#L209)
+[src/opendoc/traversal.py](../../src/opendoc/traversal.py#L214)
 
 ```python
 iter_elements(root: ModelNode, types: type[_ElementT] | tuple[type[_ElementT], ...], *, limits: DocumentLimits | None=None)
@@ -803,7 +1078,7 @@ Find element types in both block and inline positions without user recursion.
 
 ### iter_inlines
 
-[src/opendoc/traversal.py](../../src/opendoc/traversal.py#L202)
+[src/opendoc/traversal.py](../../src/opendoc/traversal.py#L207)
 
 ```python
 iter_inlines(root: ModelNode, *, limits: DocumentLimits | None=None)
@@ -813,7 +1088,7 @@ Yield inline occurrences; standalone images/formulas are block roots.
 
 ### iter_resource_references
 
-[src/opendoc/traversal.py](../../src/opendoc/traversal.py#L248)
+[src/opendoc/traversal.py](../../src/opendoc/traversal.py#L253)
 
 ```python
 iter_resource_references(root: ModelNode, *, limits: DocumentLimits | None=None)
@@ -826,7 +1101,7 @@ Missing resource identifiers are yielded; their resolution is validation.
 
 ### iter_sections
 
-[src/opendoc/traversal.py](../../src/opendoc/traversal.py#L188)
+[src/opendoc/traversal.py](../../src/opendoc/traversal.py#L193)
 
 ```python
 iter_sections(root: ModelNode, *, limits: DocumentLimits | None=None)
@@ -836,7 +1111,7 @@ Yield sections with their actual parent and document position.
 
 ### walk_model
 
-[src/opendoc/traversal.py](../../src/opendoc/traversal.py#L173)
+[src/opendoc/traversal.py](../../src/opendoc/traversal.py#L178)
 
 ```python
 walk_model(root: ModelNode, *, limits: DocumentLimits | None=None)

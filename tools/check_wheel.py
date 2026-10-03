@@ -178,7 +178,36 @@ assert [item.number for item in core.iter_list_numbers(list_restored)] == [3]
 list_merged = core.merge_documents([list_document, list_restored], conflicts='rename')
 assert list_merged.id_maps[1].lists == {'items': 'items~2'}
 assert [item.number for item in core.iter_list_numbers(list_merged.document)] == [3, 3]
-print('Independent wheel: model, traversal, operations, composition, lists, resources, '
+target_paragraph = core.Paragraph([core.TextRun('Target')])
+core.set_anchor(target_paragraph, core.Anchor('target'))
+link_run = core.TextRun('Go')
+core.set_internal_link(link_run, core.InternalLink('target'))
+reference_document = core.DocumentModel(sections=[core.Section(blocks=[core.Paragraph([link_run]), target_paragraph])])
+reference_restored = core.document_from_json(core.document_to_json(reference_document))
+assert core.resolve_anchor(reference_restored, 'target').node is reference_restored.sections[0].blocks[1]
+reference_merged = core.merge_documents([reference_document, reference_restored], conflicts='rename')
+assert reference_merged.id_maps[1].anchors == {'target': 'target~2'}
+assert [core.get_internal_link(item.node).target_id for item in core.iter_internal_links(reference_merged.document)] == [
+    'target', 'target~2']
+reference_selected = core.extract_document(reference_document, next(core.iter_internal_links(reference_document)))
+assert core.resolve_anchor(reference_selected, 'target') is not None
+reference_comparison = core.compare_documents(reference_document, reference_restored)
+assert reference_comparison.metrics['comparison']['object_diff']['references']['available']
+note_reference = core.TextRun('1')
+core.set_footnote_reference(note_reference, core.FootnoteReference('note'))
+note_document = core.DocumentModel(sections=[core.Section(blocks=[core.Paragraph([note_reference])])],
+                                   footnotes=[core.Footnote('note', [core.Paragraph([core.TextRun('Note body')])])])
+note_restored = core.document_from_json(core.document_to_json(note_document))
+assert note_restored == note_document
+assert [item.number for item in core.iter_footnote_numbers(note_restored)] == [1]
+assert next(core.iter_footnotes(note_restored)).node is note_restored.footnotes[0]
+note_selected = core.extract_document(note_restored, next(core.iter_footnote_references(note_restored)))
+assert core.get_footnote(note_selected, 'note').blocks[0].plain_text == 'Note body'
+note_merged = core.merge_documents([note_document, note_restored], conflicts='rename')
+assert note_merged.id_maps[1].footnotes == {'note': 'note~2'}
+assert [item.number for item in core.iter_footnote_numbers(note_merged.document)] == [1, 2]
+assert core.compare_documents(note_document, note_restored).metrics['comparison']['object_diff']['footnotes']['available']
+print('Independent wheel: model, traversal, operations, composition, lists, references, footnotes, resources, '
       'styles, typed properties, memory checks, persistence, comparison and optional math behavior OK')
 """
 

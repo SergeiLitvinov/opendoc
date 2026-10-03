@@ -7,7 +7,7 @@ from dataclasses import dataclass, fields, is_dataclass
 from typing import Any
 
 from opendoc.diagnostics import _DiagnosticError
-from opendoc.document_model import PackagePart, Resource
+from opendoc.document_model import DocumentModel, PackagePart, Resource
 from opendoc.storage import ArtifactLimitError
 
 
@@ -115,6 +115,24 @@ def _guard_model(value: Any, limits: DocumentLimits) -> tuple[int, int]:
         children = None
         if is_dataclass(item) and not isinstance(item, type):
             children = [(getattr(item, field.name), f"{path}.{field.name}") for field in fields(item)]
+            if isinstance(item, DocumentModel):
+                # Absent extensions must not change accepted budgets for old
+                # documents. Populated/malformed fields still consume quotas.
+                children = [
+                    (child, location)
+                    for child, location in children
+                    if not (
+                        location == f"{path}.footnotes"
+                        and type(child) is list
+                        and not child
+                        or location == f"{path}.footnote_properties"
+                        and type(child) is dict
+                        and not child
+                        or location == f"{path}.footnote_extensions"
+                        and type(child) is dict
+                        and not child
+                    )
+                ]
         elif isinstance(item, Mapping):
             if len(item) > limits.max_nodes - nodes:
                 _quota(path, "nodes", limits.max_nodes)

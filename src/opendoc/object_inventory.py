@@ -5,7 +5,7 @@ from collections.abc import Iterator
 from dataclasses import asdict
 from typing import Any
 
-from opendoc.document_model import Formula, Image, Paragraph, Resource, Table, TextRun
+from opendoc.document_model import Footnote, Formula, Image, Paragraph, Resource, Table, TextRun
 from opendoc.emphasis_quality import EmphasisInventory
 from opendoc.lists import LIST_PROPERTY, _list_payload
 from opendoc.semantics import HEADING_PROPERTY, _heading_payload
@@ -27,6 +27,8 @@ def inspect_objects(
 ) -> Iterator[dict[str, Any]]:
     for reference in walk_model(value):
         node = reference.node
+        if isinstance(node, Footnote):
+            continue
         if not isinstance(node, (Paragraph, Table, Formula, Image)) and reference.parent is not None:
             continue
         local = f"{location}.{reference.path}" if reference.path else location
@@ -52,7 +54,7 @@ def _inventory_parent(reference: NodeLocation[ModelNode]) -> str | None:
 def _object_entry(
     value: Any,
     location: str,
-    page_index: int,
+    page_index: int | None,
     resources: dict[str, Resource],
     *,
     parent: str | None = None,

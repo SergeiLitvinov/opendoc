@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING, Any
 from opendoc._xml import _parse_xml, _xml_bytes
 from opendoc.diagnostics import CheckResult, ConversionReport, IssueSeverity
 from opendoc.document_model import Formula, FormulaFormat
+from opendoc.footnotes import _note_content_available
 from opendoc.object_inventory import OBJECT_INVENTORY_SCOPE
 
 if TYPE_CHECKING:
@@ -75,6 +76,8 @@ class FormulaLossPolicy:
 
     def evaluate(self, report: ConversionReport | CheckResult, comparison: "DocumentComparison | None") -> bool:
         available = comparison is not None and comparison.valid
+        if available:
+            available = _note_content_available(comparison.source.metadata, comparison.target.metadata)
         counts = []
         for side in (comparison.source, comparison.target) if available else ():
             formulas = [item for item in side.objects if item.get("type") == "formula"]

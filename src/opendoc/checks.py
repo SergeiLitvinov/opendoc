@@ -11,6 +11,7 @@ from opendoc._validation import _model_issues
 from opendoc.diagnostics import CheckResult, ConversionIssue, DiagnosticIssue, IssueSeverity
 from opendoc.document_model import DocumentModel
 from opendoc.emphasis_quality import EmphasisLossPolicy
+from opendoc.extensions import ExtensionSchema, UnknownExtensionPolicy, _check_extensions, _schemas
 from opendoc.formula_quality_policy import FormulaLossPolicy
 from opendoc.inspection import DocumentComparison, DocumentInspection, compare_inspections, inspect_document_model
 from opendoc.limits import DocumentLimits, _quota, _resolve_limits
@@ -35,15 +36,30 @@ def _inspect(document: DocumentModel, limits: DocumentLimits) -> tuple[DocumentI
     return inspection, issues
 
 
-def check_document(document: DocumentModel, *, limits: DocumentLimits | None = None) -> CheckResult:
+def check_document(
+    document: DocumentModel,
+    *,
+    limits: DocumentLimits | None = None,
+    extensions: Iterable[ExtensionSchema] | None = None,
+    unknown_extensions: UnknownExtensionPolicy = "error",
+) -> CheckResult:
     """Validate and inspect without any filesystem lookup or output path.
 
     Structural errors have machine codes/paths; invalid models have no metrics.
     Valid external-only resources remain structurally valid with unknown sizes
     and hashes. DocumentLimits exhaustion continues to raise ArtifactLimitError.
     """
-    inspection, issues = _inspect(document, _resolve_limits(limits))
-    return CheckResult(issues, {"inspection": deepcopy(inspection.to_dict())})
+    resolved = _resolve_limits(limits)
+    if unknown_extensions not in ("error", "preserve"):
+        raise ValueError("unknown_extensions must be error or preserve")
+    selected = _schemas(extensions, resolved) if extensions is not None else None
+    inspection, issues = _inspect(document, resolved)
+    metrics = {"inspection": deepcopy(inspection.to_dict())}
+    if selected is not None and inspection.valid:
+        checked = _check_extensions(document, selected, unknown_extensions, resolved)
+        issues.extend(checked.issues)
+        metrics.update(deepcopy(checked.metrics))
+    return CheckResult(issues, metrics)
 
 
 def _policies(policies: Iterable[CheckPolicy] | None, limits: DocumentLimits) -> list[CheckPolicy]:
@@ -79,6 +95,28 @@ def _comparison_issue(issue: ConversionIssue, comparison: DocumentComparison) ->
         measurement = comparison.font_comparison
     elif issue.feature == "object-loss":
         measurement = {"available": comparison.object_diff.get("available"), "location": issue.location}
+    elif issue.feature.startswith("footnote-"):
+        change = next(
+            (
+                item
+                for item in comparison.object_diff.get("footnotes", {}).get("changes", [])
+                if item["code"] == issue.feature and item["source"]["location"] == issue.location
+            ),
+            None,
+        )
+        if change is not None:
+            measurement = {"source": change["source"], "target": change["target"]}
+    elif issue.feature.startswith(("anchor-", "internal-link-")):
+        change = next(
+            (
+                item
+                for item in comparison.object_diff.get("references", {}).get("changes", [])
+                if item["code"] == issue.feature and item["source"]["location"] == issue.location
+            ),
+            None,
+        )
+        if change is not None:
+            measurement = {"source": change["source"], "target": change["target"]}
     elif issue.feature.startswith(("list-", "heading-")):
         change = next(
             (item for item in comparison.object_diff.get("changed", []) if item["source"].get("location") == issue.location), None
@@ -99,6 +137,8 @@ def compare_documents(
     *,
     policies: Iterable[CheckPolicy] | None = None,
     limits: DocumentLimits | None = None,
+    extensions: Iterable[ExtensionSchema] | None = None,
+    unknown_extensions: UnknownExtensionPolicy = "error",
 ) -> CheckResult:
     """Compare entire models in memory and apply explicit policies in order.
 
@@ -108,9 +148,22 @@ def compare_documents(
     Existing ConversionReport usage and policy return values remain supported.
     """
     resolved = _resolve_limits(limits)
+    if unknown_extensions not in ("error", "preserve"):
+        raise ValueError("unknown_extensions must be error or preserve")
+    schemas = _schemas(extensions, resolved) if extensions is not None else None
     selected = _policies(policies, resolved)
     before, source_issues = _inspect(source, resolved)
     after, target_issues = _inspect(target, resolved)
+    extension_metrics = {}
+    if schemas is not None:
+        for side, model, inspection, model_issues in (
+            ("source", source, before, source_issues),
+            ("target", target, after, target_issues),
+        ):
+            if inspection.valid:
+                checked = _check_extensions(model, schemas, unknown_extensions, resolved)
+                model_issues.extend(checked.issues)
+                extension_metrics[side] = checked.metrics["extensions"]
     comparison = compare_inspections(before, after)
     issues = [
         replace(issue, location=f"{side}.{issue.location}" if issue.location else side)
@@ -140,6 +193,8 @@ def compare_documents(
     result = CheckResult(
         issues, deepcopy({"source": before.to_dict(), "target": after.to_dict(), "comparison": comparison.to_dict()})
     )
+    if schemas is not None:
+        result.metrics["extensions"] = deepcopy(extension_metrics)
     for policy in selected:
         if isinstance(policy, QualityPolicy):
             policy.evaluate(result)

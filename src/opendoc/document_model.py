@@ -7,6 +7,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import TYPE_CHECKING, Any, TypeAlias
@@ -195,6 +196,65 @@ class PackageGraph:
     parts: dict[str, PackagePart] = field(default_factory=dict)
     relationships: list[PackageRelationship] = field(default_factory=list)
 
+    @classmethod
+    def create(
+        cls,
+        format: str,
+        *,
+        root: str = "/",
+        parts: Iterable[PackagePart] = (),
+        relationships: Iterable[PackageRelationship] = (),
+        limits: DocumentLimits | None = None,
+    ) -> PackageGraph:
+        """Create an independent format-neutral graph; legacy constructor defaults remain unchanged.
+
+        The logical root need not be a physical part. Inputs share node/embedded
+        budgets, duplicate definitions fail, external targets are never opened.
+        """
+        from copy import deepcopy
+        from dataclasses import replace
+
+        from opendoc._validation import _validate_package
+        from opendoc.limits import _guard_model, _resolve_limits
+
+        if not isinstance(format, str) or not format:
+            raise ValueError("format must be a nonempty string")
+        budget = _resolve_limits(limits)
+        graph = cls(format, root=root)
+        errors = _validate_package(graph, budget)
+        if errors:
+            raise ValueError("; ".join(errors))
+        nodes, embedded = _guard_model(graph, budget)
+        for label, values, expected in (("parts", parts, PackagePart), ("relationships", relationships, PackageRelationship)):
+            try:
+                iterator = iter(values)
+            except TypeError as error:
+                raise ValueError(f"{label}: expected an iterable") from error
+            for index, value in enumerate(iterator):
+                if not isinstance(value, expected):
+                    raise ValueError(f"{label}[{index}]: expected {expected.__name__}")
+                remaining = replace(
+                    budget, max_nodes=max(1, budget.max_nodes - nodes), max_embedded_bytes=budget.max_embedded_bytes - embedded
+                )
+                if nodes == budget.max_nodes:
+                    from opendoc.limits import _quota
+
+                    _quota(label, "nodes", budget.max_nodes)
+                count, byte_count = _guard_model(value, remaining)
+                nodes += count
+                embedded += byte_count
+                copied = deepcopy(value)
+                if isinstance(copied, PackagePart):
+                    if copied.name in graph.parts:
+                        raise ValueError(f"parts[{index}]: duplicate part {copied.name!r}")
+                    graph.add_part(copied)
+                else:
+                    graph.add_relationship(copied)
+        errors = _validate_package(graph, budget)
+        if errors:
+            raise ValueError("; ".join(errors))
+        return graph
+
     def add_part(self, part: PackagePart) -> None:
         if part.name in self.parts and self.parts[part.name] != part:
             raise ValueError(f"duplicate package part: {part.name}")
@@ -330,6 +390,16 @@ class Table:
 Block: TypeAlias = Paragraph | Table | Formula | Image
 
 
+@dataclass
+class Footnote:
+    """Document-local note definition with rich blocks, independent of pagination."""
+
+    id: str
+    blocks: list[Block] = field(default_factory=list)
+    properties: dict[str, Any] = field(default_factory=dict)
+    extensions: dict[str, Any] = field(default_factory=dict)
+
+
 def attach_visual_surrogate(
     element: Paragraph | Table | Formula | Image,
     resource: Resource,
@@ -393,6 +463,9 @@ class DocumentModel:
     mode: ConversionMode = ConversionMode.BALANCED
     source_format: str | None = None
     version: int = 2
+    footnotes: list[Footnote] = field(default_factory=list)
+    footnote_properties: dict[str, Any] = field(default_factory=dict)
+    footnote_extensions: dict[str, Any] = field(default_factory=dict)
 
     def add_resource(self, resource: Resource) -> None:
         if resource.id in self.resources:
@@ -407,6 +480,7 @@ class DocumentModel:
 
 
 __all__ = [
+    "Footnote",
     "VECTOR_IMAGE_MEDIA_TYPES",
     "Block",
     "Box",

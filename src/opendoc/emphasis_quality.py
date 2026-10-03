@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any
 
 from opendoc.diagnostics import CheckResult, ConversionReport, IssueSeverity
+from opendoc.footnotes import _note_content_available
 
 if TYPE_CHECKING:
     from opendoc.document_model import TextRun
@@ -108,6 +109,7 @@ class EmphasisLossPolicy:
         available = (
             comparison is not None
             and comparison.valid
+            and _note_content_available(comparison.source.metadata, comparison.target.metadata)
             and all(isinstance(value, dict) and _valid(value) for value in (source, target))
             and source["sha256"] == target["sha256"]
             and source["characters"] == target["characters"]

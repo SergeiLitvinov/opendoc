@@ -15,6 +15,7 @@ from opendoc.diagnostics import ConversionIssue, IssueSeverity
 from opendoc.document_model import (
     Box,
     DocumentModel,
+    Footnote,
     Formula,
     Image,
     PageSettings,
@@ -27,10 +28,12 @@ from opendoc.document_model import (
     TextRun,
 )
 from opendoc.emphasis_quality import EmphasisInventory
+from opendoc.footnotes import _compare_notes, _note_content_available, _note_inventory
 from opendoc.limits import DocumentLimits, _resolve_limits
 from opendoc.lists import _list_inventory_valid, iter_list_numbers
 from opendoc.object_inventory import OBJECT_INVENTORY_SCOPE, _inventory_parent, _object_entry
 from opendoc.object_matching import match_objects
+from opendoc.references import _compare_references, _reference_inventory
 from opendoc.text_flow import TextFlowFingerprint
 from opendoc.traversal import SECTION_CONTENT_FIELDS, Element, NodeLocation, _references_at, _walk_locations
 
@@ -140,12 +143,13 @@ def compare_inspections(source: DocumentInspection, target: DocumentInspection) 
 
     source_metrics = _quality_metrics(source)
     target_metrics = _quality_metrics(target)
+    note_content_available = _note_content_available(source.metadata, target.metadata)
     retention: dict[str, dict[str, float | int | None]] = {}
     issues: list[ConversionIssue] = []
     for name in source_metrics:
         before = source_metrics[name]
         after = target_metrics[name]
-        if before is None or after is None:
+        if before is None or after is None or not note_content_available:
             retention[name] = {"source": before, "target": after, "delta": None, "ratio": None}
             continue
         ratio = 1.0 if before == 0 else min(after / before, 1.0)
@@ -180,15 +184,31 @@ def compare_inspections(source: DocumentInspection, target: DocumentInspection) 
         ConversionIssue(issue.severity, "package-part-loss", issue.message.replace("resource", "package part"))
         for issue in package_issues
     )
-    font_comparison, font_issues = _compare_fonts(source.fonts, target.fonts, available=inventories_available)
+    font_comparison, font_issues = _compare_fonts(
+        source.fonts, target.fonts, available=inventories_available and note_content_available
+    )
     issues.extend(font_issues)
     scope = source.metadata.get("object_inventory_scope")
     object_diff, object_issues = _compare_objects(
         source.objects,
         target.objects,
-        available=source.valid and target.valid and bool(scope) and scope == target.metadata.get("object_inventory_scope"),
+        available=source.valid
+        and target.valid
+        and bool(scope)
+        and scope == target.metadata.get("object_inventory_scope")
+        and note_content_available,
     )
     issues.extend(object_issues)
+    references, reference_issues = _compare_references(
+        source.metadata.get("semantic_references"), target.metadata.get("semantic_references"), source.valid and target.valid
+    )
+    object_diff["references"] = references
+    issues.extend(reference_issues)
+    notes, note_issues = _compare_notes(
+        source.metadata.get("semantic_footnotes"), target.metadata.get("semantic_footnotes"), source.valid and target.valid
+    )
+    object_diff["footnotes"] = notes
+    issues.extend(note_issues)
     return DocumentComparison(
         source=source,
         target=target,
@@ -724,6 +744,7 @@ def inspect_document_model(
     report.metadata = dict(document.metadata)
     report.metadata["object_inventory_scope"] = OBJECT_INVENTORY_SCOPE
     report.metadata["model_metrics_scope"] = _MODEL_METRICS_SCOPE
+    report.metadata["footnote_content_included"] = bool(document.footnotes)
     text_flow = TextFlowFingerprint()
     emphasis = EmphasisInventory()
     counters: Counter[str] = Counter(
@@ -746,10 +767,9 @@ def inspect_document_model(
             for name in SECTION_CONTENT_FIELDS:
                 counters[f"{name}_top_level"] += len(getattr(node, name))
             continue
-        if isinstance(node, DocumentModel):
+        if isinstance(node, (DocumentModel, Footnote)):
             continue
         section, section_index = reference.section, reference.section_index
-        assert section is not None and section_index is not None
         if isinstance(node, TableRow):
             counters["table_rows"] += 1
             continue
@@ -777,19 +797,28 @@ def inspect_document_model(
             counters["paragraphs"] += 1
             counters["styled_paragraphs"] += int(bool(node.style_id))
             counters["numbered_paragraphs"] += int(node.properties.get("numbering_id") is not None)
-            _inspect_box(node.box, section.page, report, location)
+            _inspect_box(node.box, section.page if section is not None else None, report, location)
         elif isinstance(node, Table):
             counters["tables"] += 1
-            _inspect_box(node.box, section.page, report, location)
+            _inspect_box(node.box, section.page if section is not None else None, report, location)
         elif isinstance(node, TextRun):
             _inspect_run(node, counters, fonts)
         elif isinstance(node, Formula):
-            _inspect_formula(node, location, section.page, report, counters, formula_formats)
+            _inspect_formula(node, location, section.page if section is not None else None, report, counters, formula_formats)
         elif isinstance(node, Image):
-            _inspect_image(node, location, section.page, report, counters)
+            _inspect_image(node, location, section.page if section is not None else None, report, counters)
     numbers = {number.location.path: number.number for number in iter_list_numbers(document, limits=limits)}
     counters["semantic_list_items"] = len(numbers)
     counters["ordered_list_items"] = sum(number is not None for number in numbers.values())
+    references = _reference_inventory(document, _resolve_limits(limits))
+    report.metadata["semantic_references"] = references
+    counters["anchors"] = len(references["anchors"])
+    counters["internal_links"] = len(references["links"])
+    notes = _note_inventory(document, _resolve_limits(limits))
+    report.metadata["semantic_footnotes"] = notes
+    counters["footnotes"] = len(notes["notes"])
+    counters["semantic_footnote_references"] = len(notes["references"])
+    counters["referenced_footnotes"] = len({reference["note_id"] for reference in notes["references"]})
     for entry in report.objects:
         if entry["type"] == "paragraph":
             entry["list_number"] = numbers.get(entry["location"])
@@ -853,7 +882,7 @@ def _inspect_run(run: TextRun, counters: Counter[str], fonts: Counter[str]) -> N
 def _inspect_formula(
     formula: Formula,
     location: str,
-    page: PageSettings,
+    page: PageSettings | None,
     report: DocumentInspection,
     counters: Counter[str],
     formula_formats: Counter[str],
@@ -868,7 +897,7 @@ def _inspect_formula(
 def _inspect_image(
     image: Image,
     location: str,
-    page: PageSettings,
+    page: PageSettings | None,
     report: DocumentInspection,
     counters: Counter[str],
 ) -> None:
@@ -882,8 +911,8 @@ def _inspect_image(
         report.add(IssueSeverity.WARNING, "image-alt-text", "image has no alternative text", location)
 
 
-def _inspect_box(box: Box | None, page: PageSettings, report: DocumentInspection, location: str) -> None:
-    if box is None:
+def _inspect_box(box: Box | None, page: PageSettings | None, report: DocumentInspection, location: str) -> None:
+    if box is None or page is None:
         return
     if box.x < 0 or box.y < 0:
         report.add(IssueSeverity.WARNING, "element-geometry", "element starts outside the page", location)

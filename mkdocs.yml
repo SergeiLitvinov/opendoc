@@ -41,6 +41,10 @@ nav:
       - Проверка в памяти: docs/guide/checks.md
       - Семантические заголовки: docs/guide/headings.md
       - Списки и нумерация: docs/guide/lists.md
+      - Внутренние ссылки и якоря: docs/guide/references.md
+      - Сноски: docs/guide/footnotes.md
+      - Сноски: docs/guide/footnotes.md
+      - Внутренние ссылки и якоря: docs/guide/references.md
       - Изменения: docs/guide/changes.md
   - Справочник:
       - API: docs/reference/api.md

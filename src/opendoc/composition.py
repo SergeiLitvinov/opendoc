@@ -13,6 +13,7 @@ from opendoc.document_model import (
     Block,
     ConversionMode,
     DocumentModel,
+    Footnote,
     Formula,
     Image,
     PackageGraph,
@@ -24,9 +25,18 @@ from opendoc.document_model import (
     TextRun,
     TextStyle,
 )
+from opendoc.footnotes import FOOTNOTE_REFERENCE_PROPERTY, get_footnote_reference, iter_footnote_references
 from opendoc.limits import DocumentLimits, _guard_model, _quota, _resolve_limits
 from opendoc.lists import LIST_PROPERTY, get_list_item, iter_list_items
 from opendoc.operations import _attached
+from opendoc.references import (
+    ANCHOR_PROPERTY,
+    INTERNAL_LINK_PROPERTY,
+    get_anchor,
+    get_internal_link,
+    iter_anchors,
+    iter_internal_links,
+)
 from opendoc.storage import ArtifactLimitError
 from opendoc.traversal import (
     SECTION_CONTENT_FIELDS,
@@ -49,6 +59,8 @@ class DocumentIdMap:
     styles: dict[str, str]
     resources: dict[str, str]
     lists: dict[str, str] = field(default_factory=dict)
+    anchors: dict[str, str] = field(default_factory=dict)
+    footnotes: dict[str, str] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -147,8 +159,14 @@ def _inputs(documents: Iterable[DocumentModel], limits: DocumentLimits) -> list[
 
 
 def _definition_ids(
-    document: DocumentModel, domain: Literal["styles", "resources", "lists"], limits: DocumentLimits | None = None
+    document: DocumentModel,
+    domain: Literal["styles", "resources", "lists", "anchors", "footnotes"],
+    limits: DocumentLimits | None = None,
 ) -> Iterable[str]:
+    if domain == "footnotes":
+        return [note.id for note in document.footnotes]
+    if domain == "anchors":
+        return [get_anchor(location.node, limits=limits).id for location in iter_anchors(document, limits=limits)]
     if domain == "lists":
         identifiers: dict[str, None] = {}
         for location in iter_list_items(document, limits=limits):
@@ -161,7 +179,7 @@ def _definition_ids(
 
 def _id_maps(
     documents: list[DocumentModel],
-    domain: Literal["styles", "resources", "lists"],
+    domain: Literal["styles", "resources", "lists", "anchors", "footnotes"],
     policy: IdentifierConflictPolicy,
     limits: DocumentLimits | None = None,
 ) -> list[dict[str, str]]:
@@ -212,6 +230,30 @@ def _rewrite(document: DocumentModel, identifiers: DocumentIdMap, limits: Docume
         (location.node.properties[LIST_PROPERTY], get_list_item(location.node, limits=limits))
         for location in iter_list_items(document, limits=limits)
     ]
+    anchors = [
+        (location.node.properties[ANCHOR_PROPERTY], get_anchor(location.node, limits=limits))
+        for location in iter_anchors(document, limits=limits)
+    ]
+    internal_links = [
+        (location.node.properties[INTERNAL_LINK_PROPERTY], get_internal_link(location.node, limits=limits))
+        for location in iter_internal_links(document, limits=limits)
+    ]
+    note_definitions = [(note, note.id) for note in document.footnotes]
+    note_links = [
+        (location.node.properties[FOOTNOTE_REFERENCE_PROPERTY], get_footnote_reference(location.node, limits=limits))
+        for location in iter_footnote_references(document, limits=limits)
+    ]
+    for note, identifier in note_definitions:
+        note.id = identifiers.footnotes[identifier]
+    for value, note_link in note_links:
+        assert note_link is not None
+        value["note_id"] = identifiers.footnotes[note_link.note_id]
+    for value, anchor in anchors:
+        assert anchor is not None
+        value["id"] = identifiers.anchors[anchor.id]
+    for value, link in internal_links:
+        assert link is not None
+        value["target_id"] = identifiers.anchors[link.target_id]
     for value, item in lists:
         assert item is not None
         value["list_id"] = identifiers.lists[item.list_id]
@@ -257,9 +299,13 @@ def merge_documents(
     style_maps = _id_maps(inputs, "styles", conflicts)
     resource_maps = _id_maps(inputs, "resources", conflicts)
     list_maps = _id_maps(inputs, "lists", conflicts, budget)
+    anchor_maps = _id_maps(inputs, "anchors", conflicts, budget)
+    note_maps = _id_maps(inputs, "footnotes", conflicts, budget)
     maps = tuple(
-        DocumentIdMap(styles, resources, lists)
-        for styles, resources, lists in zip(style_maps, resource_maps, list_maps, strict=True)
+        DocumentIdMap(styles, resources, lists, anchors, notes)
+        for styles, resources, lists, anchors, notes in zip(
+            style_maps, resource_maps, list_maps, anchor_maps, note_maps, strict=True
+        )
     )
     result = DocumentModel(mode=result_mode, source_format=inputs[0].source_format, package=deepcopy(package))
     if any(document.source_format != result.source_format for document in inputs[1:]):
@@ -268,6 +314,7 @@ def merge_documents(
         copied = deepcopy(document)
         _rewrite(copied, maps[index], budget)
         result.sections.extend(copied.sections)
+        result.footnotes.extend(copied.footnotes)
         result.styles.update(copied.styles)
         result.resources.update(copied.resources)
         for key, value in copied.metadata.items():
@@ -277,6 +324,20 @@ def merge_documents(
                 if metadata_conflicts == "keep_first":
                     continue
             result.metadata[key] = value
+        for key, value in copied.footnote_properties.items():
+            if key in result.footnote_properties:
+                if metadata_conflicts == "error":
+                    raise ValueError(f"documents[{index}].footnote_properties[{key!r}]: metadata conflict")
+                if metadata_conflicts == "keep_first":
+                    continue
+            result.footnote_properties[key] = value
+        for key, value in copied.footnote_extensions.items():
+            if key in result.footnote_extensions:
+                if metadata_conflicts == "error":
+                    raise ValueError(f"documents[{index}].footnote_extensions[{key!r}]: metadata conflict")
+                if metadata_conflicts == "keep_first":
+                    continue
+            result.footnote_extensions[key] = value
     _require_document(result, budget, "result")
     return DocumentMerge(result, maps)
 
@@ -306,6 +367,12 @@ def _selected_sections(location: NodeLocation[ModelNode]) -> list[Section]:
     if isinstance(node, Section):
         return [node]
     section, field = _section_shell(location)
+    getattr(section, field).append(_selected_block(location))
+    return [section]
+
+
+def _selected_block(location: NodeLocation[ModelNode]) -> Block:
+    node = location.node
     block: Block
     if isinstance(node, TableCell):
         row = replace(cast(TableRow, _ancestor(location, TableRow)), cells=[node])
@@ -318,8 +385,7 @@ def _selected_sections(location: NodeLocation[ModelNode]) -> list[Section]:
         block = node
     else:
         raise ValueError(f"{location.path}: unsupported extraction node")
-    getattr(section, field).append(block)
-    return [section]
+    return block
 
 
 def _extra_ids(values: Iterable[str], available: Collection[str], name: str, limits: DocumentLimits) -> set[str]:
@@ -368,6 +434,73 @@ def _dependencies(
     return needed_styles, needed_resources
 
 
+def _owner(location: NodeLocation[ModelNode]) -> tuple[str, str | int]:
+    current: NodeLocation[ModelNode] | None = location
+    while current is not None:
+        if isinstance(current.node, Footnote):
+            return "footnote", current.node.id
+        if isinstance(current.node, Section):
+            assert current.index is not None
+            return "section", current.index
+        current = current.parent
+    raise ValueError(f"{location.path}: missing containing section or footnote")
+
+
+def _semantic_links(root: ModelNode, limits: DocumentLimits) -> Iterator[tuple[str, str]]:
+    for location in iter_internal_links(root, limits=limits):
+        link = get_internal_link(location.node, limits=limits)
+        assert link is not None
+        yield "anchor", link.target_id
+    for location in iter_footnote_references(root, limits=limits):
+        reference = get_footnote_reference(location.node, limits=limits)
+        assert reference is not None
+        yield "footnote", reference.note_id
+
+
+def _anchor_dependencies(
+    selected: DocumentModel, source: DocumentModel, location: NodeLocation[ModelNode], limits: DocumentLimits
+) -> None:
+    """Close note/anchor dependencies, expanding each original container at most once."""
+    containers: dict[tuple[str, str | int], Section | Footnote] = {}
+    if selected.sections:
+        containers[_owner(location)] = selected.sections[0]
+    if selected.footnotes:
+        containers[_owner(location)] = selected.footnotes[0]
+    originals: dict[tuple[str, str | int], Section | Footnote] = {
+        ("section", index): section for index, section in enumerate(source.sections)
+    }
+    originals.update({("footnote", note.id): note for note in source.footnotes})
+    targets: dict[str, tuple[str, str | int]] = {}
+    for reference in iter_anchors(source, limits=limits):
+        anchor = get_anchor(reference.node, limits=limits)
+        assert anchor is not None
+        targets[anchor.id] = _owner(reference)
+    available = {get_anchor(reference.node, limits=limits).id for reference in iter_anchors(selected, limits=limits)}
+    available_notes = {note.id for note in selected.footnotes}
+    pending = deque(_semantic_links(selected, limits))
+    expanded: set[tuple[str, str | int]] = set()
+    while pending:
+        kind, identifier = pending.popleft()
+        if identifier in (available if kind == "anchor" else available_notes):
+            continue
+        target = targets[identifier] if kind == "anchor" else ("footnote", identifier)
+        if target in expanded:
+            continue
+        expanded.add(target)
+        container = originals[target]
+        containers[target] = container
+        if isinstance(container, Footnote):
+            available_notes.add(container.id)
+        available.update(get_anchor(reference.node, limits=limits).id for reference in iter_anchors(container, limits=limits))
+        pending.extend(_semantic_links(container, limits))
+    selected.sections = [
+        cast(Section, containers[("section", index)]) for index in range(len(source.sections)) if ("section", index) in containers
+    ]
+    selected.footnotes = [
+        cast(Footnote, containers[("footnote", note.id)]) for note in source.footnotes if ("footnote", note.id) in containers
+    ]
+
+
 def extract_document(
     document: DocumentModel,
     location: NodeLocation[ModelNode],
@@ -396,13 +529,24 @@ def extract_document(
     else:
         if document.package is not None and package_policy == "error":
             raise ValueError("package: partial extraction requires an explicit preserve/drop policy")
+        if isinstance(location.node, Footnote):
+            selected_notes = [location.node]
+        elif location.section is None:
+            note = cast(Footnote, _ancestor(location, Footnote))
+            selected_notes = [replace(note, blocks=[_selected_block(location)])]
+        else:
+            selected_notes = []
         selected = DocumentModel(
-            sections=_selected_sections(location),
+            sections=[] if selected_notes else _selected_sections(location),
+            footnotes=selected_notes,
+            footnote_properties=document.footnote_properties,
+            footnote_extensions=document.footnote_extensions,
             metadata=document.metadata,
             package=None if package_policy == "drop" else document.package,
             mode=document.mode,
             source_format=document.source_format,
         )
+        _anchor_dependencies(selected, document, location, budget)
         styles, resources = _dependencies(selected, document, extra_styles, extra_resources, budget)
         selected.styles = {identifier: style for identifier, style in document.styles.items() if identifier in styles}
         selected.resources = {

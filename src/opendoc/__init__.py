@@ -82,6 +82,7 @@ from .document_model import (
 from .document_model import (
     DocumentModel as DocumentModel,
 )
+from .document_model import Footnote as Footnote
 from .document_model import (
     Formula as Formula,
 )
@@ -175,6 +176,28 @@ from .document_model import (
 from .emphasis_quality import (
     EmphasisLossPolicy as EmphasisLossPolicy,
 )
+from .extensions import ExtensionCallback as ExtensionCallback
+from .extensions import ExtensionContext as ExtensionContext
+from .extensions import ExtensionSchema as ExtensionSchema
+from .extensions import ExtensionScope as ExtensionScope
+from .extensions import ExtensionValue as ExtensionValue
+from .extensions import UnknownExtensionPolicy as UnknownExtensionPolicy
+from .extensions import check_extensions as check_extensions
+from .extensions import get_extension as get_extension
+from .extensions import remove_extension as remove_extension
+from .extensions import set_extension as set_extension
+from .footnotes import FOOTNOTE_REFERENCE_PROPERTY as FOOTNOTE_REFERENCE_PROPERTY
+from .footnotes import FOOTNOTES_PROPERTY as FOOTNOTES_PROPERTY
+from .footnotes import FootnoteNumber as FootnoteNumber
+from .footnotes import FootnoteReference as FootnoteReference
+from .footnotes import get_footnote as get_footnote
+from .footnotes import get_footnote_reference as get_footnote_reference
+from .footnotes import iter_footnote_numbers as iter_footnote_numbers
+from .footnotes import iter_footnote_references as iter_footnote_references
+from .footnotes import iter_footnotes as iter_footnotes
+from .footnotes import remove_footnote as remove_footnote
+from .footnotes import set_footnote as set_footnote
+from .footnotes import set_footnote_reference as set_footnote_reference
 from .formula_quality_policy import (
     FormulaLossPolicy as FormulaLossPolicy,
 )
@@ -226,6 +249,17 @@ from .properties import (
 from .quality_policy import (
     QualityPolicy as QualityPolicy,
 )
+from .references import ANCHOR_PROPERTY as ANCHOR_PROPERTY
+from .references import INTERNAL_LINK_PROPERTY as INTERNAL_LINK_PROPERTY
+from .references import Anchor as Anchor
+from .references import InternalLink as InternalLink
+from .references import get_anchor as get_anchor
+from .references import get_internal_link as get_internal_link
+from .references import iter_anchors as iter_anchors
+from .references import iter_internal_links as iter_internal_links
+from .references import resolve_anchor as resolve_anchor
+from .references import set_anchor as set_anchor
+from .references import set_internal_link as set_internal_link
 from .resources import (
     ResourceConflictPolicy as ResourceConflictPolicy,
 )
@@ -299,6 +333,40 @@ from .traversal import (
 )
 
 __all__ = [
+    "ExtensionCallback",
+    "ExtensionContext",
+    "ExtensionSchema",
+    "ExtensionScope",
+    "ExtensionValue",
+    "UnknownExtensionPolicy",
+    "check_extensions",
+    "get_extension",
+    "remove_extension",
+    "set_extension",
+    "FOOTNOTES_PROPERTY",
+    "FOOTNOTE_REFERENCE_PROPERTY",
+    "Footnote",
+    "FootnoteNumber",
+    "FootnoteReference",
+    "get_footnote",
+    "get_footnote_reference",
+    "iter_footnote_numbers",
+    "iter_footnote_references",
+    "iter_footnotes",
+    "remove_footnote",
+    "set_footnote",
+    "set_footnote_reference",
+    "ANCHOR_PROPERTY",
+    "INTERNAL_LINK_PROPERTY",
+    "Anchor",
+    "InternalLink",
+    "get_anchor",
+    "get_internal_link",
+    "iter_anchors",
+    "iter_internal_links",
+    "resolve_anchor",
+    "set_anchor",
+    "set_internal_link",
     "LIST_PROPERTY",
     "ListItem",
     "ListKind",

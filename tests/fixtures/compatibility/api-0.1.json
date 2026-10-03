@@ -615,6 +615,21 @@
             "name": "version",
             "kind": "POSITIONAL_OR_KEYWORD",
             "default": "2"
+          },
+          {
+            "name": "footnotes",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "<factory>"
+          },
+          {
+            "name": "footnote_properties",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "<factory>"
+          },
+          {
+            "name": "footnote_extensions",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "<factory>"
           }
         ],
         "members": {
@@ -638,6 +653,11 @@
                 "name": "self",
                 "kind": "POSITIONAL_OR_KEYWORD",
                 "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
               }
             ]
           }
@@ -646,7 +666,10 @@
           "sections": "[]",
           "resources": "{}",
           "styles": "{}",
-          "metadata": "{}"
+          "metadata": "{}",
+          "footnotes": "[]",
+          "footnote_properties": "{}",
+          "footnote_extensions": "{}"
         }
       },
       "EmphasisLossPolicy": {
@@ -3356,10 +3379,10 @@
         "constant": "opendoc.document_model.Paragraph | opendoc.document_model.Table | opendoc.document_model.Formula | opendoc.document_model.Image | opendoc.document_model.TextRun"
       },
       "ModelNode": {
-        "constant": "opendoc.document_model.DocumentModel | opendoc.document_model.Section | opendoc.document_model.TableRow | opendoc.document_model.TableCell | opendoc.document_model.Paragraph | opendoc.document_model.Table | opendoc.document_model.Formula | opendoc.document_model.Image | opendoc.document_model.TextRun"
+        "constant": "opendoc.document_model.DocumentModel | opendoc.document_model.Section | opendoc.document_model.TableRow | opendoc.document_model.TableCell | opendoc.document_model.Paragraph | opendoc.document_model.Table | opendoc.document_model.Formula | opendoc.document_model.Image | opendoc.document_model.TextRun | opendoc.document_model.Footnote"
       },
       "NodeKind": {
-        "constant": "typing.Literal['document', 'section', 'block', 'inline', 'row', 'cell']"
+        "constant": "typing.Literal['document', 'section', 'block', 'inline', 'row', 'cell', 'footnote']"
       },
       "NodeLocation": {
         "parameters": [
@@ -3699,10 +3722,29 @@
             "name": "resources",
             "kind": "POSITIONAL_OR_KEYWORD",
             "default": null
+          },
+          {
+            "name": "lists",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "<factory>"
+          },
+          {
+            "name": "anchors",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "<factory>"
+          },
+          {
+            "name": "footnotes",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "<factory>"
           }
         ],
         "members": {},
-        "factories": {}
+        "factories": {
+          "lists": "{}",
+          "anchors": "{}",
+          "footnotes": "{}"
+        }
       },
       "DocumentMerge": {
         "parameters": [
@@ -4190,6 +4232,466 @@
             "default": "None"
           }
         ]
+      },
+      "LIST_PROPERTY": {
+        "constant": "opendoc.list-item"
+      },
+      "ListItem": {
+        "parameters": [
+          {
+            "name": "list_id",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "level",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "0"
+          },
+          {
+            "name": "kind",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "'ordered'"
+          },
+          {
+            "name": "start",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "1"
+          },
+          {
+            "name": "restart",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "None"
+          }
+        ],
+        "members": {},
+        "factories": {}
+      },
+      "ListKind": {
+        "constant": "typing.Literal['ordered', 'unordered']"
+      },
+      "ListNumber": {
+        "parameters": [
+          {
+            "name": "location",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "item",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "number",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          }
+        ],
+        "members": {},
+        "factories": {}
+      },
+      "get_list_item": {
+        "parameters": [
+          {
+            "name": "paragraph",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "iter_list_items": {
+        "parameters": [
+          {
+            "name": "root",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "iter_list_numbers": {
+        "parameters": [
+          {
+            "name": "root",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "set_list_item": {
+        "parameters": [
+          {
+            "name": "paragraph",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "item",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "ANCHOR_PROPERTY": {
+        "constant": "opendoc.anchor"
+      },
+      "INTERNAL_LINK_PROPERTY": {
+        "constant": "opendoc.internal-link"
+      },
+      "Anchor": {
+        "parameters": [
+          {
+            "name": "id",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          }
+        ],
+        "members": {},
+        "factories": {}
+      },
+      "InternalLink": {
+        "parameters": [
+          {
+            "name": "target_id",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          }
+        ],
+        "members": {},
+        "factories": {}
+      },
+      "get_anchor": {
+        "parameters": [
+          {
+            "name": "node",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "get_internal_link": {
+        "parameters": [
+          {
+            "name": "run",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "iter_anchors": {
+        "parameters": [
+          {
+            "name": "root",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "iter_internal_links": {
+        "parameters": [
+          {
+            "name": "root",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "resolve_anchor": {
+        "parameters": [
+          {
+            "name": "document",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "identifier",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "set_anchor": {
+        "parameters": [
+          {
+            "name": "node",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "anchor",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "set_internal_link": {
+        "parameters": [
+          {
+            "name": "run",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "link",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "FOOTNOTES_PROPERTY": {
+        "constant": "opendoc.footnotes"
+      },
+      "FOOTNOTE_REFERENCE_PROPERTY": {
+        "constant": "opendoc.footnote-reference"
+      },
+      "FootnoteNumber": {
+        "parameters": [
+          {
+            "name": "location",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "note_id",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "number",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          }
+        ],
+        "members": {},
+        "factories": {}
+      },
+      "FootnoteReference": {
+        "parameters": [
+          {
+            "name": "note_id",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          }
+        ],
+        "members": {},
+        "factories": {}
+      },
+      "get_footnote": {
+        "parameters": [
+          {
+            "name": "document",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "identifier",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "get_footnote_reference": {
+        "parameters": [
+          {
+            "name": "run",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "iter_footnote_numbers": {
+        "parameters": [
+          {
+            "name": "document",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "iter_footnote_references": {
+        "parameters": [
+          {
+            "name": "root",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "iter_footnotes": {
+        "parameters": [
+          {
+            "name": "root",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "remove_footnote": {
+        "parameters": [
+          {
+            "name": "document",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "identifier",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "set_footnote": {
+        "parameters": [
+          {
+            "name": "document",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "note",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "set_footnote_reference": {
+        "parameters": [
+          {
+            "name": "run",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "reference",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "Footnote": {
+        "parameters": [
+          {
+            "name": "id",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "blocks",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "<factory>"
+          },
+          {
+            "name": "properties",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "<factory>"
+          },
+          {
+            "name": "extensions",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "<factory>"
+          }
+        ],
+        "members": {},
+        "factories": {
+          "blocks": "[]",
+          "properties": "{}",
+          "extensions": "{}"
+        }
       }
     },
     "opendoc.color": {
@@ -4797,6 +5299,21 @@
             "name": "version",
             "kind": "POSITIONAL_OR_KEYWORD",
             "default": "2"
+          },
+          {
+            "name": "footnotes",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "<factory>"
+          },
+          {
+            "name": "footnote_properties",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "<factory>"
+          },
+          {
+            "name": "footnote_extensions",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "<factory>"
           }
         ],
         "members": {
@@ -4820,6 +5337,11 @@
                 "name": "self",
                 "kind": "POSITIONAL_OR_KEYWORD",
                 "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
               }
             ]
           }
@@ -4828,7 +5350,10 @@
           "sections": "[]",
           "resources": "{}",
           "styles": "{}",
-          "metadata": "{}"
+          "metadata": "{}",
+          "footnotes": "[]",
+          "footnote_properties": "{}",
+          "footnote_extensions": "{}"
         }
       },
       "Formula": {
@@ -7255,6 +7780,36 @@
             "default": "'fallback.visual-surrogate'"
           }
         ]
+      },
+      "Footnote": {
+        "parameters": [
+          {
+            "name": "id",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "blocks",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "<factory>"
+          },
+          {
+            "name": "properties",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "<factory>"
+          },
+          {
+            "name": "extensions",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "<factory>"
+          }
+        ],
+        "members": {},
+        "factories": {
+          "blocks": "[]",
+          "properties": "{}",
+          "extensions": "{}"
+        }
       }
     },
     "opendoc.emphasis_quality": {
@@ -9935,10 +10490,10 @@
         "constant": "opendoc.document_model.Paragraph | opendoc.document_model.Table | opendoc.document_model.Formula | opendoc.document_model.Image | opendoc.document_model.TextRun"
       },
       "ModelNode": {
-        "constant": "opendoc.document_model.DocumentModel | opendoc.document_model.Section | opendoc.document_model.TableRow | opendoc.document_model.TableCell | opendoc.document_model.Paragraph | opendoc.document_model.Table | opendoc.document_model.Formula | opendoc.document_model.Image | opendoc.document_model.TextRun"
+        "constant": "opendoc.document_model.DocumentModel | opendoc.document_model.Section | opendoc.document_model.TableRow | opendoc.document_model.TableCell | opendoc.document_model.Paragraph | opendoc.document_model.Table | opendoc.document_model.Formula | opendoc.document_model.Image | opendoc.document_model.TextRun | opendoc.document_model.Footnote"
       },
       "NodeKind": {
-        "constant": "typing.Literal['document', 'section', 'block', 'inline', 'row', 'cell']"
+        "constant": "typing.Literal['document', 'section', 'block', 'inline', 'row', 'cell', 'footnote']"
       },
       "NodeLocation": {
         "parameters": [
@@ -10282,10 +10837,29 @@
             "name": "resources",
             "kind": "POSITIONAL_OR_KEYWORD",
             "default": null
+          },
+          {
+            "name": "lists",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "<factory>"
+          },
+          {
+            "name": "anchors",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "<factory>"
+          },
+          {
+            "name": "footnotes",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "<factory>"
           }
         ],
         "members": {},
-        "factories": {}
+        "factories": {
+          "lists": "{}",
+          "anchors": "{}",
+          "footnotes": "{}"
+        }
       },
       "DocumentMerge": {
         "parameters": [
@@ -10670,6 +11244,442 @@
           }
         ]
       }
+    },
+    "opendoc.lists": {
+      "LIST_PROPERTY": {
+        "constant": "opendoc.list-item"
+      },
+      "ListItem": {
+        "parameters": [
+          {
+            "name": "list_id",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "level",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "0"
+          },
+          {
+            "name": "kind",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "'ordered'"
+          },
+          {
+            "name": "start",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "1"
+          },
+          {
+            "name": "restart",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "None"
+          }
+        ],
+        "members": {},
+        "factories": {}
+      },
+      "ListKind": {
+        "constant": "typing.Literal['ordered', 'unordered']"
+      },
+      "ListNumber": {
+        "parameters": [
+          {
+            "name": "location",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "item",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "number",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          }
+        ],
+        "members": {},
+        "factories": {}
+      },
+      "get_list_item": {
+        "parameters": [
+          {
+            "name": "paragraph",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "iter_list_items": {
+        "parameters": [
+          {
+            "name": "root",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "iter_list_numbers": {
+        "parameters": [
+          {
+            "name": "root",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "set_list_item": {
+        "parameters": [
+          {
+            "name": "paragraph",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "item",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      }
+    },
+    "opendoc.references": {
+      "ANCHOR_PROPERTY": {
+        "constant": "opendoc.anchor"
+      },
+      "INTERNAL_LINK_PROPERTY": {
+        "constant": "opendoc.internal-link"
+      },
+      "Anchor": {
+        "parameters": [
+          {
+            "name": "id",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          }
+        ],
+        "members": {},
+        "factories": {}
+      },
+      "InternalLink": {
+        "parameters": [
+          {
+            "name": "target_id",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          }
+        ],
+        "members": {},
+        "factories": {}
+      },
+      "get_anchor": {
+        "parameters": [
+          {
+            "name": "node",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "get_internal_link": {
+        "parameters": [
+          {
+            "name": "run",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "iter_anchors": {
+        "parameters": [
+          {
+            "name": "root",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "iter_internal_links": {
+        "parameters": [
+          {
+            "name": "root",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "resolve_anchor": {
+        "parameters": [
+          {
+            "name": "document",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "identifier",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "set_anchor": {
+        "parameters": [
+          {
+            "name": "node",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "anchor",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "set_internal_link": {
+        "parameters": [
+          {
+            "name": "run",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "link",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      }
+    },
+    "opendoc.footnotes": {
+      "FOOTNOTES_PROPERTY": {
+        "constant": "opendoc.footnotes"
+      },
+      "FOOTNOTE_REFERENCE_PROPERTY": {
+        "constant": "opendoc.footnote-reference"
+      },
+      "FootnoteNumber": {
+        "parameters": [
+          {
+            "name": "location",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "note_id",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "number",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          }
+        ],
+        "members": {},
+        "factories": {}
+      },
+      "FootnoteReference": {
+        "parameters": [
+          {
+            "name": "note_id",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          }
+        ],
+        "members": {},
+        "factories": {}
+      },
+      "get_footnote": {
+        "parameters": [
+          {
+            "name": "document",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "identifier",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "get_footnote_reference": {
+        "parameters": [
+          {
+            "name": "run",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "iter_footnote_numbers": {
+        "parameters": [
+          {
+            "name": "document",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "iter_footnote_references": {
+        "parameters": [
+          {
+            "name": "root",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "iter_footnotes": {
+        "parameters": [
+          {
+            "name": "root",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "remove_footnote": {
+        "parameters": [
+          {
+            "name": "document",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "identifier",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "set_footnote": {
+        "parameters": [
+          {
+            "name": "document",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "note",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "set_footnote_reference": {
+        "parameters": [
+          {
+            "name": "run",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "reference",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      }
     }
   },
   "root_identities": {
@@ -10770,6 +11780,38 @@
     "Heading": "opendoc.semantics",
     "get_heading": "opendoc.semantics",
     "iter_headings": "opendoc.semantics",
-    "set_heading": "opendoc.semantics"
+    "set_heading": "opendoc.semantics",
+    "LIST_PROPERTY": "opendoc.lists",
+    "ListItem": "opendoc.lists",
+    "ListKind": "opendoc.lists",
+    "ListNumber": "opendoc.lists",
+    "get_list_item": "opendoc.lists",
+    "iter_list_items": "opendoc.lists",
+    "iter_list_numbers": "opendoc.lists",
+    "set_list_item": "opendoc.lists",
+    "ANCHOR_PROPERTY": "opendoc.references",
+    "INTERNAL_LINK_PROPERTY": "opendoc.references",
+    "Anchor": "opendoc.references",
+    "InternalLink": "opendoc.references",
+    "get_anchor": "opendoc.references",
+    "get_internal_link": "opendoc.references",
+    "iter_anchors": "opendoc.references",
+    "iter_internal_links": "opendoc.references",
+    "resolve_anchor": "opendoc.references",
+    "set_anchor": "opendoc.references",
+    "set_internal_link": "opendoc.references",
+    "FOOTNOTES_PROPERTY": "opendoc.footnotes",
+    "FOOTNOTE_REFERENCE_PROPERTY": "opendoc.footnotes",
+    "FootnoteNumber": "opendoc.footnotes",
+    "FootnoteReference": "opendoc.footnotes",
+    "get_footnote": "opendoc.footnotes",
+    "get_footnote_reference": "opendoc.footnotes",
+    "iter_footnote_numbers": "opendoc.footnotes",
+    "iter_footnote_references": "opendoc.footnotes",
+    "iter_footnotes": "opendoc.footnotes",
+    "remove_footnote": "opendoc.footnotes",
+    "set_footnote": "opendoc.footnotes",
+    "set_footnote_reference": "opendoc.footnotes",
+    "Footnote": "opendoc.document_model"
   }
 }
