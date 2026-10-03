@@ -4955,6 +4955,324 @@
         ],
         "members": {},
         "factories": {}
+      },
+      "CheckData": {
+        "required_keys": [
+          "format",
+          "issues",
+          "lossless",
+          "metrics",
+          "success",
+          "version"
+        ],
+        "optional_keys": [],
+        "field_types": {
+          "format": "builtins.str",
+          "version": "builtins.int",
+          "success": "builtins.bool",
+          "lossless": "builtins.bool",
+          "metrics": {
+            "origin": "builtins.dict",
+            "arguments": [
+              "builtins.str",
+              "typing.Any"
+            ]
+          },
+          "issues": {
+            "origin": "builtins.list",
+            "arguments": [
+              "opendoc.result_types.DiagnosticData"
+            ]
+          }
+        }
+      },
+      "ComparisonData": {
+        "required_keys": [
+          "font_comparison",
+          "geometry_summary",
+          "has_losses",
+          "issues",
+          "matching_package_part_hashes",
+          "matching_resource_hashes",
+          "object_diff",
+          "package_comparison",
+          "page_geometry",
+          "resource_comparison",
+          "retention",
+          "valid"
+        ],
+        "optional_keys": [],
+        "field_types": {
+          "valid": "builtins.bool",
+          "has_losses": "builtins.bool",
+          "retention": {
+            "origin": "builtins.dict",
+            "arguments": [
+              "builtins.str",
+              {
+                "origin": "builtins.dict",
+                "arguments": [
+                  "builtins.str",
+                  {
+                    "union": [
+                      "builtins.NoneType",
+                      "builtins.float",
+                      "builtins.int"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "page_geometry": {
+            "origin": "builtins.list",
+            "arguments": [
+              {
+                "origin": "builtins.dict",
+                "arguments": [
+                  "builtins.str",
+                  "typing.Any"
+                ]
+              }
+            ]
+          },
+          "geometry_summary": {
+            "origin": "builtins.dict",
+            "arguments": [
+              "builtins.str",
+              {
+                "union": [
+                  "builtins.NoneType",
+                  "builtins.float",
+                  "builtins.int"
+                ]
+              }
+            ]
+          },
+          "resource_comparison": {
+            "origin": "builtins.dict",
+            "arguments": [
+              "builtins.str",
+              "typing.Any"
+            ]
+          },
+          "package_comparison": {
+            "origin": "builtins.dict",
+            "arguments": [
+              "builtins.str",
+              "typing.Any"
+            ]
+          },
+          "font_comparison": {
+            "origin": "builtins.dict",
+            "arguments": [
+              "builtins.str",
+              "typing.Any"
+            ]
+          },
+          "matching_resource_hashes": "builtins.int",
+          "matching_package_part_hashes": "builtins.int",
+          "object_diff": {
+            "origin": "builtins.dict",
+            "arguments": [
+              "builtins.str",
+              "typing.Any"
+            ]
+          },
+          "issues": {
+            "origin": "builtins.list",
+            "arguments": [
+              "opendoc.result_types.ConversionIssueData"
+            ]
+          }
+        }
+      },
+      "ConversionIssueData": {
+        "required_keys": [
+          "feature",
+          "location",
+          "message",
+          "severity"
+        ],
+        "optional_keys": [],
+        "field_types": {
+          "severity": "builtins.str",
+          "feature": "builtins.str",
+          "message": "builtins.str",
+          "location": "builtins.str"
+        }
+      },
+      "ConversionReportData": {
+        "required_keys": [
+          "issues",
+          "lossless",
+          "metrics",
+          "output_path",
+          "success"
+        ],
+        "optional_keys": [],
+        "field_types": {
+          "success": "builtins.bool",
+          "lossless": "builtins.bool",
+          "output_path": "builtins.str",
+          "metrics": {
+            "origin": "builtins.dict",
+            "arguments": [
+              "builtins.str",
+              "typing.Any"
+            ]
+          },
+          "issues": {
+            "origin": "builtins.list",
+            "arguments": [
+              "opendoc.result_types.ConversionIssueData"
+            ]
+          }
+        }
+      },
+      "DiagnosticData": {
+        "required_keys": [
+          "code",
+          "location",
+          "measurement",
+          "message",
+          "reason",
+          "severity"
+        ],
+        "optional_keys": [],
+        "field_types": {
+          "code": "builtins.str",
+          "severity": "builtins.str",
+          "message": "builtins.str",
+          "location": "builtins.str",
+          "measurement": {
+            "union": [
+              "builtins.NoneType",
+              {
+                "origin": "builtins.dict",
+                "arguments": [
+                  "builtins.str",
+                  "typing.Any"
+                ]
+              }
+            ]
+          },
+          "reason": {
+            "union": [
+              "builtins.NoneType",
+              "builtins.str"
+            ]
+          }
+        }
+      },
+      "InspectionData": {
+        "required_keys": [
+          "fonts",
+          "formula_formats",
+          "issues",
+          "metadata",
+          "metrics",
+          "objects",
+          "package_parts",
+          "pages",
+          "resources",
+          "source_format",
+          "source_path",
+          "valid"
+        ],
+        "optional_keys": [],
+        "field_types": {
+          "valid": "builtins.bool",
+          "source_path": {
+            "union": [
+              "builtins.NoneType",
+              "builtins.str"
+            ]
+          },
+          "source_format": "builtins.str",
+          "metadata": {
+            "origin": "builtins.dict",
+            "arguments": [
+              "builtins.str",
+              "typing.Any"
+            ]
+          },
+          "metrics": {
+            "origin": "builtins.dict",
+            "arguments": [
+              "builtins.str",
+              "builtins.int"
+            ]
+          },
+          "pages": {
+            "origin": "builtins.list",
+            "arguments": [
+              {
+                "origin": "builtins.dict",
+                "arguments": [
+                  "builtins.str",
+                  "typing.Any"
+                ]
+              }
+            ]
+          },
+          "resources": {
+            "origin": "builtins.list",
+            "arguments": [
+              {
+                "origin": "builtins.dict",
+                "arguments": [
+                  "builtins.str",
+                  "typing.Any"
+                ]
+              }
+            ]
+          },
+          "package_parts": {
+            "origin": "builtins.list",
+            "arguments": [
+              {
+                "origin": "builtins.dict",
+                "arguments": [
+                  "builtins.str",
+                  "typing.Any"
+                ]
+              }
+            ]
+          },
+          "fonts": {
+            "origin": "builtins.dict",
+            "arguments": [
+              "builtins.str",
+              "builtins.int"
+            ]
+          },
+          "formula_formats": {
+            "origin": "builtins.dict",
+            "arguments": [
+              "builtins.str",
+              "builtins.int"
+            ]
+          },
+          "objects": {
+            "origin": "builtins.list",
+            "arguments": [
+              {
+                "origin": "builtins.dict",
+                "arguments": [
+                  "builtins.str",
+                  "typing.Any"
+                ]
+              }
+            ]
+          },
+          "issues": {
+            "origin": "builtins.list",
+            "arguments": [
+              "opendoc.result_types.ConversionIssueData"
+            ]
+          }
+        }
       }
     },
     "opendoc.color": {
@@ -8549,6 +8867,37 @@
         ],
         "members": {},
         "factories": {}
+      },
+      "ObjectMatch": {
+        "required_keys": [
+          "ambiguous",
+          "match_basis",
+          "source",
+          "source_index",
+          "target",
+          "target_index"
+        ],
+        "optional_keys": [],
+        "field_types": {
+          "source": {
+            "origin": "builtins.dict",
+            "arguments": [
+              "builtins.str",
+              "typing.Any"
+            ]
+          },
+          "target": {
+            "origin": "builtins.dict",
+            "arguments": [
+              "builtins.str",
+              "typing.Any"
+            ]
+          },
+          "match_basis": "builtins.str",
+          "ambiguous": "builtins.bool",
+          "source_index": "builtins.int",
+          "target_index": "builtins.int"
+        }
       }
     },
     "opendoc.object_quality_policy": {
@@ -10389,14 +10738,27 @@
           "x",
           "y"
         ],
-        "optional_keys": []
+        "optional_keys": [],
+        "field_types": {
+          "x": "builtins.int",
+          "y": "builtins.int"
+        }
       },
       "WrapPolygon": {
         "required_keys": [
           "edited",
           "points"
         ],
-        "optional_keys": []
+        "optional_keys": [],
+        "field_types": {
+          "edited": "builtins.bool",
+          "points": {
+            "origin": "builtins.list",
+            "arguments": [
+              "opendoc.properties.WrapPoint"
+            ]
+          }
+        }
       }
     },
     "opendoc.quality_policy": {
@@ -10535,6 +10897,37 @@
                 "name": "self",
                 "kind": "POSITIONAL_OR_KEYWORD",
                 "default": null
+              }
+            ]
+          }
+        }
+      },
+      "TextFlowData": {
+        "required_keys": [
+          "characters",
+          "paragraphs",
+          "sha256",
+          "token_count",
+          "tokenization",
+          "tokens",
+          "version"
+        ],
+        "optional_keys": [],
+        "field_types": {
+          "version": "builtins.str",
+          "sha256": "builtins.str",
+          "characters": "builtins.int",
+          "paragraphs": "builtins.int",
+          "tokenization": "builtins.str",
+          "token_count": "builtins.int",
+          "tokens": {
+            "union": [
+              "builtins.NoneType",
+              {
+                "origin": "builtins.list",
+                "arguments": [
+                  "builtins.str"
+                ]
               }
             ]
           }
@@ -12213,6 +12606,326 @@
           }
         ]
       }
+    },
+    "opendoc.result_types": {
+      "CheckData": {
+        "required_keys": [
+          "format",
+          "issues",
+          "lossless",
+          "metrics",
+          "success",
+          "version"
+        ],
+        "optional_keys": [],
+        "field_types": {
+          "format": "builtins.str",
+          "version": "builtins.int",
+          "success": "builtins.bool",
+          "lossless": "builtins.bool",
+          "metrics": {
+            "origin": "builtins.dict",
+            "arguments": [
+              "builtins.str",
+              "typing.Any"
+            ]
+          },
+          "issues": {
+            "origin": "builtins.list",
+            "arguments": [
+              "opendoc.result_types.DiagnosticData"
+            ]
+          }
+        }
+      },
+      "ComparisonData": {
+        "required_keys": [
+          "font_comparison",
+          "geometry_summary",
+          "has_losses",
+          "issues",
+          "matching_package_part_hashes",
+          "matching_resource_hashes",
+          "object_diff",
+          "package_comparison",
+          "page_geometry",
+          "resource_comparison",
+          "retention",
+          "valid"
+        ],
+        "optional_keys": [],
+        "field_types": {
+          "valid": "builtins.bool",
+          "has_losses": "builtins.bool",
+          "retention": {
+            "origin": "builtins.dict",
+            "arguments": [
+              "builtins.str",
+              {
+                "origin": "builtins.dict",
+                "arguments": [
+                  "builtins.str",
+                  {
+                    "union": [
+                      "builtins.NoneType",
+                      "builtins.float",
+                      "builtins.int"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "page_geometry": {
+            "origin": "builtins.list",
+            "arguments": [
+              {
+                "origin": "builtins.dict",
+                "arguments": [
+                  "builtins.str",
+                  "typing.Any"
+                ]
+              }
+            ]
+          },
+          "geometry_summary": {
+            "origin": "builtins.dict",
+            "arguments": [
+              "builtins.str",
+              {
+                "union": [
+                  "builtins.NoneType",
+                  "builtins.float",
+                  "builtins.int"
+                ]
+              }
+            ]
+          },
+          "resource_comparison": {
+            "origin": "builtins.dict",
+            "arguments": [
+              "builtins.str",
+              "typing.Any"
+            ]
+          },
+          "package_comparison": {
+            "origin": "builtins.dict",
+            "arguments": [
+              "builtins.str",
+              "typing.Any"
+            ]
+          },
+          "font_comparison": {
+            "origin": "builtins.dict",
+            "arguments": [
+              "builtins.str",
+              "typing.Any"
+            ]
+          },
+          "matching_resource_hashes": "builtins.int",
+          "matching_package_part_hashes": "builtins.int",
+          "object_diff": {
+            "origin": "builtins.dict",
+            "arguments": [
+              "builtins.str",
+              "typing.Any"
+            ]
+          },
+          "issues": {
+            "origin": "builtins.list",
+            "arguments": [
+              "opendoc.result_types.ConversionIssueData"
+            ]
+          }
+        }
+      },
+      "ConversionIssueData": {
+        "required_keys": [
+          "feature",
+          "location",
+          "message",
+          "severity"
+        ],
+        "optional_keys": [],
+        "field_types": {
+          "severity": "builtins.str",
+          "feature": "builtins.str",
+          "message": "builtins.str",
+          "location": "builtins.str"
+        }
+      },
+      "ConversionReportData": {
+        "required_keys": [
+          "issues",
+          "lossless",
+          "metrics",
+          "output_path",
+          "success"
+        ],
+        "optional_keys": [],
+        "field_types": {
+          "success": "builtins.bool",
+          "lossless": "builtins.bool",
+          "output_path": "builtins.str",
+          "metrics": {
+            "origin": "builtins.dict",
+            "arguments": [
+              "builtins.str",
+              "typing.Any"
+            ]
+          },
+          "issues": {
+            "origin": "builtins.list",
+            "arguments": [
+              "opendoc.result_types.ConversionIssueData"
+            ]
+          }
+        }
+      },
+      "DiagnosticData": {
+        "required_keys": [
+          "code",
+          "location",
+          "measurement",
+          "message",
+          "reason",
+          "severity"
+        ],
+        "optional_keys": [],
+        "field_types": {
+          "code": "builtins.str",
+          "severity": "builtins.str",
+          "message": "builtins.str",
+          "location": "builtins.str",
+          "measurement": {
+            "union": [
+              "builtins.NoneType",
+              {
+                "origin": "builtins.dict",
+                "arguments": [
+                  "builtins.str",
+                  "typing.Any"
+                ]
+              }
+            ]
+          },
+          "reason": {
+            "union": [
+              "builtins.NoneType",
+              "builtins.str"
+            ]
+          }
+        }
+      },
+      "InspectionData": {
+        "required_keys": [
+          "fonts",
+          "formula_formats",
+          "issues",
+          "metadata",
+          "metrics",
+          "objects",
+          "package_parts",
+          "pages",
+          "resources",
+          "source_format",
+          "source_path",
+          "valid"
+        ],
+        "optional_keys": [],
+        "field_types": {
+          "valid": "builtins.bool",
+          "source_path": {
+            "union": [
+              "builtins.NoneType",
+              "builtins.str"
+            ]
+          },
+          "source_format": "builtins.str",
+          "metadata": {
+            "origin": "builtins.dict",
+            "arguments": [
+              "builtins.str",
+              "typing.Any"
+            ]
+          },
+          "metrics": {
+            "origin": "builtins.dict",
+            "arguments": [
+              "builtins.str",
+              "builtins.int"
+            ]
+          },
+          "pages": {
+            "origin": "builtins.list",
+            "arguments": [
+              {
+                "origin": "builtins.dict",
+                "arguments": [
+                  "builtins.str",
+                  "typing.Any"
+                ]
+              }
+            ]
+          },
+          "resources": {
+            "origin": "builtins.list",
+            "arguments": [
+              {
+                "origin": "builtins.dict",
+                "arguments": [
+                  "builtins.str",
+                  "typing.Any"
+                ]
+              }
+            ]
+          },
+          "package_parts": {
+            "origin": "builtins.list",
+            "arguments": [
+              {
+                "origin": "builtins.dict",
+                "arguments": [
+                  "builtins.str",
+                  "typing.Any"
+                ]
+              }
+            ]
+          },
+          "fonts": {
+            "origin": "builtins.dict",
+            "arguments": [
+              "builtins.str",
+              "builtins.int"
+            ]
+          },
+          "formula_formats": {
+            "origin": "builtins.dict",
+            "arguments": [
+              "builtins.str",
+              "builtins.int"
+            ]
+          },
+          "objects": {
+            "origin": "builtins.list",
+            "arguments": [
+              {
+                "origin": "builtins.dict",
+                "arguments": [
+                  "builtins.str",
+                  "typing.Any"
+                ]
+              }
+            ]
+          },
+          "issues": {
+            "origin": "builtins.list",
+            "arguments": [
+              "opendoc.result_types.ConversionIssueData"
+            ]
+          }
+        }
+      }
     }
   },
   "root_identities": {
@@ -12356,6 +13069,18 @@
     "get_extension": "opendoc.extensions",
     "remove_extension": "opendoc.extensions",
     "set_extension": "opendoc.extensions",
-    "MatchingLimits": "opendoc.object_matching"
+    "MatchingLimits": "opendoc.object_matching",
+    "CheckData": "opendoc.result_types",
+    "ComparisonData": "opendoc.result_types",
+    "ConversionIssueData": "opendoc.result_types",
+    "ConversionReportData": "opendoc.result_types",
+    "DiagnosticData": "opendoc.result_types",
+    "InspectionData": "opendoc.result_types"
+  },
+  "result_returns": {
+    "DocumentInspection": "opendoc.result_types.InspectionData",
+    "DocumentComparison": "opendoc.result_types.ComparisonData",
+    "CheckResult": "opendoc.result_types.CheckData",
+    "ConversionReport": "opendoc.result_types.ConversionReportData"
   }
 }

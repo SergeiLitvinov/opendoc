@@ -95,7 +95,7 @@
 | `DocumentInspection` | `opendoc.inspection` | [src/opendoc/inspection.py](../../src/opendoc/inspection.py#L45) |
 | `compare_inspections` | `opendoc.inspection` | [src/opendoc/inspection.py](../../src/opendoc/inspection.py#L142) |
 | `inspect_document_model` | `opendoc.inspection` | [src/opendoc/inspection.py](../../src/opendoc/inspection.py#L741) |
-| `DocumentLimits` | `opendoc.limits` | [src/opendoc/limits.py](../../src/opendoc/limits.py#L15) |
+| `DocumentLimits` | `opendoc.limits` | [src/opendoc/limits.py](../../src/opendoc/limits.py#L14) |
 | `LIST_PROPERTY` | `opendoc.lists` | [src/opendoc/lists.py](../../src/opendoc/lists.py) |
 | `ListItem` | `opendoc.lists` | [src/opendoc/lists.py](../../src/opendoc/lists.py#L38) |
 | `ListKind` | `opendoc.lists` | [src/opendoc/lists.py](../../src/opendoc/lists.py) |
@@ -646,7 +646,7 @@ inspect_document_model(document: DocumentModel, *, source_path: str | Path | Non
 
 ### DocumentLimits
 
-[src/opendoc/limits.py](../../src/opendoc/limits.py#L15)
+[src/opendoc/limits.py](../../src/opendoc/limits.py#L14)
 
 UTF-8/byte input, container depth, value count and embedded-byte budgets.
 

@@ -5,6 +5,8 @@ import subprocess
 import tempfile
 from pathlib import Path
 
+from tools.check_math import verify as verify_math
+
 PROBE = """
 import importlib.util
 from importlib.metadata import distribution, distributions
@@ -17,6 +19,7 @@ for name in ('fastapi', 'docx', 'pptx', 'fitz', 'lxml'):
     assert importlib.util.find_spec(name) is None, name
 assert {dist.metadata['Name'].lower() for dist in distributions()} == {'opendoc'}
 dist = distribution('opendoc')
+assert dist.version == core.__version__, (dist.version, core.__version__)
 assert all('extra ==' in requirement for requirement in dist.requires or []), dist.requires
 assert Path(core.__file__).is_relative_to(Path(__import__('sys').prefix)), core.__file__
 paragraph = core.Paragraph(content=[core.TextRun('Independent document')],
@@ -251,6 +254,7 @@ print('Independent wheel: extensions, packages, model, traversal, operations, co
 def verify(python: str) -> None:
     with tempfile.TemporaryDirectory(prefix="document-core-probe-") as directory:
         subprocess.run([str(Path(python).resolve()), "-I", "-c", PROBE], cwd=directory, check=True)
+    verify_math(python)
 
 
 if __name__ == "__main__":

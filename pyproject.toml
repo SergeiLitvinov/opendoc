@@ -1,14 +1,15 @@
 [build-system]
-requires = ["setuptools>=68.0"]
+requires = ["setuptools==84.0.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "opendoc"
-version = "0.1.0"
+dynamic = ["version"]
 description = "Independent document structures, serialization and structural comparison"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
+license-files = ["LICENSE"]
 dependencies = []
 
 [project.optional-dependencies]
@@ -48,6 +49,9 @@ show_error_codes = true
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.dynamic]
+version = {attr = "opendoc.__version__"}
 
 [tool.setuptools.package-data]
 opendoc = ["py.typed"]

@@ -4,11 +4,13 @@ import ast
 import sys
 from pathlib import Path
 
+import pytest
+
 import opendoc
 
 
-def test_production_imports_are_standard_library_or_document_modules():
-    paths = list(Path(opendoc.__file__).parent.glob("*.py"))
+def _check_imports(root):
+    paths = list(root.rglob("*.py"))
     assert paths
     allowed = sys.stdlib_module_names | {"opendoc", "lxml"}
     for path in paths:
@@ -20,4 +22,18 @@ def test_production_imports_are_standard_library_or_document_modules():
                 names = [(node.module or "").split(".")[0]]
             else:
                 continue
-            assert set(names) <= allowed, (path.name, names)
+            assert set(names) <= allowed, (str(path.relative_to(root)), names)
+
+
+def test_production_imports_are_standard_library_or_document_modules():
+    _check_imports(Path(opendoc.__file__).parent)
+
+
+@pytest.mark.parametrize("statement", ["import consumer_app", "from consumer_app.queue import Task"])
+def test_import_boundary_rejects_consumers_in_nested_packages(tmp_path, statement):
+    nested = tmp_path / "subsystem" / "nested"
+    nested.mkdir(parents=True)
+    (tmp_path / "__init__.py").write_text("from .subsystem import nested\n", encoding="utf-8")
+    (nested / "worker.py").write_text(statement, encoding="utf-8")
+    with pytest.raises(AssertionError, match="worker.py"):
+        _check_imports(tmp_path)

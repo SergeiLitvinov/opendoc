@@ -262,7 +262,7 @@ Budget changed or removed source formulas using reproducible fingerprints.
 
 Per-operation document budgets, independent of application storage.
 
-- `DocumentLimits` — [src/opendoc/limits.py](../../src/opendoc/limits.py#L15)
+- `DocumentLimits` — [src/opendoc/limits.py](../../src/opendoc/limits.py#L14)
 
 Импорты: [opendoc.diagnostics](#opendoc-diagnostics), [opendoc.document_model](#opendoc-document_model), [opendoc.storage](#opendoc-storage).
 

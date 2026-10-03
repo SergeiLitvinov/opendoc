@@ -1,7 +1,7 @@
 """One-to-one matching of inspected objects without collapsing duplicates."""
 
 from collections import defaultdict
-from collections.abc import Callable
+from collections.abc import Callable, Hashable
 from dataclasses import dataclass
 from typing import Any, TypedDict
 
@@ -55,12 +55,12 @@ class _CandidatePool:
     def __init__(self, indices: list[int], objects: list[Object]) -> None:
         self.indices = indices
         self.position = 0
-        self.locations: dict[Any, list[int]] = defaultdict(list)
-        self.offsets: dict[Any, int] = {}
+        self.locations: dict[Hashable, list[int]] = defaultdict(list)
+        self.offsets: dict[Hashable, int] = {}
         for index in indices:
             self.locations[objects[index].get("location")].append(index)
 
-    def first(self, location: Any, remaining: set[int], budget: _MatchingBudget) -> int | None:
+    def first(self, location: Hashable, remaining: set[int], budget: _MatchingBudget) -> int | None:
         budget.charge()
         selected = self.locations.get(location)
         if selected is not None:
@@ -109,7 +109,7 @@ def _match_objects(
                 return True  # Re-imported files have independent origin identifiers.
         return not (origin(before) and origin(after) and origin(before) != origin(after))
 
-    def scope(item: Object) -> tuple[Any, Any] | None:
+    def scope(item: Object) -> tuple[Hashable, Hashable] | None:
         provenance = item.get("provenance") or {}
         if provenance.get("source_format"):
             return provenance["source_format"], provenance.get("source_path")
@@ -130,7 +130,7 @@ def _match_objects(
         remaining_source.remove(left)
         remaining_target.remove(right)
 
-    def match_groups(key: Callable[[Object], Any], basis: str, *, unique: bool = False) -> None:
+    def match_groups(key: Callable[[Object], Hashable], basis: str, *, unique: bool = False) -> None:
         budget.charge(len(remaining_source) + len(remaining_target))
         left_groups, right_groups = defaultdict(list), defaultdict(list)
         for index in sorted(remaining_source):
@@ -154,7 +154,7 @@ def _match_objects(
             if indexed:
                 budget.charge(3 * len(right))
                 all_candidates = _CandidatePool(right, target)
-                origins: dict[Any, list[int]] = defaultdict(list)
+                origins: dict[Hashable, list[int]] = defaultdict(list)
                 for index in right:
                     origins[origin(target[index])].append(index)
                 pools = {identity: _CandidatePool(indices, target) for identity, indices in origins.items()}

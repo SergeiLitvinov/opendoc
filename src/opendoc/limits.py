@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from dataclasses import dataclass, fields, is_dataclass
-from typing import Any
 
 from opendoc.diagnostics import _DiagnosticError
 from opendoc.document_model import DocumentModel, PackagePart, Resource
@@ -93,7 +92,7 @@ def _check_json_text(value: str | bytes | bytearray, limits: DocumentLimits) -> 
             depth -= 1
 
 
-def _guard_model(value: Any, limits: DocumentLimits) -> tuple[int, int]:
+def _guard_model(value: object, limits: DocumentLimits) -> tuple[int, int]:
     """Bound traversal before recursive encoding or allocating base64 strings."""
     pending = [(value, "$", False)]
     active: set[int] = set()

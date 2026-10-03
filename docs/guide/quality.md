@@ -5,8 +5,15 @@
 ```python
 from pathlib import Path
 from opendoc import (
-    ConversionReport, DocumentModel, ObjectLossPolicy, Paragraph, Section,
-    TextPreservationPolicy, TextRun, compare_inspections, inspect_document_model,
+    ConversionReport,
+    DocumentModel,
+    ObjectLossPolicy,
+    Paragraph,
+    Section,
+    TextPreservationPolicy,
+    TextRun,
+    compare_inspections,
+    inspect_document_model,
 )
 
 source = DocumentModel(sections=[Section(blocks=[Paragraph([TextRun("Сохранённый текст")])])])

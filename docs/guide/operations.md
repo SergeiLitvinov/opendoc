@@ -60,13 +60,14 @@ assert extract_text(copied) == "Готово"
 ```python
 from opendoc import iter_elements, transform_elements
 
+
 def finalize(location):
     for run in iter_elements(location.node, TextRun):
         run.node.text = run.node.text.replace("Черновик", "Готово")
     return location.node
 
-result = transform_elements(original, Paragraph, finalize,
-                            predicate=lambda location: "Черновик" in location.node.plain_text)
+
+result = transform_elements(original, Paragraph, finalize, predicate=lambda location: "Черновик" in location.node.plain_text)
 assert extract_text(result) == "Готово"
 assert extract_text(original) == "Черновик"
 assert result.validate() == []

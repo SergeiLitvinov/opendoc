@@ -11,8 +11,14 @@ LaTeX сохраняется и проверяется через точный �
 ```python
 from pathlib import Path
 from opendoc import (
-    ConversionReport, DocumentModel, Formula, FormulaFormat, FormulaLossPolicy,
-    Section, compare_inspections, inspect_document_model,
+    ConversionReport,
+    DocumentModel,
+    Formula,
+    FormulaFormat,
+    FormulaLossPolicy,
+    Section,
+    compare_inspections,
+    inspect_document_model,
 )
 
 document = DocumentModel(sections=[Section(blocks=[Formula("x^2", FormulaFormat.LATEX, fallback_text="x²")])])
@@ -77,3 +83,32 @@ XML-парсер не восстанавливает повреждённую р
 API принимает Unicode-строку, кодируемую в UTF-8. Допустимы отсутствие декларации, UTF-8 и ASCII; декларация иной кодировки отклоняется, чтобы не получить другой текст после повторной интерпретации байтов. Неправильный Unicode также отклоняется. `formula_fingerprint()` превращает ожидаемый отказ XML в `None`, а прямое преобразование сообщает `ValueError`.
 
 Независимые деревья ожидаемого OMML, неподдержанные конструкции и точные границы проверяются в `tests/test_mathml.py` и `tests/test_formula_xml.py`. Проверка установленного wheel отдельно подтверждает LaTeX и строгую недоступность XML в пустом окружении без `lxml`.
+
+## Независимость установки
+
+`tools/check_wheel.py` исполняет основные сценарии в отдельном процессе,
+во временном каталоге, с `-I` и окружением только с установленным OpenDoc.
+Модель, изменение, ресурсы, композиция, JSON и сравнение работают без `math`.
+Проверка также импортирует все модули и подпакеты OpenDoc под наблюдением,
+которое отвергает любую попытку импорта `lxml` во время загрузки библиотеки,
+работы с моделью или LaTeX.
+
+`tools/check_math.py` повторяет один сценарий в двух установках:
+без дополнительных пакетов и только с extra `math`. Во второй установке
+основные операции тоже не загружают `lxml`; backend появляется при XML-операции.
+JSON сохраняет исходники MathML/OMML в обеих установках. Без backend отпечатки
+недоступны и строгая политика отклоняет даже сравнение с исходником. С backend
+независимо заданные деревья MathML/OMML совпадают, изменение символа отличается,
+неподдержанная конструкция и DTD остаются недоступными.
+
+```text
+uv run python -m tools.check_wheel --python <python-окружения-только-с-opendoc>
+uv run python -m tools.check_math --python <python-окружения-с-opendoc-и-lxml> --with-math
+```
+
+В CI эти установки проверяются на Python 3.11/3.12/3.13. Math-зависимость
+экспортируется из `uv.lock` без dev/docs extras и устанавливается с проверкой
+хешей; тест требует ровно дистрибутивы `opendoc` и `lxml`. Это проверка границы
+библиотеки, а не обещание поддержки произвольного математического языка.
+Архитектурный тест обходит исходники рекурсивно, включая будущие подпакеты,
+и отвергает импорты приложения-потребителя.

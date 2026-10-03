@@ -7,10 +7,12 @@
 ```python
 from opendoc import DocumentModel, Paragraph, Section, TextRun, TextStyle, merge_documents, save_document
 
-first = DocumentModel(sections=[Section(blocks=[Paragraph([TextRun("Первый")], style_id="body")])],
-                      styles={"body": TextStyle(bold=True)})
-second = DocumentModel(sections=[Section(blocks=[Paragraph([TextRun("Второй")], style_id="body")])],
-                       styles={"body": TextStyle(italic=True)})
+first = DocumentModel(
+    sections=[Section(blocks=[Paragraph([TextRun("Первый")], style_id="body")])], styles={"body": TextStyle(bold=True)}
+)
+second = DocumentModel(
+    sections=[Section(blocks=[Paragraph([TextRun("Второй")], style_id="body")])], styles={"body": TextStyle(italic=True)}
+)
 merged = merge_documents([first, second], conflicts="rename")
 assert merged.id_maps[0].styles == {"body": "body"}
 assert merged.id_maps[1].styles == {"body": "body~2"}

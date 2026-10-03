@@ -20,10 +20,24 @@ jobs:
       - run: uv run python -m tools.docs check
       - run: uv build --out-dir dist
       - run: |
+          uv build --wheel dist/*.tar.gz --out-dir .opendoc/sdist-dist
+          uv run python -m tools.check_distribution --dist dist --rebuilt .opendoc/sdist-dist
+          uv venv --python "${{ matrix.python-version }}" .opendoc/sdist-env
+          uv pip install --python .opendoc/sdist-env/bin/python --no-deps --no-index .opendoc/sdist-dist/*.whl
+          uv run python -m tools.check_wheel --python .opendoc/sdist-env/bin/python
+          uv run python -m tools.check_types --python .opendoc/sdist-env/bin/python
+      - run: |
           uv venv --python "${{ matrix.python-version }}" .opendoc/wheel-env
           uv pip install --python .opendoc/wheel-env/bin/python --no-deps --no-index dist/*.whl
           uv run python -m tools.check_wheel --python .opendoc/wheel-env/bin/python
           uv run python -m tools.check_types --python .opendoc/wheel-env/bin/python
+          .opendoc/wheel-env/bin/python -I examples/math.py
+          uv venv --python "${{ matrix.python-version }}" .opendoc/math-env
+          uv pip install --python .opendoc/math-env/bin/python --no-deps --no-index dist/*.whl
+          uv export --locked --extra math --no-dev --no-emit-project --no-editable --output-file .opendoc/math-requirements.txt > /dev/null
+          uv pip install --python .opendoc/math-env/bin/python --require-hashes -r .opendoc/math-requirements.txt
+          uv run python -m tools.check_math --python .opendoc/math-env/bin/python --with-math
+          .opendoc/math-env/bin/python -I examples/math.py
       - uses: actions/upload-artifact@v4
         with:
           name: opendoc-docs-${{ matrix.python-version }}

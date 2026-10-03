@@ -4,9 +4,11 @@ import ast
 import importlib
 import inspect
 import json
+import types
 from dataclasses import fields, is_dataclass
 from enum import Enum
 from pathlib import Path
+from typing import get_args, get_origin, get_type_hints
 
 import pytest
 
@@ -54,7 +56,11 @@ def _describe(value):
     if inspect.isfunction(value) or (inspect.isclass(value) and value.__module__.startswith("opendoc")):
         # TypedDict classes expose a mapping schema rather than a runtime signature.
         if hasattr(value, "__required_keys__"):
-            return {"required_keys": sorted(value.__required_keys__), "optional_keys": sorted(value.__optional_keys__)}
+            return {
+                "required_keys": sorted(value.__required_keys__),
+                "optional_keys": sorted(value.__optional_keys__),
+                "field_types": {name: _type_contract(annotation) for name, annotation in get_type_hints(value).items()},
+            }
         result = {"parameters": _parameters(value)}
         if inspect.isclass(value):
             result["members"] = {}
@@ -76,6 +82,16 @@ def _describe(value):
     return {"constant": str(value)}
 
 
+def _type_contract(annotation):
+    """Stable type trees, independent of annotation spelling or union ordering."""
+    origin = get_origin(annotation)
+    if origin is types.UnionType:
+        return {"union": sorted((_type_contract(item) for item in get_args(annotation)), key=lambda item: json.dumps(item))}
+    if origin is not None:
+        return {"origin": _type_contract(origin), "arguments": [_type_contract(item) for item in get_args(annotation)]}
+    return f"{annotation.__module__}.{annotation.__qualname__}"
+
+
 def _assert_parameters_compatible(expected, actual, label):
     assert actual[: len(expected)] == expected, label
     assert all(
@@ -93,7 +109,7 @@ def _assert_contract(expected, actual, label):
                 _assert_parameters_compatible(contract["parameters"], actual[category][name]["parameters"], f"{label}.{name}")
             else:
                 assert actual[category][name] == contract, f"{label}.{name}"
-    for category in ("exception_bases", "required_keys", "optional_keys", "constant"):
+    for category in ("exception_bases", "required_keys", "optional_keys", "field_types", "constant"):
         if category in expected:
             assert actual[category] == expected[category], label
 
@@ -108,6 +124,9 @@ def test_saved_public_api_contract():
             _assert_contract(contract, _describe(value), f"{module_name}.{name}")
     for name, source_module in baseline["root_identities"].items():
         assert getattr(opendoc, name) is getattr(importlib.import_module(source_module), name), name
+    for class_name, expected in baseline.get("result_returns", {}).items():
+        annotations = get_type_hints(getattr(opendoc, class_name).to_dict, localns={"DocumentLimits": opendoc.DocumentLimits})
+        assert _type_contract(annotations["return"]) == expected, class_name
 
 
 @pytest.mark.parametrize("version", [1, 2])
@@ -166,3 +185,9 @@ def test_contract_comparison_rejects_incompatible_signatures(breaking_change):
 def test_contract_comparison_permits_optional_addition():
     expected = [{"name": "path", "kind": "POSITIONAL_OR_KEYWORD", "default": "None"}]
     _assert_parameters_compatible(expected, [*expected, {"name": "new", "kind": "KEYWORD_ONLY", "default": "False"}], "example")
+
+
+@pytest.mark.parametrize("actual", [{}, {"valid": "builtins.str"}, {"valid": "typing.Any"}])
+def test_contract_comparison_rejects_removed_or_weakened_result_fields(actual):
+    with pytest.raises(AssertionError):
+        _assert_contract({"field_types": {"valid": "builtins.bool"}}, {"field_types": actual}, "InspectionData")

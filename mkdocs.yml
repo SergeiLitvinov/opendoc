@@ -27,6 +27,7 @@ nav:
   - Руководство:
       - Навигация: docs/reference/user-guide.md
       - Работа с библиотекой: docs/guide/index.md
+      - Исполняемые сценарии: docs/guide/examples.md
       - Совместимость: docs/guide/compatibility.md
       - JSON и ошибки: docs/guide/json.md
       - Пользовательские расширения: docs/guide/extensions.md
@@ -48,6 +49,7 @@ nav:
       - Внутренние ссылки и якоря: docs/guide/references.md
       - Сноски: docs/guide/footnotes.md
       - Изменения: docs/guide/changes.md
+      - Сборка и выпуск: docs/guide/release.md
   - Справочник:
       - API: docs/reference/api.md
       - Навигатор по коду: docs/reference/code.md

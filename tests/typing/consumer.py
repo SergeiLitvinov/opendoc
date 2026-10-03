@@ -1,5 +1,6 @@
 """Typed consumer of the installed library; also executed in its empty environment."""
 
+from pathlib import Path
 from typing import Any, assert_type
 
 from opendoc import (
@@ -8,11 +9,16 @@ from opendoc import (
     ColorValue,
     ComparisonData,
     ConversionIssueData,
+    ConversionReport,
+    ConversionReportData,
+    DiagnosticData,
+    DiagnosticIssue,
     DocumentComparison,
     DocumentInspection,
     DocumentModel,
     Footnote,
     InspectionData,
+    IssueSeverity,
     NodeLocation,
     Paragraph,
     ParagraphProperties,
@@ -65,6 +71,15 @@ def main() -> None:
     assert_type(checked, CheckData)
     assert_type(checked["version"], int)
     assert_type(checked["success"], bool)
+    issue = DiagnosticIssue("consumer.info", IssueSeverity.INFO, "Typed diagnostic")
+    result.issues.append(issue)
+    assert_type(result.to_dict()["issues"][0], DiagnosticData)
+    assert_type(result.to_dict()["issues"][0]["reason"], str | None)
+    report = ConversionReport(Path("consumer-output"))
+    report.add(IssueSeverity.INFO, "consumer", "Typed conversion report")
+    assert_type(report.to_dict(), ConversionReportData)
+    assert_type(report.to_dict()["output_path"], str)
+    assert_type(report.to_dict()["issues"][0], ConversionIssueData)
     objects = [{"type": "paragraph", "content_hash": "same", "location": "one"}]
     matches, _, _ = match_objects(objects, objects)
     assert_type(matches, list[ObjectMatch])
