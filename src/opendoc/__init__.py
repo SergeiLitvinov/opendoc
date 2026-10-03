@@ -222,6 +222,7 @@ from .lists import get_list_item as get_list_item
 from .lists import iter_list_items as iter_list_items
 from .lists import iter_list_numbers as iter_list_numbers
 from .lists import set_list_item as set_list_item
+from .object_matching import MatchingLimits as MatchingLimits
 from .object_quality_policy import (
     ObjectLossPolicy as ObjectLossPolicy,
 )
@@ -281,6 +282,24 @@ from .resources import (
 from .resources import (
     replace_resource as replace_resource,
 )
+from .result_types import (
+    CheckData as CheckData,
+)
+from .result_types import (
+    ComparisonData as ComparisonData,
+)
+from .result_types import (
+    ConversionIssueData as ConversionIssueData,
+)
+from .result_types import (
+    ConversionReportData as ConversionReportData,
+)
+from .result_types import (
+    DiagnosticData as DiagnosticData,
+)
+from .result_types import (
+    InspectionData as InspectionData,
+)
 from .semantics import HEADING_PROPERTY as HEADING_PROPERTY
 from .semantics import Heading as Heading
 from .semantics import get_heading as get_heading
@@ -333,6 +352,13 @@ from .traversal import (
 )
 
 __all__ = [
+    "CheckData",
+    "ComparisonData",
+    "ConversionIssueData",
+    "ConversionReportData",
+    "DiagnosticData",
+    "InspectionData",
+    "MatchingLimits",
     "ExtensionCallback",
     "ExtensionContext",
     "ExtensionSchema",

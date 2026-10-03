@@ -23,7 +23,7 @@ class EmphasisInventory:
     def __init__(self) -> None:
         self.digest = hashlib.sha256()
         self.characters = 0
-        self.runs = []
+        self.runs: list[list[int | bool]] = []
         self.available = True
 
     def add(self, run: TextRun) -> None:
@@ -78,7 +78,7 @@ def _changes(source: list[list[int | bool]], target: list[list[int | bool]]) -> 
     left, right = iter(source), iter(target)
     a, b = next(left, None), next(right, None)
     changed = 0
-    if a is None:
+    if a is None or b is None:
         return changed
     remaining_a, remaining_b = a[0], b[0]
     while a is not None and b is not None:
@@ -115,7 +115,7 @@ class EmphasisLossPolicy:
             and source["characters"] == target["characters"]
         )
         changed = _changes(source["runs"], target["runs"]) if available else None
-        accepted = available and changed <= self.max_changed_emphasis
+        accepted = available and changed is not None and changed <= self.max_changed_emphasis
         report.metrics["emphasis_quality_gate"] = {
             "basis": EMPHASIS_VERSION,
             "verified": available,

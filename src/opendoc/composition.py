@@ -39,7 +39,6 @@ from opendoc.references import (
 )
 from opendoc.storage import ArtifactLimitError
 from opendoc.traversal import (
-    SECTION_CONTENT_FIELDS,
     ModelNode,
     NodeLocation,
     _set_resource_reference,
@@ -158,6 +157,15 @@ def _inputs(documents: Iterable[DocumentModel], limits: DocumentLimits) -> list[
     return result
 
 
+def _anchor_ids(document: ModelNode, limits: DocumentLimits | None) -> list[str]:
+    identifiers = []
+    for location in iter_anchors(document, limits=limits):
+        anchor = get_anchor(location.node, limits=limits)
+        assert anchor is not None
+        identifiers.append(anchor.id)
+    return identifiers
+
+
 def _definition_ids(
     document: DocumentModel,
     domain: Literal["styles", "resources", "lists", "anchors", "footnotes"],
@@ -166,7 +174,7 @@ def _definition_ids(
     if domain == "footnotes":
         return [note.id for note in document.footnotes]
     if domain == "anchors":
-        return [get_anchor(location.node, limits=limits).id for location in iter_anchors(document, limits=limits)]
+        return _anchor_ids(document, limits)
     if domain == "lists":
         identifiers: dict[str, None] = {}
         for location in iter_list_items(document, limits=limits):
@@ -257,10 +265,10 @@ def _rewrite(document: DocumentModel, identifiers: DocumentIdMap, limits: Docume
     for value, item in lists:
         assert item is not None
         value["list_id"] = identifiers.lists[item.list_id]
-    for link in styles:
-        link.set(identifiers.styles[link.identifier])
-    for link in resources:
-        _set_resource_reference(link, identifiers.resources[link.resource_id])
+    for style_link in styles:
+        style_link.set(identifiers.styles[style_link.identifier])
+    for resource_link in resources:
+        _set_resource_reference(resource_link, identifiers.resources[resource_link.resource_id])
     document.styles = {identifiers.styles[identifier]: style for identifier, style in document.styles.items()}
     remapped_resources = {}
     for identifier, resource in document.resources.items():
@@ -359,7 +367,16 @@ def _section_shell(location: NodeLocation[ModelNode]) -> tuple[Section, str]:
     while top.parent is not None and not isinstance(top.parent.node, Section):
         top = top.parent
     field = cast(str, top.field)
-    return replace(section, **{name: [] for name in SECTION_CONTENT_FIELDS}), field
+    return replace(
+        section,
+        headers=[],
+        first_page_headers=[],
+        even_page_headers=[],
+        blocks=[],
+        footers=[],
+        first_page_footers=[],
+        even_page_footers=[],
+    ), field
 
 
 def _selected_sections(location: NodeLocation[ModelNode]) -> list[Section]:
@@ -475,7 +492,7 @@ def _anchor_dependencies(
         anchor = get_anchor(reference.node, limits=limits)
         assert anchor is not None
         targets[anchor.id] = _owner(reference)
-    available = {get_anchor(reference.node, limits=limits).id for reference in iter_anchors(selected, limits=limits)}
+    available = set(_anchor_ids(selected, limits))
     available_notes = {note.id for note in selected.footnotes}
     pending = deque(_semantic_links(selected, limits))
     expanded: set[tuple[str, str | int]] = set()
@@ -491,7 +508,7 @@ def _anchor_dependencies(
         containers[target] = container
         if isinstance(container, Footnote):
             available_notes.add(container.id)
-        available.update(get_anchor(reference.node, limits=limits).id for reference in iter_anchors(container, limits=limits))
+        available.update(_anchor_ids(container, limits))
         pending.extend(_semantic_links(container, limits))
     selected.sections = [
         cast(Section, containers[("section", index)]) for index in range(len(source.sections)) if ("section", index) in containers

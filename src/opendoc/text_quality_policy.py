@@ -39,9 +39,9 @@ class TextPreservationPolicy:
         if self.mode == "flow":
             return self._evaluate_flow(report, comparison)
         available = comparison is not None and comparison.valid
-        if available:
+        if available and comparison is not None:
             available = _note_content_available(comparison.source.metadata, comparison.target.metadata)
-        if available:
+        if available and comparison is not None:
             available = all(
                 side.metadata.get("object_inventory_scope") == OBJECT_INVENTORY_SCOPE
                 and all(
@@ -53,8 +53,9 @@ class TextPreservationPolicy:
                 )
                 for side in (comparison.source, comparison.target)
             )
-        source, target = Counter(), Counter()
-        if available:
+        source: Counter[str] = Counter()
+        target: Counter[str] = Counter()
+        if available and comparison is not None:
             for side, counts in ((comparison.source, source), (comparison.target, target)):
                 counts.update(
                     item["text_hash"] for item in side.objects if item.get("type") == "paragraph" and item["text_characters"] > 0

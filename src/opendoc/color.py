@@ -7,7 +7,16 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 from enum import Enum
 from math import isfinite
-from typing import Any, TypeAlias
+from typing import Any, TypeAlias, TypedDict, Unpack
+
+
+class _ColorAppearance(TypedDict, total=False):
+    icc_profile: str | None
+    blend_mode: str
+
+
+class _ColorMetadata(_ColorAppearance, total=False):
+    alpha: float
 
 
 class ColorSpace(str, Enum):
@@ -41,7 +50,7 @@ class ColorValue:
             raise ValueError("blend mode must not be empty")
 
     @classmethod
-    def from_hex(cls, value: str, **metadata: object) -> ColorValue:
+    def from_hex(cls, value: str, **metadata: Unpack[_ColorMetadata]) -> ColorValue:
         token = value.strip().removeprefix("#")
         if len(token) in (3, 4):
             token = "".join(character * 2 for character in token)
@@ -52,20 +61,23 @@ class ColorValue:
         except ValueError as error:
             raise ValueError(f"invalid hexadecimal color {value!r}") from error
         alpha = channels[3] if len(channels) == 4 else float(metadata.pop("alpha", 1.0))
-        return cls(ColorSpace.SRGB, channels[:3], alpha=alpha, **metadata)
+        appearance: _ColorAppearance = metadata
+        return cls(ColorSpace.SRGB, channels[:3], alpha=alpha, **appearance)
 
     @classmethod
-    def from_pdf_srgb(cls, value: int, **metadata: object) -> ColorValue:
+    def from_pdf_srgb(cls, value: int, **metadata: Unpack[_ColorMetadata]) -> ColorValue:
         if value < 0 or value > 0xFFFFFF:
             raise ValueError("PDF sRGB integer must be between 0x000000 and 0xFFFFFF")
         return cls.from_hex(f"#{value:06X}", **metadata)
 
     @classmethod
-    def from_srgb_components(cls, red: float, green: float, blue: float, **metadata: object) -> ColorValue:
+    def from_srgb_components(cls, red: float, green: float, blue: float, **metadata: Unpack[_ColorMetadata]) -> ColorValue:
         return cls(ColorSpace.SRGB, (red, green, blue), **metadata)
 
     @classmethod
-    def from_cmyk(cls, cyan: float, magenta: float, yellow: float, black: float, **metadata: object) -> ColorValue:
+    def from_cmyk(
+        cls, cyan: float, magenta: float, yellow: float, black: float, **metadata: Unpack[_ColorMetadata]
+    ) -> ColorValue:
         return cls(ColorSpace.CMYK, (cyan, magenta, yellow, black), **metadata)
 
     def to_srgb(self) -> ColorValue:

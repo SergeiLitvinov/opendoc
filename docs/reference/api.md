@@ -7,30 +7,30 @@
 | Имя | Модуль | Объявление |
 |---|---|---|
 | `CheckPolicy` | `opendoc.checks` | [src/opendoc/checks.py](../../src/opendoc/checks.py) |
-| `check_document` | `opendoc.checks` | [src/opendoc/checks.py](../../src/opendoc/checks.py#L39) |
-| `compare_documents` | `opendoc.checks` | [src/opendoc/checks.py](../../src/opendoc/checks.py#L134) |
-| `ColorSpace` | `opendoc.color` | [src/opendoc/color.py](../../src/opendoc/color.py#L13) |
-| `ColorValue` | `opendoc.color` | [src/opendoc/color.py](../../src/opendoc/color.py#L19) |
-| `DocumentIdMap` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py#L56) |
-| `DocumentMerge` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py#L67) |
+| `check_document` | `opendoc.checks` | [src/opendoc/checks.py](../../src/opendoc/checks.py#L40) |
+| `compare_documents` | `opendoc.checks` | [src/opendoc/checks.py](../../src/opendoc/checks.py#L144) |
+| `ColorSpace` | `opendoc.color` | [src/opendoc/color.py](../../src/opendoc/color.py#L22) |
+| `ColorValue` | `opendoc.color` | [src/opendoc/color.py](../../src/opendoc/color.py#L28) |
+| `DocumentIdMap` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py#L55) |
+| `DocumentMerge` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py#L66) |
 | `IdentifierConflictPolicy` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py) |
 | `MetadataConflictPolicy` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py) |
 | `PackagePolicy` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py) |
-| `extract_document` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py#L504) |
-| `merge_documents` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py#L272) |
-| `CheckResult` | `opendoc.diagnostics` | [src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L95) |
-| `ConversionIssue` | `opendoc.diagnostics` | [src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L23) |
-| `ConversionReport` | `opendoc.diagnostics` | [src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L31) |
-| `DiagnosticIssue` | `opendoc.diagnostics` | [src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L66) |
-| `IssueSeverity` | `opendoc.diagnostics` | [src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L15) |
+| `extract_document` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py#L521) |
+| `merge_documents` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py#L280) |
+| `CheckResult` | `opendoc.diagnostics` | [src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L97) |
+| `ConversionIssue` | `opendoc.diagnostics` | [src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L25) |
+| `ConversionReport` | `opendoc.diagnostics` | [src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L33) |
+| `DiagnosticIssue` | `opendoc.diagnostics` | [src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L68) |
+| `IssueSeverity` | `opendoc.diagnostics` | [src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L17) |
 | `FORMAT_NAME` | `opendoc.document_codec` | [src/opendoc/document_codec.py](../../src/opendoc/document_codec.py) |
 | `FORMAT_VERSION` | `opendoc.document_codec` | [src/opendoc/document_codec.py](../../src/opendoc/document_codec.py) |
-| `document_from_dict` | `opendoc.document_codec` | [src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L78) |
-| `document_from_json` | `opendoc.document_codec` | [src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L114) |
-| `document_to_dict` | `opendoc.document_codec` | [src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L50) |
-| `document_to_json` | `opendoc.document_codec` | [src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L110) |
-| `load_document` | `opendoc.document_codec` | [src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L154) |
-| `save_document` | `opendoc.document_codec` | [src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L143) |
+| `document_from_dict` | `opendoc.document_codec` | [src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L88) |
+| `document_from_json` | `opendoc.document_codec` | [src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L124) |
+| `document_to_dict` | `opendoc.document_codec` | [src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L60) |
+| `document_to_json` | `opendoc.document_codec` | [src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L120) |
+| `load_document` | `opendoc.document_codec` | [src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L164) |
+| `save_document` | `opendoc.document_codec` | [src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L153) |
 | `VECTOR_IMAGE_MEDIA_TYPES` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py) |
 | `Block` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py) |
 | `Box` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L109) |
@@ -91,10 +91,10 @@
 | `set_footnote` | `opendoc.footnotes` | [src/opendoc/footnotes.py](../../src/opendoc/footnotes.py#L131) |
 | `set_footnote_reference` | `opendoc.footnotes` | [src/opendoc/footnotes.py](../../src/opendoc/footnotes.py#L62) |
 | `FormulaLossPolicy` | `opendoc.formula_quality_policy` | [src/opendoc/formula_quality_policy.py](../../src/opendoc/formula_quality_policy.py#L70) |
-| `DocumentComparison` | `opendoc.inspection` | [src/opendoc/inspection.py](../../src/opendoc/inspection.py#L94) |
-| `DocumentInspection` | `opendoc.inspection` | [src/opendoc/inspection.py](../../src/opendoc/inspection.py#L44) |
-| `compare_inspections` | `opendoc.inspection` | [src/opendoc/inspection.py](../../src/opendoc/inspection.py#L141) |
-| `inspect_document_model` | `opendoc.inspection` | [src/opendoc/inspection.py](../../src/opendoc/inspection.py#L724) |
+| `DocumentComparison` | `opendoc.inspection` | [src/opendoc/inspection.py](../../src/opendoc/inspection.py#L95) |
+| `DocumentInspection` | `opendoc.inspection` | [src/opendoc/inspection.py](../../src/opendoc/inspection.py#L45) |
+| `compare_inspections` | `opendoc.inspection` | [src/opendoc/inspection.py](../../src/opendoc/inspection.py#L142) |
+| `inspect_document_model` | `opendoc.inspection` | [src/opendoc/inspection.py](../../src/opendoc/inspection.py#L741) |
 | `DocumentLimits` | `opendoc.limits` | [src/opendoc/limits.py](../../src/opendoc/limits.py#L15) |
 | `LIST_PROPERTY` | `opendoc.lists` | [src/opendoc/lists.py](../../src/opendoc/lists.py) |
 | `ListItem` | `opendoc.lists` | [src/opendoc/lists.py](../../src/opendoc/lists.py#L38) |
@@ -104,6 +104,7 @@
 | `iter_list_items` | `opendoc.lists` | [src/opendoc/lists.py](../../src/opendoc/lists.py#L135) |
 | `iter_list_numbers` | `opendoc.lists` | [src/opendoc/lists.py](../../src/opendoc/lists.py#L142) |
 | `set_list_item` | `opendoc.lists` | [src/opendoc/lists.py](../../src/opendoc/lists.py#L111) |
+| `MatchingLimits` | `opendoc.object_matching` | [src/opendoc/object_matching.py](../../src/opendoc/object_matching.py#L23) |
 | `ObjectLossPolicy` | `opendoc.object_quality_policy` | [src/opendoc/object_quality_policy.py](../../src/opendoc/object_quality_policy.py#L14) |
 | `clone_model` | `opendoc.operations` | [src/opendoc/operations.py](../../src/opendoc/operations.py#L32) |
 | `extract_text` | `opendoc.operations` | [src/opendoc/operations.py](../../src/opendoc/operations.py#L172) |
@@ -131,6 +132,12 @@
 | `find_resource_uses` | `opendoc.resources` | [src/opendoc/resources.py](../../src/opendoc/resources.py#L92) |
 | `remove_resource` | `opendoc.resources` | [src/opendoc/resources.py](../../src/opendoc/resources.py#L122) |
 | `replace_resource` | `opendoc.resources` | [src/opendoc/resources.py](../../src/opendoc/resources.py#L102) |
+| `CheckData` | `opendoc.result_types` | [src/opendoc/result_types.py](../../src/opendoc/result_types.py#L35) |
+| `ComparisonData` | `opendoc.result_types` | [src/opendoc/result_types.py](../../src/opendoc/result_types.py#L59) |
+| `ConversionIssueData` | `opendoc.result_types` | [src/opendoc/result_types.py](../../src/opendoc/result_types.py#L11) |
+| `ConversionReportData` | `opendoc.result_types` | [src/opendoc/result_types.py](../../src/opendoc/result_types.py#L27) |
+| `DiagnosticData` | `opendoc.result_types` | [src/opendoc/result_types.py](../../src/opendoc/result_types.py#L18) |
+| `InspectionData` | `opendoc.result_types` | [src/opendoc/result_types.py](../../src/opendoc/result_types.py#L44) |
 | `HEADING_PROPERTY` | `opendoc.semantics` | [src/opendoc/semantics.py](../../src/opendoc/semantics.py) |
 | `Heading` | `opendoc.semantics` | [src/opendoc/semantics.py](../../src/opendoc/semantics.py#L19) |
 | `get_heading` | `opendoc.semantics` | [src/opendoc/semantics.py](../../src/opendoc/semantics.py#L42) |
@@ -158,7 +165,7 @@
 
 ### check_document
 
-[src/opendoc/checks.py](../../src/opendoc/checks.py#L39)
+[src/opendoc/checks.py](../../src/opendoc/checks.py#L40)
 
 ```python
 check_document(document: DocumentModel, *, limits: DocumentLimits | None=None, extensions: Iterable[ExtensionSchema] | None=None, unknown_extensions: UnknownExtensionPolicy='error')
@@ -172,10 +179,10 @@ and hashes. DocumentLimits exhaustion continues to raise ArtifactLimitError.
 
 ### compare_documents
 
-[src/opendoc/checks.py](../../src/opendoc/checks.py#L134)
+[src/opendoc/checks.py](../../src/opendoc/checks.py#L144)
 
 ```python
-compare_documents(source: DocumentModel, target: DocumentModel, *, policies: Iterable[CheckPolicy] | None=None, limits: DocumentLimits | None=None, extensions: Iterable[ExtensionSchema] | None=None, unknown_extensions: UnknownExtensionPolicy='error')
+compare_documents(source: DocumentModel, target: DocumentModel, *, policies: Iterable[CheckPolicy] | None=None, limits: DocumentLimits | None=None, extensions: Iterable[ExtensionSchema] | None=None, unknown_extensions: UnknownExtensionPolicy='error', matching_limits: MatchingLimits | None=None)
 ```
 
 Compare entire models in memory and apply explicit policies in order.
@@ -187,27 +194,27 @@ Existing ConversionReport usage and policy return values remain supported.
 
 ### ColorSpace
 
-[src/opendoc/color.py](../../src/opendoc/color.py#L13)
+[src/opendoc/color.py](../../src/opendoc/color.py#L22)
 
 ### ColorValue
 
-[src/opendoc/color.py](../../src/opendoc/color.py#L19)
+[src/opendoc/color.py](../../src/opendoc/color.py#L28)
 
 ### DocumentIdMap
 
-[src/opendoc/composition.py](../../src/opendoc/composition.py#L56)
+[src/opendoc/composition.py](../../src/opendoc/composition.py#L55)
 
 Original-to-result identifiers for one input, including unchanged IDs.
 
 ### DocumentMerge
 
-[src/opendoc/composition.py](../../src/opendoc/composition.py#L67)
+[src/opendoc/composition.py](../../src/opendoc/composition.py#L66)
 
 Independent merged model and per-input identifier snapshots.
 
 ### extract_document
 
-[src/opendoc/composition.py](../../src/opendoc/composition.py#L504)
+[src/opendoc/composition.py](../../src/opendoc/composition.py#L521)
 
 ```python
 extract_document(document: DocumentModel, location: NodeLocation[ModelNode], *, package_policy: PackagePolicy='error', additional_styles: Iterable[str]=(), additional_resources: Iterable[str]=(), limits: DocumentLimits | None=None)
@@ -223,7 +230,7 @@ partial extraction and keeps the entire opaque graph, without pruning bytes.
 
 ### merge_documents
 
-[src/opendoc/composition.py](../../src/opendoc/composition.py#L272)
+[src/opendoc/composition.py](../../src/opendoc/composition.py#L280)
 
 ```python
 merge_documents(documents: Iterable[DocumentModel], *, conflicts: IdentifierConflictPolicy='error', metadata_conflicts: MetadataConflictPolicy='error', package_policy: PackagePolicy='error', mode: ConversionMode | None=None, limits: DocumentLimits | None=None)
@@ -238,7 +245,7 @@ Input value/embedded-byte counts share a budget; output is validated separately.
 
 ### CheckResult
 
-[src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L95)
+[src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L97)
 
 A model check result without a filesystem destination.
 
@@ -248,25 +255,25 @@ add/metrics/issues, and structured policy measurements are snapshotted.
 
 ### ConversionIssue
 
-[src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L23)
+[src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L25)
 
 ### ConversionReport
 
-[src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L31)
+[src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L33)
 
 ### DiagnosticIssue
 
-[src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L66)
+[src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L68)
 
 Machine-readable issue; the message is explanatory, never a parser input.
 
 ### IssueSeverity
 
-[src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L15)
+[src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L17)
 
 ### document_from_dict
 
-[src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L78)
+[src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L88)
 
 ```python
 document_from_dict(payload: dict[str, Any], *, limits: DocumentLimits | None=None)
@@ -276,7 +283,7 @@ document_from_dict(payload: dict[str, Any], *, limits: DocumentLimits | None=Non
 
 ### document_from_json
 
-[src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L114)
+[src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L124)
 
 ```python
 document_from_json(value: str | bytes, *, limits: DocumentLimits | None=None)
@@ -284,7 +291,7 @@ document_from_json(value: str | bytes, *, limits: DocumentLimits | None=None)
 
 ### document_to_dict
 
-[src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L50)
+[src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L60)
 
 ```python
 document_to_dict(document: DocumentModel, *, limits: DocumentLimits | None=None)
@@ -294,7 +301,7 @@ document_to_dict(document: DocumentModel, *, limits: DocumentLimits | None=None)
 
 ### document_to_json
 
-[src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L110)
+[src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L120)
 
 ```python
 document_to_json(document: DocumentModel, *, indent: int | None=None, limits: DocumentLimits | None=None)
@@ -302,7 +309,7 @@ document_to_json(document: DocumentModel, *, indent: int | None=None, limits: Do
 
 ### load_document
 
-[src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L154)
+[src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L164)
 
 ```python
 load_document(path: str | Path, *, limits: DocumentLimits | None=None)
@@ -310,7 +317,7 @@ load_document(path: str | Path, *, limits: DocumentLimits | None=None)
 
 ### save_document
 
-[src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L143)
+[src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L153)
 
 ```python
 save_document(document: DocumentModel, path: str | Path, *, indent: int | None=2, limits: DocumentLimits | None=None)
@@ -611,25 +618,25 @@ Assign/remove a role atomically, preserving unknown tagged fields.
 
 ### DocumentComparison
 
-[src/opendoc/inspection.py](../../src/opendoc/inspection.py#L94)
+[src/opendoc/inspection.py](../../src/opendoc/inspection.py#L95)
 
 ### DocumentInspection
 
-[src/opendoc/inspection.py](../../src/opendoc/inspection.py#L44)
+[src/opendoc/inspection.py](../../src/opendoc/inspection.py#L45)
 
 ### compare_inspections
 
-[src/opendoc/inspection.py](../../src/opendoc/inspection.py#L141)
+[src/opendoc/inspection.py](../../src/opendoc/inspection.py#L142)
 
 ```python
-compare_inspections(source: DocumentInspection, target: DocumentInspection)
+compare_inspections(source: DocumentInspection, target: DocumentInspection, *, matching_limits: MatchingLimits | None=None)
 ```
 
 Сравнить структурную сохранность двух проинспектированных документов.
 
 ### inspect_document_model
 
-[src/opendoc/inspection.py](../../src/opendoc/inspection.py#L724)
+[src/opendoc/inspection.py](../../src/opendoc/inspection.py#L741)
 
 ```python
 inspect_document_model(document: DocumentModel, *, source_path: str | Path | None=None, source_format: str | None=None, limits: DocumentLimits | None=None, check_external_sources: bool=True)
@@ -705,6 +712,12 @@ set_list_item(paragraph: Paragraph, item: ListItem | None, *, limits: DocumentLi
 ```
 
 Set/remove membership in place after checking; do not overwrite opaque data.
+
+### MatchingLimits
+
+[src/opendoc/object_matching.py](../../src/opendoc/object_matching.py#L23)
+
+Deterministic record/candidate work units, shared by comparison domains.
 
 ### ObjectLossPolicy
 
@@ -957,6 +970,30 @@ Replace a definition in place, normalizing the copy&#x27;s ID to the target.
 
 All links keep their ID. Return the detached original Resource; the caller&#x27;s
 replacement and existing structural nodes remain unchanged.
+
+### CheckData
+
+[src/opendoc/result_types.py](../../src/opendoc/result_types.py#L35)
+
+### ComparisonData
+
+[src/opendoc/result_types.py](../../src/opendoc/result_types.py#L59)
+
+### ConversionIssueData
+
+[src/opendoc/result_types.py](../../src/opendoc/result_types.py#L11)
+
+### ConversionReportData
+
+[src/opendoc/result_types.py](../../src/opendoc/result_types.py#L27)
+
+### DiagnosticData
+
+[src/opendoc/result_types.py](../../src/opendoc/result_types.py#L18)
+
+### InspectionData
+
+[src/opendoc/result_types.py](../../src/opendoc/result_types.py#L44)
 
 ### Heading
 

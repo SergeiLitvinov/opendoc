@@ -27,7 +27,7 @@ def formula_fingerprint(formula: Formula) -> str | None:
     except ValueError:
         return None
     if formula.format is FormulaFormat.LATEX:
-        content = ["latex", formula.value]
+        content: list[Any] = ["latex", formula.value]
     else:
         try:
             if formula.format is FormulaFormat.MATHML:
@@ -76,10 +76,10 @@ class FormulaLossPolicy:
 
     def evaluate(self, report: ConversionReport | CheckResult, comparison: "DocumentComparison | None") -> bool:
         available = comparison is not None and comparison.valid
-        if available:
+        if available and comparison is not None:
             available = _note_content_available(comparison.source.metadata, comparison.target.metadata)
         counts = []
-        for side in (comparison.source, comparison.target) if available else ():
+        for side in (comparison.source, comparison.target) if available and comparison is not None else ():
             formulas = [item for item in side.objects if item.get("type") == "formula"]
             available = (
                 available
@@ -92,7 +92,7 @@ class FormulaLossPolicy:
             )
             counts.append(Counter(item.get("formula_hash") for item in formulas))
         changed = sum((counts[0] - counts[1]).values()) if available else None
-        accepted = available and changed <= self.max_changed_formulas
+        accepted = available and changed is not None and changed <= self.max_changed_formulas
         report.metrics["formula_quality_gate"] = {
             "basis": FORMULA_FINGERPRINT_VERSION,
             "verified": available,

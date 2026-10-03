@@ -1236,6 +1236,35 @@
               }
             ]
           },
+          "create": {
+            "parameters": [
+              {
+                "name": "format",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "root",
+                "kind": "KEYWORD_ONLY",
+                "default": "'/'"
+              },
+              {
+                "name": "parts",
+                "kind": "KEYWORD_ONLY",
+                "default": "()"
+              },
+              {
+                "name": "relationships",
+                "kind": "KEYWORD_ONLY",
+                "default": "()"
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
+          },
           "related_part": {
             "parameters": [
               {
@@ -1261,6 +1290,11 @@
                 "name": "self",
                 "kind": "POSITIONAL_OR_KEYWORD",
                 "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
               }
             ]
           }
@@ -3271,6 +3305,11 @@
             "name": "target",
             "kind": "POSITIONAL_OR_KEYWORD",
             "default": null
+          },
+          {
+            "name": "matching_limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
           }
         ]
       },
@@ -4033,6 +4072,16 @@
             "name": "limits",
             "kind": "KEYWORD_ONLY",
             "default": "None"
+          },
+          {
+            "name": "extensions",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          },
+          {
+            "name": "unknown_extensions",
+            "kind": "KEYWORD_ONLY",
+            "default": "'error'"
           }
         ]
       },
@@ -4055,6 +4104,21 @@
           },
           {
             "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          },
+          {
+            "name": "extensions",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          },
+          {
+            "name": "unknown_extensions",
+            "kind": "KEYWORD_ONLY",
+            "default": "'error'"
+          },
+          {
+            "name": "matching_limits",
             "kind": "KEYWORD_ONLY",
             "default": "None"
           }
@@ -4692,6 +4756,205 @@
           "properties": "{}",
           "extensions": "{}"
         }
+      },
+      "ExtensionCallback": {
+        "constant": "collections.abc.Callable[[opendoc.extensions.ExtensionContext], collections.abc.Iterable[opendoc.diagnostics.DiagnosticIssue] | None]"
+      },
+      "ExtensionContext": {
+        "parameters": [
+          {
+            "name": "key",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "version",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "data",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "location",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "scope",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "owner_type",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          }
+        ],
+        "members": {},
+        "factories": {}
+      },
+      "ExtensionSchema": {
+        "parameters": [
+          {
+            "name": "key",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "versions",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "validator",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "None"
+          },
+          {
+            "name": "scopes",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "frozenset({'metadata', 'properties'})"
+          }
+        ],
+        "members": {},
+        "factories": {}
+      },
+      "ExtensionScope": {
+        "constant": "typing.Literal['metadata', 'properties']"
+      },
+      "ExtensionValue": {
+        "parameters": [
+          {
+            "name": "key",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "version",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "data",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "extensions",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          }
+        ],
+        "members": {},
+        "factories": {}
+      },
+      "UnknownExtensionPolicy": {
+        "constant": "typing.Literal['error', 'preserve']"
+      },
+      "check_extensions": {
+        "parameters": [
+          {
+            "name": "document",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "schemas",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "unknown",
+            "kind": "KEYWORD_ONLY",
+            "default": "'error'"
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "get_extension": {
+        "parameters": [
+          {
+            "name": "bag",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "key",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "remove_extension": {
+        "parameters": [
+          {
+            "name": "bag",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "key",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "set_extension": {
+        "parameters": [
+          {
+            "name": "bag",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "key",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "data",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "version",
+            "kind": "KEYWORD_ONLY",
+            "default": "1"
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "MatchingLimits": {
+        "parameters": [
+          {
+            "name": "max_work",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "1000000"
+          }
+        ],
+        "members": {},
+        "factories": {}
       }
     },
     "opendoc.color": {
@@ -5819,6 +6082,35 @@
               }
             ]
           },
+          "create": {
+            "parameters": [
+              {
+                "name": "format",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "root",
+                "kind": "KEYWORD_ONLY",
+                "default": "'/'"
+              },
+              {
+                "name": "parts",
+                "kind": "KEYWORD_ONLY",
+                "default": "()"
+              },
+              {
+                "name": "relationships",
+                "kind": "KEYWORD_ONLY",
+                "default": "()"
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
+          },
           "related_part": {
             "parameters": [
               {
@@ -5844,6 +6136,11 @@
                 "name": "self",
                 "kind": "POSITIONAL_OR_KEYWORD",
                 "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
               }
             ]
           }
@@ -8132,6 +8429,11 @@
             "name": "target",
             "kind": "POSITIONAL_OR_KEYWORD",
             "default": null
+          },
+          {
+            "name": "matching_limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
           }
         ]
       },
@@ -8229,8 +8531,24 @@
             "name": "target",
             "kind": "POSITIONAL_OR_KEYWORD",
             "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
           }
         ]
+      },
+      "MatchingLimits": {
+        "parameters": [
+          {
+            "name": "max_work",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "1000000"
+          }
+        ],
+        "members": {},
+        "factories": {}
       }
     },
     "opendoc.object_quality_policy": {
@@ -11154,6 +11472,16 @@
             "name": "limits",
             "kind": "KEYWORD_ONLY",
             "default": "None"
+          },
+          {
+            "name": "extensions",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          },
+          {
+            "name": "unknown_extensions",
+            "kind": "KEYWORD_ONLY",
+            "default": "'error'"
           }
         ]
       },
@@ -11176,6 +11504,21 @@
           },
           {
             "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          },
+          {
+            "name": "extensions",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          },
+          {
+            "name": "unknown_extensions",
+            "kind": "KEYWORD_ONLY",
+            "default": "'error'"
+          },
+          {
+            "name": "matching_limits",
             "kind": "KEYWORD_ONLY",
             "default": "None"
           }
@@ -11680,6 +12023,196 @@
           }
         ]
       }
+    },
+    "opendoc.extensions": {
+      "ExtensionCallback": {
+        "constant": "collections.abc.Callable[[opendoc.extensions.ExtensionContext], collections.abc.Iterable[opendoc.diagnostics.DiagnosticIssue] | None]"
+      },
+      "ExtensionContext": {
+        "parameters": [
+          {
+            "name": "key",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "version",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "data",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "location",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "scope",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "owner_type",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          }
+        ],
+        "members": {},
+        "factories": {}
+      },
+      "ExtensionSchema": {
+        "parameters": [
+          {
+            "name": "key",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "versions",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "validator",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "None"
+          },
+          {
+            "name": "scopes",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "frozenset({'metadata', 'properties'})"
+          }
+        ],
+        "members": {},
+        "factories": {}
+      },
+      "ExtensionScope": {
+        "constant": "typing.Literal['metadata', 'properties']"
+      },
+      "ExtensionValue": {
+        "parameters": [
+          {
+            "name": "key",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "version",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "data",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "extensions",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          }
+        ],
+        "members": {},
+        "factories": {}
+      },
+      "UnknownExtensionPolicy": {
+        "constant": "typing.Literal['error', 'preserve']"
+      },
+      "check_extensions": {
+        "parameters": [
+          {
+            "name": "document",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "schemas",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "unknown",
+            "kind": "KEYWORD_ONLY",
+            "default": "'error'"
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "get_extension": {
+        "parameters": [
+          {
+            "name": "bag",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "key",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "remove_extension": {
+        "parameters": [
+          {
+            "name": "bag",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "key",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "set_extension": {
+        "parameters": [
+          {
+            "name": "bag",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "key",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "data",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "version",
+            "kind": "KEYWORD_ONLY",
+            "default": "1"
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      }
     }
   },
   "root_identities": {
@@ -11812,6 +12345,17 @@
     "remove_footnote": "opendoc.footnotes",
     "set_footnote": "opendoc.footnotes",
     "set_footnote_reference": "opendoc.footnotes",
-    "Footnote": "opendoc.document_model"
+    "Footnote": "opendoc.document_model",
+    "ExtensionCallback": "opendoc.extensions",
+    "ExtensionContext": "opendoc.extensions",
+    "ExtensionSchema": "opendoc.extensions",
+    "ExtensionScope": "opendoc.extensions",
+    "ExtensionValue": "opendoc.extensions",
+    "UnknownExtensionPolicy": "opendoc.extensions",
+    "check_extensions": "opendoc.extensions",
+    "get_extension": "opendoc.extensions",
+    "remove_extension": "opendoc.extensions",
+    "set_extension": "opendoc.extensions",
+    "MatchingLimits": "opendoc.object_matching"
   }
 }

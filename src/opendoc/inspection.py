@@ -32,8 +32,9 @@ from opendoc.footnotes import _compare_notes, _note_content_available, _note_inv
 from opendoc.limits import DocumentLimits, _resolve_limits
 from opendoc.lists import _list_inventory_valid, iter_list_numbers
 from opendoc.object_inventory import OBJECT_INVENTORY_SCOPE, _inventory_parent, _object_entry
-from opendoc.object_matching import match_objects
+from opendoc.object_matching import MatchingLimits, _match_objects, _MatchingBudget, _MatchingLimitError
 from opendoc.references import _compare_references, _reference_inventory
+from opendoc.result_types import ComparisonData, InspectionData
 from opendoc.text_flow import TextFlowFingerprint
 from opendoc.traversal import SECTION_CONTENT_FIELDS, Element, NodeLocation, _references_at, _walk_locations
 
@@ -65,7 +66,7 @@ class DocumentInspection:
     def add(self, severity: IssueSeverity, feature: str, message: str, location: str = "") -> None:
         self.issues.append(ConversionIssue(severity, feature, message, location))
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> InspectionData:
         return {
             "valid": self.valid,
             "source_path": str(self.source_path) if self.source_path is not None else None,
@@ -113,7 +114,7 @@ class DocumentComparison:
     def has_losses(self) -> bool:
         return any(issue.severity is IssueSeverity.LOSS for issue in self.issues)
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> ComparisonData:
         return {
             "valid": self.valid,
             "has_losses": self.has_losses,
@@ -138,9 +139,12 @@ class DocumentComparison:
         }
 
 
-def compare_inspections(source: DocumentInspection, target: DocumentInspection) -> DocumentComparison:
+def compare_inspections(
+    source: DocumentInspection, target: DocumentInspection, *, matching_limits: MatchingLimits | None = None
+) -> DocumentComparison:
     """Сравнить структурную сохранность двух проинспектированных документов."""
 
+    matching_budget = _MatchingBudget(matching_limits)
     source_metrics = _quality_metrics(source)
     target_metrics = _quality_metrics(target)
     note_content_available = _note_content_available(source.metadata, target.metadata)
@@ -197,15 +201,22 @@ def compare_inspections(source: DocumentInspection, target: DocumentInspection) 
         and bool(scope)
         and scope == target.metadata.get("object_inventory_scope")
         and note_content_available,
+        matching_budget=matching_budget,
     )
     issues.extend(object_issues)
     references, reference_issues = _compare_references(
-        source.metadata.get("semantic_references"), target.metadata.get("semantic_references"), source.valid and target.valid
+        source.metadata.get("semantic_references"),
+        target.metadata.get("semantic_references"),
+        source.valid and target.valid,
+        matching_budget=matching_budget,
     )
     object_diff["references"] = references
     issues.extend(reference_issues)
     notes, note_issues = _compare_notes(
-        source.metadata.get("semantic_footnotes"), target.metadata.get("semantic_footnotes"), source.valid and target.valid
+        source.metadata.get("semantic_footnotes"),
+        target.metadata.get("semantic_footnotes"),
+        source.valid and target.valid,
+        matching_budget=matching_budget,
     )
     object_diff["footnotes"] = notes
     issues.extend(note_issues)
@@ -230,6 +241,7 @@ def _compare_objects(
     target_objects: list[dict[str, Any]],
     *,
     available: bool = True,
+    matching_budget: _MatchingBudget | None = None,
 ) -> tuple[dict[str, Any], list[ConversionIssue]]:
     """Compare matched occurrences; location-only matches are explicitly heuristic."""
     if not available:
@@ -250,7 +262,12 @@ def _compare_objects(
             "changed_list_numbers": None,
             "recommendations": [],
         }, []
-    matches, lost, added = match_objects(source_objects, target_objects)
+    try:
+        matches, lost, added = _match_objects(source_objects, target_objects, matching_budget or _MatchingBudget())
+    except _MatchingLimitError as error:
+        result, _ = _compare_objects(source_objects, target_objects, available=False)
+        result.update(reason="matching-budget-exceeded", matching_budget=error.measurement)
+        return result, [ConversionIssue(IssueSeverity.INFO, "object-matching-unavailable", str(error), "objects")]
     lists_available = all(
         "list_item" in item and _list_inventory_valid(item["list_item"])
         for item in (*source_objects, *target_objects)
@@ -390,8 +407,9 @@ def _compare_page_geometry(
     tolerance_pt: float = 0.5,
     available: bool = True,
 ) -> tuple[list[dict[str, Any]], dict[str, float | int | None], list[ConversionIssue]]:
+    issues: list[ConversionIssue] = []
+    summary: dict[str, float | int | None]
     if not available or not source_pages or not target_pages:
-        issues: list[ConversionIssue] = []
         if available and source_pages and not target_pages:
             issues.append(
                 ConversionIssue(
@@ -410,7 +428,7 @@ def _compare_page_geometry(
                     "pages",
                 )
             )
-        summary: dict[str, float | int | None] = {
+        summary = {
             "available": False,
             "source_pages": len(source_pages),
             "target_pages": len(target_pages),
@@ -426,7 +444,6 @@ def _compare_page_geometry(
         }
         return [], summary, issues
     page_geometry: list[dict[str, Any]] = []
-    issues: list[ConversionIssue] = []
     dimension_errors: list[float] = []
     margin_errors: list[float] = []
     missing_pages = 0
@@ -505,7 +522,7 @@ def _compare_page_geometry(
                     f"pages[{index}]",
                 )
             )
-    summary: dict[str, float | int | None] = {
+    summary = {
         "available": True,
         "source_pages": len(source_pages),
         "target_pages": len(target_pages),
@@ -552,8 +569,8 @@ def _compare_resources(
         else:
             if available:
                 added_resources.append(_resource_identity(item))
-    source_by_id = {item.get("id"): item for item in source_resources if item.get("id")}
-    target_by_id = {item.get("id"): item for item in target_resources if item.get("id")}
+    source_by_id = {identifier: item for item in source_resources if (identifier := item.get("id"))}
+    target_by_id = {identifier: item for item in target_resources if (identifier := item.get("id"))}
     changed_ids = [
         {
             "id": resource_id,
@@ -567,7 +584,7 @@ def _compare_resources(
     ]
     source_bytes = _resource_bytes(source_resources) if inventories_available else None
     target_bytes = _resource_bytes(target_resources) if inventories_available else None
-    matched_bytes = sum(
+    matched_bytes: int | None = sum(
         int(next(item.get("size_bytes") or 0 for item in source_resources if item.get("sha256") == digest)) * count
         for digest, count in matched_hashes.items()
     )
@@ -586,7 +603,7 @@ def _compare_resources(
         "target_bytes": target_bytes,
         "exact_bytes_retained": matched_bytes,
         "exact_byte_retention_ratio": round(_ratio(matched_bytes, source_bytes), 4)
-        if available and source_bytes is not None
+        if available and source_bytes is not None and matched_bytes is not None
         else None,
         "media_type_retention_ratio": round(_ratio(matched_types, len(source_resources)), 4) if available else None,
         "lost_resources": lost_resources,
@@ -636,7 +653,7 @@ def _compare_fonts(
         "exact_run_retention_ratio": round(_ratio(preserved_runs, source_runs), 4) if available else None,
         "possible_substitutions": candidates if available else [],
     }
-    issues = []
+    issues: list[ConversionIssue] = []
     if not available:
         return comparison, issues
     for family, count in sorted(missing.items()):
@@ -655,7 +672,7 @@ def _compare_fonts(
 def _resource_bytes(resources: list[dict[str, Any]]) -> int | None:
     if any(type(item.get("size_bytes")) is not int or item["size_bytes"] < 0 for item in resources):
         return None
-    return sum(item["size_bytes"] for item in resources)
+    return sum(int(item["size_bytes"]) for item in resources)
 
 
 def _resource_identity(item: dict[str, Any]) -> dict[str, Any]:
@@ -758,6 +775,7 @@ def inspect_document_model(
     fonts: Counter[str] = Counter()
     formula_formats: Counter[str] = Counter()
     referenced_resources: set[str] = set()
+    content_cache: dict[int, str | None] = {}
 
     for reference in _walk_locations(document, _resolve_limits(limits)):
         node, location = reference.node, reference.path
@@ -791,6 +809,7 @@ def inspect_document_model(
                     parent=_inventory_parent(reference),
                     text_flow=text_flow,
                     emphasis=emphasis,
+                    content_cache=content_cache,
                 )
             )
         if isinstance(node, Paragraph):

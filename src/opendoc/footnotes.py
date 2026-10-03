@@ -12,7 +12,7 @@ from typing import Any, cast
 from opendoc.diagnostics import ConversionIssue, IssueSeverity, _DiagnosticError
 from opendoc.document_model import DocumentModel, Footnote, TextRun
 from opendoc.limits import DocumentLimits, _guard_model, _resolve_limits
-from opendoc.object_matching import match_objects
+from opendoc.object_matching import _match_objects, _MatchingBudget, _MatchingLimitError
 from opendoc.references import _identifier
 from opendoc.traversal import ModelNode, NodeLocation, iter_elements, walk_model
 
@@ -306,7 +306,9 @@ def _note_inventory_valid(value: Any) -> bool:
     return True
 
 
-def _compare_notes(source: Any, target: Any, available: bool) -> tuple[dict[str, Any], list[ConversionIssue]]:
+def _compare_notes(
+    source: Any, target: Any, available: bool, *, matching_budget: _MatchingBudget | None = None
+) -> tuple[dict[str, Any], list[ConversionIssue]]:
     if not available or not _note_inventory_valid(source) or not _note_inventory_valid(target):
         return {
             "available": False,
@@ -319,6 +321,13 @@ def _compare_notes(source: Any, target: Any, available: bool) -> tuple[dict[str,
             "added_notes": None,
             "added_references": None,
         }, []
+    budget = matching_budget or _MatchingBudget()
+    try:
+        budget.charge(len(source["notes"]) + len(target["notes"]))
+    except _MatchingLimitError as error:
+        result, _ = _compare_notes(source, target, False)
+        result.update(reason="matching-budget-exceeded", matching_budget=error.measurement)
+        return result, [ConversionIssue(IssueSeverity.INFO, "footnote-matching-unavailable", str(error), "footnotes")]
     before = {item["id"]: item for item in source["notes"]}
     after = {item["id"]: item for item in target["notes"]}
     changes = []
@@ -342,7 +351,12 @@ def _compare_notes(source: Any, target: Any, available: bool) -> tuple[dict[str,
             record("footnote-loss", item, None, True)
         elif item["body_hash"] != after[identifier]["body_hash"]:
             record("footnote-change", item, after[identifier], False)
-    matches, lost, added = match_objects(source["references"], target["references"])
+    try:
+        matches, lost, added = _match_objects(source["references"], target["references"], budget)
+    except _MatchingLimitError as error:
+        result, _ = _compare_notes(source, target, False)
+        result.update(reason="matching-budget-exceeded", matching_budget=error.measurement)
+        return result, [ConversionIssue(IssueSeverity.INFO, "footnote-matching-unavailable", str(error), "footnotes")]
     for item in lost:
         record("footnote-reference-loss", item, None, True)
     changed = []

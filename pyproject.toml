@@ -13,7 +13,12 @@ dependencies = []
 
 [project.optional-dependencies]
 math = ["lxml>=5.0.0"]
-dev = ["pytest>=8.0", "ruff>=0.9.0"]
+dev = [
+    "mypy>=2.4,<3",
+    "pytest>=8.0",
+    "ruff>=0.9.0",
+    "types-lxml>=2026.2.16",
+]
 docs = ["mkdocs>=1.6,<2"]
 
 [tool.ruff]
@@ -33,6 +38,13 @@ ignore = ["ANN401"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
+
+[tool.mypy]
+python_version = "3.11"
+files = ["src/opendoc"]
+strict = true
+cache_dir = ".opendoc/mypy-cache"
+show_error_codes = true
 
 [tool.setuptools.packages.find]
 where = ["src"]

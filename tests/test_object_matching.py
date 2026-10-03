@@ -115,3 +115,52 @@ def test_images_match_by_bytes_not_package_resource_ids():
     assert len(diff["retained"]) == 1
     assert diff["retained"][0]["match_basis"] == "content"
     assert compare_inspections(source, replaced).object_diff["changed"][0]["changes"] == ["content_hash"]
+
+
+def test_duplicate_index_prefers_equal_location_then_first_compatible_occurrence():
+    from opendoc.object_matching import match_objects
+
+    source = [{"type": "paragraph", "content_hash": "same", "location": str(index)} for index in range(3000)]
+    matches, lost, added = match_objects(source, list(reversed(source[:2000])))
+    assert len(matches) == 2000 and len(lost) == 1000 and not added
+    assert all(item["source"]["location"] == item["target"]["location"] for item in matches)
+    assert all(item["ambiguous"] and item["match_basis"] == "content" for item in matches)
+    assert len({item["target_index"] for item in matches}) == 2000
+
+
+def test_indexed_origin_pools_merge_unknown_and_same_identity_in_original_order():
+    from opendoc.object_matching import match_objects
+
+    def item(identity, location):
+        return {
+            "type": "paragraph",
+            "content_hash": "same",
+            "location": location,
+            "provenance": {"identity": identity, "source_format": "custom", "source_path": "same"},
+        }
+
+    source = [item("a", "preferred"), item("a", "elsewhere"), item(None, "third"), item("b", "fourth")]
+    target = [item("b", "preferred"), item(None, "preferred"), item("a", "none"), item(None, "last")]
+    matches, lost, added = match_objects(source, target)
+    assert not lost and not added
+    assert [(entry["source_index"], entry["target_index"]) for entry in matches] == [(0, 2), (1, 1), (2, 3), (3, 0)]
+    assert matches[0]["match_basis"] == "provenance-content"
+    assert all(entry["ambiguous"] for entry in matches[:3])
+    assert matches[3]["match_basis"] == "provenance" and not matches[3]["ambiguous"]
+
+
+def test_conflicting_duplicate_origins_do_not_gain_matches_from_indexing():
+    from opendoc.object_matching import match_objects
+
+    source = [
+        {
+            "type": "paragraph",
+            "content_hash": "same",
+            "location": str(index),
+            "provenance": {"identity": f"before-{index}", "source_format": "custom", "source_path": "same"},
+        }
+        for index in range(2000)
+    ]
+    target = [{**item, "provenance": {**item["provenance"], "identity": f"after-{index}"}} for index, item in enumerate(source)]
+    matches, lost, added = match_objects(source, target)
+    assert not matches and lost == source and added == target

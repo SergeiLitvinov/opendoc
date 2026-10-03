@@ -8,6 +8,8 @@ from enum import Enum
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
+from opendoc.result_types import CheckData, ConversionReportData
+
 if TYPE_CHECKING:
     from opendoc.limits import DocumentLimits
 
@@ -44,7 +46,7 @@ class ConversionReport:
     def add(self, severity: IssueSeverity, feature: str, message: str, location: str = "") -> None:
         self.issues.append(ConversionIssue(severity, feature, message, location))
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> ConversionReportData:
         return {
             "success": self.success,
             "lossless": self.lossless,
@@ -127,7 +129,7 @@ class CheckResult:
             reason = "budget-exceeded"
         self.issues.append(DiagnosticIssue(feature, severity, message, location, deepcopy(measurement), reason))
 
-    def to_dict(self, *, limits: DocumentLimits | None = None) -> dict[str, Any]:
+    def to_dict(self, *, limits: DocumentLimits | None = None) -> CheckData:
         """Return an independent, bounded JSON payload (opendoc.check v1)."""
         from opendoc._json_validation import _json_tree
         from opendoc.limits import _resolve_limits
@@ -136,7 +138,7 @@ class CheckResult:
             raise ValueError("issues must be a list of DiagnosticIssue")
         if not isinstance(self.metrics, dict):
             raise ValueError("metrics must be a dictionary")
-        payload = {
+        payload: CheckData = {
             "format": "opendoc.check",
             "version": 1,
             "success": self.success,

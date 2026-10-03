@@ -40,7 +40,17 @@ from opendoc.document_model import (
 )
 from opendoc.footnotes import FOOTNOTES_PROPERTY, _decode_notes, _encode_notes
 from opendoc.limits import DocumentLimits, _check_json_text, _quota, _resolve_limits, _utf8_size
-from opendoc.properties import PROPERTY_SCHEMA_VERSION, VersionedProperties
+from opendoc.properties import (
+    PROPERTY_SCHEMA_VERSION,
+    ImageProperties,
+    ParagraphProperties,
+    SectionProperties,
+    TableCellProperties,
+    TableProperties,
+    TableRowProperties,
+    TextStyleProperties,
+    VersionedProperties,
+)
 
 FORMAT_NAME = "opendoc.document"
 FORMAT_VERSION = 2
@@ -281,7 +291,7 @@ def _style_from_dict(value: dict[str, Any]) -> TextStyle:
         color=_color_from_value(value.get("color")),
         background=_color_from_value(value.get("background")),
         language=value.get("language"),
-        properties=dict(value.get("properties", {})),
+        properties=TextStyleProperties(dict(value.get("properties", {}))),
     )
 
 
@@ -484,7 +494,7 @@ def _block_from_dict(value: dict[str, Any]) -> Block:
             style_id=value.get("style_id"),
             alignment=value.get("alignment"),
             box=_box_from_dict(value.get("box")),
-            properties=dict(value.get("properties", {})),
+            properties=ParagraphProperties(dict(value.get("properties", {}))),
             provenance=_provenance_from_dict(value.get("provenance")),
             visual_surrogate=_surrogate_from_dict(value.get("visual_surrogate")),
         )
@@ -496,16 +506,16 @@ def _block_from_dict(value: dict[str, Any]) -> Block:
                     blocks=[_block_from_dict(block) for block in raw_cell.get("blocks", [])],
                     row_span=raw_cell.get("row_span", 1),
                     column_span=raw_cell.get("column_span", 1),
-                    properties=dict(raw_cell.get("properties", {})),
+                    properties=TableCellProperties(dict(raw_cell.get("properties", {}))),
                 )
                 for raw_cell in raw_row.get("cells", [])
             ]
-            rows.append(TableRow(cells=cells, properties=dict(raw_row.get("properties", {}))))
+            rows.append(TableRow(cells=cells, properties=TableRowProperties(dict(raw_row.get("properties", {})))))
         return Table(
             rows=rows,
             style_id=value.get("style_id"),
             box=_box_from_dict(value.get("box")),
-            properties=dict(value.get("properties", {})),
+            properties=TableProperties(dict(value.get("properties", {}))),
             provenance=_provenance_from_dict(value.get("provenance")),
             visual_surrogate=_surrogate_from_dict(value.get("visual_surrogate")),
         )
@@ -525,7 +535,7 @@ def _block_from_dict(value: dict[str, Any]) -> Block:
             resource_id=value["resource_id"],
             alt_text=value.get("alt_text", ""),
             box=_box_from_dict(value.get("box")),
-            properties=dict(value.get("properties", {})),
+            properties=ImageProperties(dict(value.get("properties", {}))),
             crop=_crop_from_dict(value.get("crop")),
             provenance=_provenance_from_dict(value.get("provenance")),
             visual_surrogate=_surrogate_from_dict(value.get("visual_surrogate")),
@@ -581,7 +591,7 @@ def _section_from_dict(value: dict[str, Any]) -> Section:
         first_page_footers=[_block_from_dict(block) for block in value.get("first_page_footers", [])],
         even_page_headers=[_block_from_dict(block) for block in value.get("even_page_headers", [])],
         even_page_footers=[_block_from_dict(block) for block in value.get("even_page_footers", [])],
-        properties=dict(value.get("properties", {})),
+        properties=SectionProperties(dict(value.get("properties", {}))),
         provenance=_provenance_from_dict(value.get("provenance")),
     )
 

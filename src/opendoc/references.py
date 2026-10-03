@@ -11,7 +11,7 @@ from typing import Any, cast
 from opendoc.diagnostics import ConversionIssue, IssueSeverity, _DiagnosticError
 from opendoc.document_model import DocumentModel, Formula, Image, Paragraph, Table, TextRun
 from opendoc.limits import DocumentLimits, _resolve_limits
-from opendoc.object_matching import match_objects
+from opendoc.object_matching import _match_objects, _MatchingBudget, _MatchingLimitError
 from opendoc.traversal import Element, ModelNode, NodeLocation, _walk_locations, iter_elements
 
 ANCHOR_PROPERTY = "opendoc.anchor"
@@ -123,7 +123,7 @@ def iter_anchors(root: ModelNode, *, limits: DocumentLimits | None = None) -> It
     """Yield anchor-bearing occurrences in common order, including tables and all headers."""
     for location in iter_elements(root, _ELEMENTS, limits=limits):
         if get_anchor(location.node, limits=limits) is not None:
-            yield cast(NodeLocation[Element], location)
+            yield location
 
 
 def iter_internal_links(root: ModelNode, *, limits: DocumentLimits | None = None) -> Iterator[NodeLocation[TextRun]]:
@@ -214,7 +214,9 @@ def _inventory_valid(value: Any) -> bool:
     return True
 
 
-def _compare_references(source: Any, target: Any, available: bool) -> tuple[dict[str, Any], list[ConversionIssue]]:
+def _compare_references(
+    source: Any, target: Any, available: bool, *, matching_budget: _MatchingBudget | None = None
+) -> tuple[dict[str, Any], list[ConversionIssue]]:
     if not available or not _inventory_valid(source) or not _inventory_valid(target):
         return {
             "available": False,
@@ -227,6 +229,13 @@ def _compare_references(source: Any, target: Any, available: bool) -> tuple[dict
             "link_matches": [],
             "changes": [],
         }, []
+    budget = matching_budget or _MatchingBudget()
+    try:
+        budget.charge(len(source["anchors"]) + len(target["anchors"]))
+    except _MatchingLimitError as error:
+        result, _ = _compare_references(source, target, False)
+        result.update(reason="matching-budget-exceeded", matching_budget=error.measurement)
+        return result, [ConversionIssue(IssueSeverity.INFO, "reference-matching-unavailable", str(error), "references")]
     before = {item["id"]: item for item in source["anchors"]}
     after = {item["id"]: item for item in target["anchors"]}
     changes = []
@@ -243,7 +252,12 @@ def _compare_references(source: Any, target: Any, available: bool) -> tuple[dict
             record("anchor-loss", item, None, True)
         elif item != after[identifier]:
             record("anchor-change", item, after[identifier], False)
-    matches, lost, added = match_objects(source["links"], target["links"])
+    try:
+        matches, lost, added = _match_objects(source["links"], target["links"], budget)
+    except _MatchingLimitError as error:
+        result, _ = _compare_references(source, target, False)
+        result.update(reason="matching-budget-exceeded", matching_budget=error.measurement)
+        return result, [ConversionIssue(IssueSeverity.INFO, "reference-matching-unavailable", str(error), "references")]
     for item in lost:
         record("internal-link-loss", item, None, True)
     changed = []

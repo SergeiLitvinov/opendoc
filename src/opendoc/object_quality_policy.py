@@ -24,11 +24,15 @@ class ObjectLossPolicy:
         diff = comparison.object_diff if comparison is not None else {}
         matching = diff.get("matching") or {}
         available = comparison is not None and comparison.valid and diff.get("available") is True
-        available = available and comparison.source.metadata.get("object_inventory_scope") == OBJECT_INVENTORY_SCOPE
+        available = (
+            available
+            and comparison is not None
+            and comparison.source.metadata.get("object_inventory_scope") == OBJECT_INVENTORY_SCOPE
+        )
         uncertain = bool(matching.get("heuristic") or matching.get("ambiguous"))
         verified = available and not uncertain
         lost = len(diff["lost"]) if verified else None
-        accepted = verified and lost <= self.max_lost_objects
+        accepted = verified and lost is not None and lost <= self.max_lost_objects
         if verified:
             reason = "accepted" if accepted else "budget-exceeded"
         else:

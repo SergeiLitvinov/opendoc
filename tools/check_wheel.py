@@ -207,8 +207,44 @@ note_merged = core.merge_documents([note_document, note_restored], conflicts='re
 assert note_merged.id_maps[1].footnotes == {'note': 'note~2'}
 assert [item.number for item in core.iter_footnote_numbers(note_merged.document)] == [1, 2]
 assert core.compare_documents(note_document, note_restored).metrics['comparison']['object_diff']['footnotes']['available']
-print('Independent wheel: model, traversal, operations, composition, lists, references, footnotes, resources, '
-      'styles, typed properties, memory checks, persistence, comparison and optional math behavior OK')
+def review_extension(context):
+    if context.data.get('approved') is not True:
+        return [core.DiagnosticIssue('review.approved', core.IssueSeverity.ERROR, 'approval required', 'approved')]
+    return None
+
+extended = core.DocumentModel()
+core.set_extension(extended.metadata, 'org.example.review', {'approved': True})
+extended.metadata['org.example.review']['retained'] = 'unknown envelope field'
+schemas = [core.ExtensionSchema('org.example.review', frozenset({1}), review_extension)]
+extended.package = core.PackageGraph.create('example.archive',
+    parts=[core.PackagePart('/content', 'application/octet-stream', b'opaque')],
+    relationships=[core.PackageRelationship('main', 'example.main', '/', '/content')])
+extended_restored = core.document_from_json(core.document_to_json(extended))
+assert extended_restored == extended
+assert extended_restored.package.root == '/'
+assert core.PackageGraph('example.archive').root == '/word/document.xml'
+assert core.get_extension(extended_restored.metadata, 'org.example.review').extensions == {
+    'retained': 'unknown envelope field'}
+assert core.check_extensions(extended_restored, schemas).success
+assert core.check_document(extended_restored, extensions=schemas).success
+assert core.compare_documents(extended, extended_restored, extensions=iter(schemas)).success
+assert not core.check_extensions(extended_restored, []).success
+assert core.check_extensions(extended_restored, [], unknown='preserve').metrics['extensions']['unknown'] == 1
+core.set_extension(extended_restored.metadata, 'org.example.review', {'approved': False})
+extension_issue = core.check_extensions(extended_restored, schemas).issues[0]
+assert extension_issue.location == "metadata['org.example.review'].data.approved"
+assert extension_issue.code == 'review.approved'
+budget_document = core.DocumentModel(sections=[core.Section(blocks=[core.Paragraph([core.TextRun('kept')])])])
+budget_result = core.compare_documents(budget_document, budget_document,
+    matching_limits=core.MatchingLimits(0), policies=[core.ObjectLossPolicy()])
+assert not budget_result.success
+assert budget_result.metrics['comparison']['object_diff']['reason'] == 'matching-budget-exceeded'
+assert budget_result.metrics['comparison']['object_diff']['lost'] == []
+assert budget_result.metrics['object_quality_gate']['lost_objects'] is None
+assert core.compare_documents(budget_document, budget_document,
+    matching_limits=core.MatchingLimits(100), policies=[core.ObjectLossPolicy()]).success
+print('Independent wheel: extensions, packages, model, traversal, operations, composition, lists, references, '
+      'footnotes, resources, styles, typed properties, memory checks, persistence, comparison and optional math behavior OK')
 """
 
 

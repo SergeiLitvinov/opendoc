@@ -16,12 +16,14 @@ jobs:
       - run: uv run ruff check
       - run: uv run ruff format --check
       - run: uv run pytest
+      - run: uv run mypy
       - run: uv run python -m tools.docs check
       - run: uv build --out-dir dist
       - run: |
           uv venv --python "${{ matrix.python-version }}" .opendoc/wheel-env
           uv pip install --python .opendoc/wheel-env/bin/python --no-deps --no-index dist/*.whl
           uv run python -m tools.check_wheel --python .opendoc/wheel-env/bin/python
+          uv run python -m tools.check_types --python .opendoc/wheel-env/bin/python
       - uses: actions/upload-artifact@v4
         with:
           name: opendoc-docs-${{ matrix.python-version }}

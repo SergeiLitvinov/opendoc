@@ -1,5 +1,7 @@
 """Bounded word edit distance; never misreport a lower bound as an exact count."""
 
+from typing import Any
+
 from opendoc.diagnostics import CheckResult, ConversionReport, IssueSeverity
 
 MAX_DISTANCE_CELLS = 2_000_000
@@ -46,7 +48,7 @@ def bounded_word_distance(source: list[str], target: list[str], limit: int) -> t
 
 
 def evaluate_text_edit_budget(
-    report: ConversionReport | CheckResult, source: dict, target: dict, available: bool, limit: int
+    report: ConversionReport | CheckResult, source: dict[str, Any], target: dict[str, Any], available: bool, limit: int
 ) -> bool:
     exact, verified = None, False
     if available and source["sha256"] == target["sha256"]:

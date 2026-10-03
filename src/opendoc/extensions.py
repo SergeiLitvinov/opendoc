@@ -167,7 +167,7 @@ def _bags(document: DocumentModel, limits: DocumentLimits) -> Iterator[tuple[Map
         yield resource.properties, f"resources[{key!r}].properties", "properties", "Resource"
     for location in _walk_locations(document, limits):
         node = location.node
-        if node is document:
+        if isinstance(node, DocumentModel):
             continue
         yield node.properties, f"{location.path}.properties", "properties", type(node).__name__
         if isinstance(node, Footnote):

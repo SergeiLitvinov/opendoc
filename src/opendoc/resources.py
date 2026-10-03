@@ -252,11 +252,12 @@ def embed_resources(
     identifiers = _selection(document, resource_ids, resolved)
     # Resolve every selected source before starting I/O, so a later forbidden
     # URL or missing relative base does not cause earlier files to be opened.
-    paths = {
-        identifier: _local_path(document.resources[identifier].source, directory)
-        for identifier in identifiers
-        if document.resources[identifier].data is None
-    }
+    paths: dict[str, Path] = {}
+    for identifier in identifiers:
+        resource = document.resources[identifier]
+        if resource.data is None:
+            assert resource.source is not None  # The complete model was validated above.
+            paths[identifier] = _local_path(resource.source, directory)
     result = deepcopy(document)
     for identifier in identifiers:
         resource = result.resources[identifier]

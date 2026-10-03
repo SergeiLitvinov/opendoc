@@ -5,7 +5,7 @@ from __future__ import annotations
 import math
 from collections import deque
 from dataclasses import fields
-from typing import Any
+from typing import Any, cast
 
 from opendoc._json_validation import _color, _json_tree
 from opendoc.color import ColorValue
@@ -198,7 +198,7 @@ class _Validator:
             raise
         except ValueError as error:
             self.capture(error, path)
-        return value
+        return cast(dict[str, Any], value)
 
     def reference(self, value: Any, path: str, kind: str, *, legacy_path: str | None = None, nullable: bool = True) -> None:
         if not self.string(value, path, nullable=nullable):
@@ -351,12 +351,12 @@ class _Validator:
         if isinstance(value, Paragraph):
             list_path = f"{path}.properties[{LIST_PROPERTY!r}]"
             try:
-                item = _list_payload(properties.get(LIST_PROPERTY), list_path)
-                if item is not None:
-                    key, config = (item.list_id, item.level), (item.kind, item.start)
-                    if key in self.list_configs and self.list_configs[key] != config:
+                list_item = _list_payload(properties.get(LIST_PROPERTY), list_path)
+                if list_item is not None:
+                    list_key, config = (list_item.list_id, list_item.level), (list_item.kind, list_item.start)
+                    if list_key in self.list_configs and self.list_configs[list_key] != config:
                         self.error(list_path, "conflicting list kind/start for the same level", code="semantic.list.config")
-                    self.list_configs[key] = config
+                    self.list_configs[list_key] = config
             except ValueError as error:
                 self.capture(error, list_path)
             try:
@@ -443,7 +443,7 @@ class _Validator:
                 self.pending.append((category, item, location))
                 if isinstance(item, Resource) and item.id != key:
                     self.error(f"{location}.id", f"must match object key {key!r}")
-        return value
+        return cast(dict[str, Any], value)
 
     def package_name(self, value: Any, path: str, *, root: bool = False) -> bool:
         if not self.string(value, path, nonempty=True):

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, NoReturn
 
 _MAX_XML_BYTES = 1024 * 1024
 _MAX_XML_NODES = 4096
@@ -28,7 +28,7 @@ def _parse_xml(value: str) -> Any:
     from lxml import etree
 
     class _NoExternalResources(etree.Resolver):
-        def resolve(self, url: str, public_id: str | None, context: Any) -> Any:
+        def resolve(self, url: str | None, public_id: str | None, context: object) -> NoReturn:
             raise ValueError("External XML resources are not allowed")
 
     parser = etree.XMLParser(

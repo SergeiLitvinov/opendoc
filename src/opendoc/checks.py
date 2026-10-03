@@ -15,6 +15,7 @@ from opendoc.extensions import ExtensionSchema, UnknownExtensionPolicy, _check_e
 from opendoc.formula_quality_policy import FormulaLossPolicy
 from opendoc.inspection import DocumentComparison, DocumentInspection, compare_inspections, inspect_document_model
 from opendoc.limits import DocumentLimits, _quota, _resolve_limits
+from opendoc.object_matching import MatchingLimits, _MatchingBudget
 from opendoc.object_quality_policy import ObjectLossPolicy
 from opendoc.quality_policy import QualityPolicy
 from opendoc.text_quality_policy import TextPreservationPolicy
@@ -83,7 +84,16 @@ def _policies(policies: Iterable[CheckPolicy] | None, limits: DocumentLimits) ->
 
 def _comparison_issue(issue: ConversionIssue, comparison: DocumentComparison) -> DiagnosticIssue:
     measurement = None
-    if issue.feature.startswith("retention-"):
+    reason = None
+    if issue.feature.endswith("-matching-unavailable"):
+        measurement = {
+            "object": comparison.object_diff,
+            "reference": comparison.object_diff.get("references", {}),
+            "footnote": comparison.object_diff.get("footnotes", {}),
+        }[issue.feature.removesuffix("-matching-unavailable")]
+        reason = measurement.get("reason")
+        measurement = measurement.get("matching_budget")
+    elif issue.feature.startswith("retention-"):
         measurement = comparison.retention.get(issue.feature.removeprefix("retention-"))
     elif issue.feature.startswith("page-geometry"):
         measurement = comparison.geometry_summary
@@ -128,7 +138,7 @@ def _comparison_issue(issue: ConversionIssue, comparison: DocumentComparison) ->
                 measurement.update(
                     source_number=change["source"].get("list_number"), target_number=change["target"].get("list_number")
                 )
-    return DiagnosticIssue(issue.feature, issue.severity, issue.message, issue.location, deepcopy(measurement))
+    return DiagnosticIssue(issue.feature, issue.severity, issue.message, issue.location, deepcopy(measurement), reason)
 
 
 def compare_documents(
@@ -139,6 +149,7 @@ def compare_documents(
     limits: DocumentLimits | None = None,
     extensions: Iterable[ExtensionSchema] | None = None,
     unknown_extensions: UnknownExtensionPolicy = "error",
+    matching_limits: MatchingLimits | None = None,
 ) -> CheckResult:
     """Compare entire models in memory and apply explicit policies in order.
 
@@ -147,6 +158,7 @@ def compare_documents(
     comparison snapshots are retained; reasons are obtained from measurements.
     Existing ConversionReport usage and policy return values remain supported.
     """
+    _MatchingBudget(matching_limits)
     resolved = _resolve_limits(limits)
     if unknown_extensions not in ("error", "preserve"):
         raise ValueError("unknown_extensions must be error or preserve")
@@ -164,7 +176,7 @@ def compare_documents(
                 checked = _check_extensions(model, schemas, unknown_extensions, resolved)
                 model_issues.extend(checked.issues)
                 extension_metrics[side] = checked.metrics["extensions"]
-    comparison = compare_inspections(before, after)
+    comparison = compare_inspections(before, after, matching_limits=matching_limits)
     issues = [
         replace(issue, location=f"{side}.{issue.location}" if issue.location else side)
         for side, side_issues in (("source", source_issues), ("target", target_issues))
@@ -176,17 +188,26 @@ def compare_documents(
         ("package", comparison.package_comparison),
         ("fonts", comparison.font_comparison),
         ("objects", comparison.object_diff),
+        ("references", comparison.object_diff.get("references", {})),
+        ("footnotes", comparison.object_diff.get("footnotes", {})),
         ("geometry", comparison.geometry_summary),
     ):
         if measurement.get("available") is False:
             reason = "invalid-model" if not comparison.valid else "no-pages" if name == "geometry" else "external-data-not-loaded"
+            supplied_reason = measurement.get("reason")
+            if isinstance(supplied_reason, str) and supplied_reason:
+                reason = supplied_reason
             issues.append(
                 DiagnosticIssue(
                     "measurement.unavailable",
                     IssueSeverity.INFO,
                     f"{name} measurement is unavailable",
                     f"comparison.{name}",
-                    {"name": name, "available": False},
+                    {
+                        "name": name,
+                        "available": False,
+                        **({"matching_budget": measurement["matching_budget"]} if "matching_budget" in measurement else {}),
+                    },
                     reason,
                 )
             )

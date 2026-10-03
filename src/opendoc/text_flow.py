@@ -1,6 +1,18 @@
 """Streaming fingerprint of paragraph text in document traversal order."""
 
 import hashlib
+from typing import TypedDict
+
+
+class TextFlowData(TypedDict):
+    version: str
+    sha256: str
+    characters: int
+    paragraphs: int
+    tokenization: str
+    token_count: int
+    tokens: list[str] | None
+
 
 TEXT_FLOW_VERSION = "paragraph-text-flow-v1"
 MAX_TEXT_TOKENS = 10_000
@@ -32,7 +44,7 @@ class TextFlowFingerprint:
         else:
             self._tokens.clear()
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> TextFlowData:
         return {
             "version": TEXT_FLOW_VERSION,
             "sha256": self._digest.hexdigest(),

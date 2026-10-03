@@ -16,7 +16,7 @@ OBJECT_INVENTORY_SCOPE = "model-recursive-objects-v1"
 
 
 def inspect_objects(
-    value: Any,
+    value: ModelNode,
     location: str,
     page_index: int,
     resources: dict[str, Resource],
@@ -25,6 +25,7 @@ def inspect_objects(
     text_flow: TextFlowFingerprint | None = None,
     emphasis: EmphasisInventory | None = None,
 ) -> Iterator[dict[str, Any]]:
+    content_cache: dict[int, str | None] = {}
     for reference in walk_model(value):
         node = reference.node
         if isinstance(node, Footnote):
@@ -39,7 +40,9 @@ def inspect_objects(
                 owner = f"{location}.{ancestor.path}" if ancestor.path else location
                 break
             ancestor = ancestor.parent
-        yield _object_entry(node, local, page_index, resources, parent=owner, text_flow=text_flow, emphasis=emphasis)
+        yield _object_entry(
+            node, local, page_index, resources, parent=owner, text_flow=text_flow, emphasis=emphasis, content_cache=content_cache
+        )
 
 
 def _inventory_parent(reference: NodeLocation[ModelNode]) -> str | None:
@@ -52,7 +55,7 @@ def _inventory_parent(reference: NodeLocation[ModelNode]) -> str | None:
 
 
 def _object_entry(
-    value: Any,
+    value: ModelNode,
     location: str,
     page_index: int | None,
     resources: dict[str, Resource],
@@ -60,6 +63,7 @@ def _object_entry(
     parent: str | None = None,
     text_flow: TextFlowFingerprint | None = None,
     emphasis: EmphasisInventory | None = None,
+    content_cache: dict[int, str | None] | None = None,
 ) -> dict[str, Any]:
     provenance = getattr(value, "provenance", None)
     provenance_data = None
@@ -98,7 +102,7 @@ def _object_entry(
             "rotation": round(box.rotation, 3),
         }
     )
-    content = _object_content(value, resources)
+    content = _object_content(value, resources, content_cache)
     # Runs may split/merge during serialization without changing the paragraph.
     text = "".join(item.text for item in value.content if isinstance(item, TextRun)) if isinstance(value, Paragraph) else None
     # Formula values may be LaTeX/OMML source, not comparable visible text.
@@ -113,7 +117,7 @@ def _object_entry(
         from opendoc.formula_quality_policy import FORMULA_FINGERPRINT_VERSION, formula_fingerprint
 
         formula_data = {"formula_hash": formula_fingerprint(value), "formula_fingerprint_version": FORMULA_FINGERPRINT_VERSION}
-    semantic_data = {}
+    semantic_data: dict[str, Any] = {}
     if isinstance(value, Paragraph):
         heading = _heading_payload(value.properties.get(HEADING_PROPERTY), f"{location}.properties[{HEADING_PROPERTY!r}]")
         semantic_data["heading"] = heading.level if heading is not None else None
@@ -137,7 +141,16 @@ def _object_entry(
     }
 
 
-def _object_content(value: Any, resources: dict[str, Resource]) -> str | None:
+def _object_content(value: ModelNode, resources: dict[str, Resource], cache: dict[int, str | None] | None = None) -> str | None:
+    if cache is None:
+        return _uncached_object_content(value, resources, None)
+    identity = id(value)
+    if identity not in cache:
+        cache[identity] = _uncached_object_content(value, resources, cache)
+    return cache[identity]
+
+
+def _uncached_object_content(value: ModelNode, resources: dict[str, Resource], cache: dict[int, str | None] | None) -> str | None:
     if isinstance(value, Paragraph):
         return value.plain_text
     if isinstance(value, Formula):
@@ -152,7 +165,7 @@ def _object_content(value: Any, resources: dict[str, Resource]) -> str | None:
             for cell in row.cells:
                 blocks = []
                 for block in cell.blocks:
-                    content = _object_content(block, resources)
+                    content = _object_content(block, resources, cache)
                     if content is None:
                         return None
                     blocks.append(content)

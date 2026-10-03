@@ -29,7 +29,11 @@ nav:
       - Работа с библиотекой: docs/guide/index.md
       - Совместимость: docs/guide/compatibility.md
       - JSON и ошибки: docs/guide/json.md
+      - Пользовательские расширения: docs/guide/extensions.md
+      - Непрозрачные пакеты: docs/guide/packages.md
       - Лимиты документа: docs/guide/limits.md
+      - Стоимость операций: docs/guide/performance.md
+      - Проверка типов: docs/guide/typing.md
       - Валидация модели: docs/guide/validation.md
       - Сравнение и качество: docs/guide/quality.md
       - Формулы и optional math: docs/guide/formulas.md
@@ -43,8 +47,6 @@ nav:
       - Списки и нумерация: docs/guide/lists.md
       - Внутренние ссылки и якоря: docs/guide/references.md
       - Сноски: docs/guide/footnotes.md
-      - Сноски: docs/guide/footnotes.md
-      - Внутренние ссылки и якоря: docs/guide/references.md
       - Изменения: docs/guide/changes.md
   - Справочник:
       - API: docs/reference/api.md
