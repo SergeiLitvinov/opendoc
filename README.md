@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/SergeiLitvinov/opendoc/actions/workflows/ci.yml/badge.svg)](https://github.com/SergeiLitvinov/opendoc/actions/workflows/ci.yml)
 
-[Сайт документации](https://SergeiLitvinov.github.io/opendoc/) · [Выпуски и пакеты](https://github.com/SergeiLitvinov/opendoc/releases) · [MIT](docs/LICENSE)
+[Сайт документации](https://SergeiLitvinov.github.io/opendoc/) · [Выпуски и пакеты](https://github.com/SergeiLitvinov/opendoc/releases) · [Группа проектов okidoki](https://github.com/search?q=user%3ASergeiLitvinov+topic%3Aokidoki&type=repositories) · [MIT](docs/LICENSE)
 
 Независимая Python-библиотека структур документов: пакет `opendoc`, импорт `opendoc`, Python 3.11+.
 
