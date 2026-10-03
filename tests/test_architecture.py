@@ -29,6 +29,12 @@ def test_production_imports_are_standard_library_or_document_modules():
     _check_imports(Path(opendoc.__file__).parent)
 
 
+def test_example_names_do_not_shadow_standard_library_modules():
+    examples = Path(__file__).resolve().parent.parent / "examples"
+    names = {path.stem for path in examples.glob("*.py")}
+    assert not names & sys.stdlib_module_names
+
+
 @pytest.mark.parametrize("statement", ["import consumer_app", "from consumer_app.queue import Task"])
 def test_import_boundary_rejects_consumers_in_nested_packages(tmp_path, statement):
     nested = tmp_path / "subsystem" / "nested"
