@@ -6,7 +6,7 @@ import hashlib
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any
 
-from opendoc.diagnostics import ConversionReport, IssueSeverity
+from opendoc.diagnostics import CheckResult, ConversionReport, IssueSeverity
 
 if TYPE_CHECKING:
     from opendoc.document_model import TextRun
@@ -102,7 +102,7 @@ class EmphasisLossPolicy:
         if type(self.max_changed_emphasis) is not int or self.max_changed_emphasis < 0:
             raise ValueError("max_changed_emphasis must be a non-negative integer")
 
-    def evaluate(self, report: ConversionReport, comparison: DocumentComparison | None) -> bool:
+    def evaluate(self, report: ConversionReport | CheckResult, comparison: DocumentComparison | None) -> bool:
         source = comparison.source.metadata.get("text_emphasis", {}) if comparison is not None else {}
         target = comparison.target.metadata.get("text_emphasis", {}) if comparison is not None else {}
         available = (

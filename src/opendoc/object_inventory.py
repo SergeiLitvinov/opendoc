@@ -2,10 +2,13 @@
 
 import hashlib
 from collections.abc import Iterator
+from dataclasses import asdict
 from typing import Any
 
 from opendoc.document_model import Formula, Image, Paragraph, Resource, Table, TextRun
 from opendoc.emphasis_quality import EmphasisInventory
+from opendoc.lists import LIST_PROPERTY, _list_payload
+from opendoc.semantics import HEADING_PROPERTY, _heading_payload
 from opendoc.text_flow import TextFlowFingerprint
 from opendoc.traversal import ModelNode, NodeLocation, walk_model
 
@@ -108,7 +111,16 @@ def _object_entry(
         from opendoc.formula_quality_policy import FORMULA_FINGERPRINT_VERSION, formula_fingerprint
 
         formula_data = {"formula_hash": formula_fingerprint(value), "formula_fingerprint_version": FORMULA_FINGERPRINT_VERSION}
+    semantic_data = {}
+    if isinstance(value, Paragraph):
+        heading = _heading_payload(value.properties.get(HEADING_PROPERTY), f"{location}.properties[{HEADING_PROPERTY!r}]")
+        semantic_data["heading"] = heading.level if heading is not None else None
+        item = _list_payload(value.properties.get(LIST_PROPERTY), f"{location}.properties[{LIST_PROPERTY!r}]")
+        semantic_data["list_item"] = asdict(item) if item is not None else None
+        if item is None or item.kind == "unordered":
+            semantic_data["list_number"] = None
     return {
+        **semantic_data,
         **formula_data,
         "location": location,
         "parent_location": parent,

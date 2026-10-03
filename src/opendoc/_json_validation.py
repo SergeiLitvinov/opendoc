@@ -8,6 +8,7 @@ from collections.abc import Callable
 from typing import Any
 
 from opendoc.color import ColorSpace
+from opendoc.diagnostics import _DiagnosticError
 from opendoc.document_model import ConversionMode, FormulaFormat, ResourceKind
 from opendoc.limits import DocumentLimits, _quota, _utf8_size
 
@@ -24,7 +25,7 @@ _SECTION_COLLECTIONS = (
 
 
 def _fail(path: str, message: str) -> None:
-    raise ValueError(f"{path}: {message}")
+    raise _DiagnosticError(path, message)
 
 
 def _json_tree(value: Any, path: str, limits: DocumentLimits) -> None:

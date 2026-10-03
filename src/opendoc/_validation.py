@@ -8,6 +8,7 @@ from typing import Any
 
 from opendoc._json_validation import _color, _json_tree
 from opendoc.color import ColorValue
+from opendoc.diagnostics import DiagnosticIssue, IssueSeverity, _DiagnosticError
 from opendoc.document_model import (
     Box,
     ConversionMode,
@@ -35,39 +36,77 @@ from opendoc.document_model import (
     VisualSurrogate,
 )
 from opendoc.limits import DocumentLimits, _guard_model, _resolve_limits
+from opendoc.lists import LIST_PROPERTY, _list_payload
 from opendoc.properties import VersionedProperties
+from opendoc.semantics import HEADING_PROPERTY, _heading_payload
 from opendoc.storage import ArtifactLimitError
 from opendoc.traversal import _resource_slots, _walk_locations
 
 
 class _Validator:
     def __init__(
-        self, limits: DocumentLimits, resources: dict[str, Resource] | None = None, styles: dict[str, TextStyle] | None = None
+        self,
+        limits: DocumentLimits,
+        resources: dict[str, Resource] | None = None,
+        styles: dict[str, TextStyle] | None = None,
+        issues: list[DiagnosticIssue] | None = None,
     ) -> None:
         self.errors: list[str] = []
+        self.issues = issues if issues is not None else []
         self.limits = limits
         self.resources = resources or {}
         self.styles = styles or {}
         self.pending: deque[tuple[str, Any, str]] = deque()
+        self.list_configs: dict[tuple[str, int], tuple[str, int]] = {}
 
-    def error(self, path: str, message: str) -> None:
+    def error(
+        self,
+        path: str,
+        message: str,
+        *,
+        code: str = "model.invalid",
+        measurement: dict[str, Any] | None = None,
+        diagnostic_path: str | None = None,
+    ) -> None:
         self.errors.append(f"{path}: {message}" if path else message)
+        self.issues.append(
+            DiagnosticIssue(
+                code,
+                IssueSeverity.ERROR,
+                message,
+                diagnostic_path if diagnostic_path is not None else path,
+                measurement,
+                "invalid-input",
+            )
+        )
+
+    def capture(self, error: ValueError, path: str) -> None:
+        self.errors.append(str(error))
+        if isinstance(error, _DiagnosticError):
+            self.issues.append(
+                DiagnosticIssue(error.code, IssueSeverity.ERROR, error.message, error.location, reason="invalid-input")
+            )
+        else:
+            self.issues.append(DiagnosticIssue("model.invalid", IssueSeverity.ERROR, str(error), path, reason="invalid-input"))
 
     def instance(self, value: Any, expected: type[Any] | tuple[type[Any], ...], path: str) -> bool:
         if isinstance(value, expected):
             return True
         names = ", ".join(item.__name__ for item in expected) if isinstance(expected, tuple) else expected.__name__
-        self.error(path, f"expected {names}")
+        self.error(path, f"expected {names}", code="model.type", measurement={"expected": names})
         return False
 
     def string(self, value: Any, path: str, *, nullable: bool = False, nonempty: bool = False) -> bool:
         if value is None and nullable:
             return True
         if not isinstance(value, str):
-            self.error(path, "expected a string")
+            self.error(path, "expected a string", code="model.type", measurement={"expected": "str"})
+            return False
+        if any(0xD800 <= ord(character) <= 0xDFFF for character in value):
+            self.error(path, "string cannot be encoded as UTF-8", code="json.utf8")
             return False
         if nonempty and not value:
-            self.error(path, "string must not be empty")
+            self.error(path, "string must not be empty", code="model.empty-string")
             return False
         return True
 
@@ -77,13 +116,13 @@ class _Validator:
         except OverflowError:
             valid = False
         if not valid:
-            self.error(path, "expected a finite number")
+            self.error(path, "expected a finite number", code="model.number.invalid")
             return False
         if positive and value <= 0:
-            self.error(path, "number must be positive")
+            self.error(path, "number must be positive", code="model.number.range", measurement={"minimum_exclusive": 0})
             return False
         if minimum is not None and value < minimum:
-            self.error(path, f"number must be at least {minimum:g}")
+            self.error(path, f"number must be at least {minimum:g}", code="model.number.range", measurement={"minimum": minimum})
             return False
         return True
 
@@ -97,7 +136,7 @@ class _Validator:
         except ArtifactLimitError:
             raise
         except ValueError as error:
-            self.errors.append(str(error))
+            self.capture(error, path)
         return value
 
     def reference(self, value: Any, path: str, kind: str, *, legacy_path: str | None = None, nullable: bool = True) -> None:
@@ -107,7 +146,13 @@ class _Validator:
             return
         values = self.styles if kind == "style" else self.resources
         if value not in values:
-            self.error(legacy_path or path, f"unknown {kind} {value!r}")
+            self.error(
+                legacy_path or path,
+                f"unknown {kind} {value!r}",
+                code="model.reference.missing",
+                measurement={"kind": kind, "identifier": value},
+                diagnostic_path=path,
+            )
 
     def run(self) -> None:
         # A bounded preflight has already rejected cycles. No recursive calls
@@ -165,7 +210,7 @@ class _Validator:
                 try:
                     _color(item.to_dict(), f"{path}.{name}")
                 except ValueError as error:
-                    self.errors.append(str(error))
+                    self.capture(error, f"{path}.{name}")
         properties = self.properties(value.properties, f"{path}.properties")
         self.reference(properties.get("base_style_id"), f"{path}.properties.base_style_id", "style")
 
@@ -190,7 +235,7 @@ class _Validator:
         self.provenance(value.provenance, f"{path}.provenance")
 
     def element(self, value: Any, path: str) -> None:
-        self.properties(value.properties, f"{path}.properties")
+        properties = self.properties(value.properties, f"{path}.properties")
         self.provenance(value.provenance, f"{path}.provenance")
         self.surrogate(value.visual_surrogate, f"{path}.visual_surrogate")
         for name, resource_id, kind in _resource_slots(value):
@@ -209,6 +254,20 @@ class _Validator:
             return
         self.box(value.box, f"{path}.box")
         if isinstance(value, Paragraph):
+            list_path = f"{path}.properties[{LIST_PROPERTY!r}]"
+            try:
+                item = _list_payload(properties.get(LIST_PROPERTY), list_path)
+                if item is not None:
+                    key, config = (item.list_id, item.level), (item.kind, item.start)
+                    if key in self.list_configs and self.list_configs[key] != config:
+                        self.error(list_path, "conflicting list kind/start for the same level", code="semantic.list.config")
+                    self.list_configs[key] = config
+            except ValueError as error:
+                self.capture(error, list_path)
+            try:
+                _heading_payload(properties.get(HEADING_PROPERTY), f"{path}.properties[{HEADING_PROPERTY!r}]")
+            except ValueError as error:
+                self.capture(error, f"{path}.properties")
             self.reference(value.style_id, f"{path}.style_id", "style")
             self.string(value.alignment, f"{path}.alignment", nullable=True)
         elif isinstance(value, Table):
@@ -331,7 +390,9 @@ class _Validator:
             current = start
             while current not in checked and current in self.styles:
                 if current in visited:
-                    self.error(f"styles[{current!r}].properties.base_style_id", "cyclic style inheritance")
+                    self.error(
+                        f"styles[{current!r}].properties.base_style_id", "cyclic style inheritance", code="model.style.cycle"
+                    )
                     break
                 visited.add(current)
                 style = self.styles[current]
@@ -350,13 +411,19 @@ def _preflight(value: Any, validator: _Validator) -> bool:
     except ArtifactLimitError:
         raise
     except ValueError as error:
-        validator.errors.append(str(error))
+        validator.capture(error, "$")
         return False
     return True
 
 
-def _validate_model(document: DocumentModel, limits: DocumentLimits | None = None, *, preflight: bool = True) -> list[str]:
-    validator = _Validator(_resolve_limits(limits))
+def _validate_model(
+    document: DocumentModel,
+    limits: DocumentLimits | None = None,
+    *,
+    preflight: bool = True,
+    issues: list[DiagnosticIssue] | None = None,
+) -> list[str]:
+    validator = _Validator(_resolve_limits(limits), issues=issues)
     if preflight and not _preflight(document, validator):
         return validator.errors
     if not validator.instance(document, DocumentModel, "document"):
@@ -383,6 +450,12 @@ def _validate_model(document: DocumentModel, limits: DocumentLimits | None = Non
             validator.element(node, path)
     validator.style_cycles()
     return validator.errors
+
+
+def _model_issues(document: DocumentModel, limits: DocumentLimits | None = None) -> list[DiagnosticIssue]:
+    issues: list[DiagnosticIssue] = []
+    _validate_model(document, limits, issues=issues)
+    return issues
 
 
 def _validate_package(package: PackageGraph, limits: DocumentLimits | None = None) -> list[str]:

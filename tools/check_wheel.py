@@ -116,8 +116,70 @@ assert set(extracted.resources) == {'asset~2'}
 assert extracted.validate() == []
 assert core.load_document(core.save_document(extracted, 'extracted.json')) == extracted
 assert merge_source.styles['body'].properties['base_style_id'] == 'base'
-print('Independent wheel: model, traversal, operations, composition, resources, '
-      'persistence, comparison and optional math behavior OK')
+resolved_style = core.resolve_style(extracted, 'body~2')
+assert resolved_style.bold is True
+assert 'base_style_id' not in resolved_style.properties
+extracted_paragraph = next(core.iter_elements(extracted, core.Paragraph)).node
+extracted_paragraph.properties.set_typed('left_indent_pt', '0')
+extracted_run = next(item for item in extracted_paragraph.content if isinstance(item, core.TextRun))
+extracted_run.style.bold = False
+effective = core.effective_text_style(extracted, extracted_paragraph, extracted_run)
+assert effective.bold is False and effective.properties.get_typed('left_indent_pt') == 0.0
+assert extracted.styles['base~2'].bold is True
+try:
+    extracted_paragraph.properties.set_typed('numbering_level', '1.5')
+except ValueError:
+    pass
+else:
+    raise AssertionError('Typed properties must not truncate fractional values')
+assert core.load_document(core.save_document(extracted, 'styled.json')) == extracted
+external_path = Path('external.bin')
+external_path.write_bytes(b'portable')
+portable_source = core.DocumentModel()
+asset_id = core.add_resource(portable_source, core.Resource('local', core.ResourceKind.RASTER_IMAGE,
+                                                           'image/png', source='external.bin'))
+portable_source.sections = [core.Section(blocks=[core.Image(asset_id, 'portable')])]
+assert len(core.find_resource_uses(portable_source, asset_id)) == 1
+portable = core.embed_resources(portable_source, base_dir=Path.cwd())
+assert portable.resources[asset_id].data == b'portable'
+assert portable.resources[asset_id].source is None and portable_source.resources[asset_id].data is None
+copy_id = core.add_resource(portable, portable.resources[asset_id], conflicts='rename')
+assert core.find_duplicate_resources(portable) == ((asset_id, copy_id),)
+core.remove_resource(portable, asset_id, replacement_id=copy_id)
+assert len(core.find_resource_uses(portable, copy_id)) == 1
+core.replace_resource(portable, copy_id, core.Resource('updated', core.ResourceKind.RASTER_IMAGE, 'image/png', b'new'))
+assert core.load_document(core.save_document(portable, 'portable.json')) == portable
+memory_check = core.check_document(portable)
+assert memory_check.success and 'output_path' not in memory_check.to_dict()
+memory_comparison = core.compare_documents(portable, portable, policies=[core.TextPreservationPolicy(),
+                                                                       core.FormulaLossPolicy()])
+assert memory_comparison.success, memory_comparison.to_dict()
+assert memory_comparison.to_dict()['format'] == 'opendoc.check'
+invalid_memory = core.DocumentModel(sections=[core.Section(blocks=[core.Image('missing')])])
+failure = core.check_document(invalid_memory)
+assert not failure.success and failure.issues[0].code == 'model.reference.missing'
+assert failure.issues[0].location == 'sections[0].blocks[0].resource_id'
+external_memory = core.DocumentModel(resources={'remote': core.Resource('remote', core.ResourceKind.ATTACHMENT,
+                                                                       'type', source='https://invalid.test/data')})
+assert core.check_document(external_memory).success
+assert core.check_document(external_memory).metrics['inspection']['resources'][0]['size_bytes'] is None
+heading_paragraph = core.Paragraph([core.TextRun('Chapter')])
+core.set_heading(heading_paragraph, core.Heading(1))
+heading_document = core.DocumentModel(sections=[core.Section(blocks=[heading_paragraph])])
+heading_restored = core.document_from_json(core.document_to_json(heading_document))
+assert core.get_heading(next(core.iter_headings(heading_restored)).node) == core.Heading(1)
+core.set_heading(heading_restored.sections[0].blocks[0], core.Heading(2))
+assert core.compare_documents(heading_document, heading_restored).metrics['comparison']['object_diff']['changed_headings'] == 1
+list_paragraph = core.Paragraph([core.TextRun('Item')])
+core.set_list_item(list_paragraph, core.ListItem('items', start=3))
+list_document = core.DocumentModel(sections=[core.Section(blocks=[list_paragraph])])
+list_restored = core.document_from_json(core.document_to_json(list_document))
+assert [item.number for item in core.iter_list_numbers(list_restored)] == [3]
+list_merged = core.merge_documents([list_document, list_restored], conflicts='rename')
+assert list_merged.id_maps[1].lists == {'items': 'items~2'}
+assert [item.number for item in core.iter_list_numbers(list_merged.document)] == [3, 3]
+print('Independent wheel: model, traversal, operations, composition, lists, resources, '
+      'styles, typed properties, memory checks, persistence, comparison and optional math behavior OK')
 """
 
 

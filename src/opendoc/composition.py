@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections import deque
 from collections.abc import Collection, Iterable, Iterator
 from copy import deepcopy
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from typing import Literal, TypeAlias, cast
 
 from opendoc._validation import _validate_model
@@ -25,13 +25,14 @@ from opendoc.document_model import (
     TextStyle,
 )
 from opendoc.limits import DocumentLimits, _guard_model, _quota, _resolve_limits
+from opendoc.lists import LIST_PROPERTY, get_list_item, iter_list_items
 from opendoc.operations import _attached
 from opendoc.storage import ArtifactLimitError
 from opendoc.traversal import (
     SECTION_CONTENT_FIELDS,
     ModelNode,
     NodeLocation,
-    ResourceReference,
+    _set_resource_reference,
     _walk_locations,
     iter_resource_references,
 )
@@ -47,6 +48,7 @@ class DocumentIdMap:
 
     styles: dict[str, str]
     resources: dict[str, str]
+    lists: dict[str, str] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -144,20 +146,32 @@ def _inputs(documents: Iterable[DocumentModel], limits: DocumentLimits) -> list[
     return result
 
 
-def _definition_ids(document: DocumentModel, domain: Literal["styles", "resources"]) -> Iterable[str]:
+def _definition_ids(
+    document: DocumentModel, domain: Literal["styles", "resources", "lists"], limits: DocumentLimits | None = None
+) -> Iterable[str]:
+    if domain == "lists":
+        identifiers: dict[str, None] = {}
+        for location in iter_list_items(document, limits=limits):
+            item = get_list_item(location.node, limits=limits)
+            assert item is not None
+            identifiers[item.list_id] = None
+        return identifiers
     return document.styles if domain == "styles" else document.resources
 
 
 def _id_maps(
-    documents: list[DocumentModel], domain: Literal["styles", "resources"], policy: IdentifierConflictPolicy
+    documents: list[DocumentModel],
+    domain: Literal["styles", "resources", "lists"],
+    policy: IdentifierConflictPolicy,
+    limits: DocumentLimits | None = None,
 ) -> list[dict[str, str]]:
-    reserved = {identifier for document in documents for identifier in _definition_ids(document, domain)}
+    reserved = {identifier for document in documents for identifier in _definition_ids(document, domain, limits)}
     used: set[str] = set()
     next_suffix: dict[str, int] = {}
     maps: list[dict[str, str]] = []
     for index, document in enumerate(documents):
         identifiers: dict[str, str] = {}
-        for identifier in _definition_ids(document, domain):
+        for identifier in _definition_ids(document, domain, limits):
             target = identifier
             if target in used:
                 if policy == "error":
@@ -189,27 +203,22 @@ def _package(documents: list[DocumentModel], policy: PackagePolicy) -> PackageGr
     return first
 
 
-def _set_resource_link(reference: ResourceReference, identifier: str) -> None:
-    owner = reference.owner.node
-    if reference.kind == "image" and isinstance(owner, Image):
-        owner.resource_id = identifier
-    elif reference.kind == "surrogate":
-        if owner.visual_surrogate is None:
-            raise ValueError(f"{reference.path}: resource owner changed during composition")
-        owner.visual_surrogate.resource_id = identifier
-    else:
-        owner.properties[reference.field.removeprefix("properties.")] = identifier
-
-
 def _rewrite(document: DocumentModel, identifiers: DocumentIdMap, limits: DocumentLimits) -> None:
     # Snapshot values before writing: repeated nodes and shared property bags
     # must not apply a mapping again to an already rewritten identifier.
     styles = list(_all_style_links(document, limits))
     resources = list(iter_resource_references(document, limits=limits))
+    lists = [
+        (location.node.properties[LIST_PROPERTY], get_list_item(location.node, limits=limits))
+        for location in iter_list_items(document, limits=limits)
+    ]
+    for value, item in lists:
+        assert item is not None
+        value["list_id"] = identifiers.lists[item.list_id]
     for link in styles:
         link.set(identifiers.styles[link.identifier])
     for link in resources:
-        _set_resource_link(link, identifiers.resources[link.resource_id])
+        _set_resource_reference(link, identifiers.resources[link.resource_id])
     document.styles = {identifiers.styles[identifier]: style for identifier, style in document.styles.items()}
     remapped_resources = {}
     for identifier, resource in document.resources.items():
@@ -247,7 +256,11 @@ def merge_documents(
     package = _package(inputs, package_policy)
     style_maps = _id_maps(inputs, "styles", conflicts)
     resource_maps = _id_maps(inputs, "resources", conflicts)
-    maps = tuple(DocumentIdMap(styles, resources) for styles, resources in zip(style_maps, resource_maps, strict=True))
+    list_maps = _id_maps(inputs, "lists", conflicts, budget)
+    maps = tuple(
+        DocumentIdMap(styles, resources, lists)
+        for styles, resources, lists in zip(style_maps, resource_maps, list_maps, strict=True)
+    )
     result = DocumentModel(mode=result_mode, source_format=inputs[0].source_format, package=deepcopy(package))
     if any(document.source_format != result.source_format for document in inputs[1:]):
         result.source_format = None

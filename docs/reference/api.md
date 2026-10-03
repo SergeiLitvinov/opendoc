@@ -6,18 +6,23 @@
 
 | Имя | Модуль | Объявление |
 |---|---|---|
+| `CheckPolicy` | `opendoc.checks` | [src/opendoc/checks.py](../../src/opendoc/checks.py) |
+| `check_document` | `opendoc.checks` | [src/opendoc/checks.py](../../src/opendoc/checks.py#L38) |
+| `compare_documents` | `opendoc.checks` | [src/opendoc/checks.py](../../src/opendoc/checks.py#L96) |
 | `ColorSpace` | `opendoc.color` | [src/opendoc/color.py](../../src/opendoc/color.py#L13) |
 | `ColorValue` | `opendoc.color` | [src/opendoc/color.py](../../src/opendoc/color.py#L19) |
-| `DocumentIdMap` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py#L45) |
-| `DocumentMerge` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py#L53) |
+| `DocumentIdMap` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py#L46) |
+| `DocumentMerge` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py#L55) |
 | `IdentifierConflictPolicy` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py) |
 | `MetadataConflictPolicy` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py) |
 | `PackagePolicy` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py) |
-| `extract_document` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py#L358) |
-| `merge_documents` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py#L221) |
-| `ConversionIssue` | `opendoc.diagnostics` | [src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L19) |
-| `ConversionReport` | `opendoc.diagnostics` | [src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L27) |
-| `IssueSeverity` | `opendoc.diagnostics` | [src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L11) |
+| `extract_document` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py#L371) |
+| `merge_documents` | `opendoc.composition` | [src/opendoc/composition.py](../../src/opendoc/composition.py#L230) |
+| `CheckResult` | `opendoc.diagnostics` | [src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L95) |
+| `ConversionIssue` | `opendoc.diagnostics` | [src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L23) |
+| `ConversionReport` | `opendoc.diagnostics` | [src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L31) |
+| `DiagnosticIssue` | `opendoc.diagnostics` | [src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L66) |
+| `IssueSeverity` | `opendoc.diagnostics` | [src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L15) |
 | `FORMAT_NAME` | `opendoc.document_codec` | [src/opendoc/document_codec.py](../../src/opendoc/document_codec.py) |
 | `FORMAT_VERSION` | `opendoc.document_codec` | [src/opendoc/document_codec.py](../../src/opendoc/document_codec.py) |
 | `document_from_dict` | `opendoc.document_codec` | [src/opendoc/document_codec.py](../../src/opendoc/document_codec.py#L74) |
@@ -63,11 +68,19 @@
 | `attach_visual_surrogate` | `opendoc.document_model` | [src/opendoc/document_model.py](../../src/opendoc/document_model.py#L333) |
 | `EmphasisLossPolicy` | `opendoc.emphasis_quality` | [src/opendoc/emphasis_quality.py](../../src/opendoc/emphasis_quality.py#L98) |
 | `FormulaLossPolicy` | `opendoc.formula_quality_policy` | [src/opendoc/formula_quality_policy.py](../../src/opendoc/formula_quality_policy.py#L69) |
-| `DocumentComparison` | `opendoc.inspection` | [src/opendoc/inspection.py](../../src/opendoc/inspection.py#L89) |
-| `DocumentInspection` | `opendoc.inspection` | [src/opendoc/inspection.py](../../src/opendoc/inspection.py#L39) |
-| `compare_inspections` | `opendoc.inspection` | [src/opendoc/inspection.py](../../src/opendoc/inspection.py#L136) |
-| `inspect_document_model` | `opendoc.inspection` | [src/opendoc/inspection.py](../../src/opendoc/inspection.py#L622) |
-| `DocumentLimits` | `opendoc.limits` | [src/opendoc/limits.py](../../src/opendoc/limits.py#L14) |
+| `DocumentComparison` | `opendoc.inspection` | [src/opendoc/inspection.py](../../src/opendoc/inspection.py#L91) |
+| `DocumentInspection` | `opendoc.inspection` | [src/opendoc/inspection.py](../../src/opendoc/inspection.py#L41) |
+| `compare_inspections` | `opendoc.inspection` | [src/opendoc/inspection.py](../../src/opendoc/inspection.py#L138) |
+| `inspect_document_model` | `opendoc.inspection` | [src/opendoc/inspection.py](../../src/opendoc/inspection.py#L704) |
+| `DocumentLimits` | `opendoc.limits` | [src/opendoc/limits.py](../../src/opendoc/limits.py#L15) |
+| `LIST_PROPERTY` | `opendoc.lists` | [src/opendoc/lists.py](../../src/opendoc/lists.py) |
+| `ListItem` | `opendoc.lists` | [src/opendoc/lists.py](../../src/opendoc/lists.py#L38) |
+| `ListKind` | `opendoc.lists` | [src/opendoc/lists.py](../../src/opendoc/lists.py) |
+| `ListNumber` | `opendoc.lists` | [src/opendoc/lists.py](../../src/opendoc/lists.py#L60) |
+| `get_list_item` | `opendoc.lists` | [src/opendoc/lists.py](../../src/opendoc/lists.py#L96) |
+| `iter_list_items` | `opendoc.lists` | [src/opendoc/lists.py](../../src/opendoc/lists.py#L135) |
+| `iter_list_numbers` | `opendoc.lists` | [src/opendoc/lists.py](../../src/opendoc/lists.py#L142) |
+| `set_list_item` | `opendoc.lists` | [src/opendoc/lists.py](../../src/opendoc/lists.py#L111) |
 | `ObjectLossPolicy` | `opendoc.object_quality_policy` | [src/opendoc/object_quality_policy.py](../../src/opendoc/object_quality_policy.py#L14) |
 | `clone_model` | `opendoc.operations` | [src/opendoc/operations.py](../../src/opendoc/operations.py#L31) |
 | `extract_text` | `opendoc.operations` | [src/opendoc/operations.py](../../src/opendoc/operations.py#L171) |
@@ -77,7 +90,21 @@
 | `transform_elements` | `opendoc.operations` | [src/opendoc/operations.py](../../src/opendoc/operations.py#L235) |
 | `PROPERTY_SCHEMA_VERSION` | `opendoc.properties` | [src/opendoc/properties.py](../../src/opendoc/properties.py) |
 | `QualityPolicy` | `opendoc.quality_policy` | [src/opendoc/quality_policy.py](../../src/opendoc/quality_policy.py#L11) |
+| `ResourceConflictPolicy` | `opendoc.resources` | [src/opendoc/resources.py](../../src/opendoc/resources.py) |
+| `add_resource` | `opendoc.resources` | [src/opendoc/resources.py](../../src/opendoc/resources.py#L62) |
+| `embed_resources` | `opendoc.resources` | [src/opendoc/resources.py](../../src/opendoc/resources.py#L229) |
+| `find_duplicate_resources` | `opendoc.resources` | [src/opendoc/resources.py](../../src/opendoc/resources.py#L161) |
+| `find_resource_uses` | `opendoc.resources` | [src/opendoc/resources.py](../../src/opendoc/resources.py#L92) |
+| `remove_resource` | `opendoc.resources` | [src/opendoc/resources.py](../../src/opendoc/resources.py#L122) |
+| `replace_resource` | `opendoc.resources` | [src/opendoc/resources.py](../../src/opendoc/resources.py#L102) |
+| `HEADING_PROPERTY` | `opendoc.semantics` | [src/opendoc/semantics.py](../../src/opendoc/semantics.py) |
+| `Heading` | `opendoc.semantics` | [src/opendoc/semantics.py](../../src/opendoc/semantics.py#L19) |
+| `get_heading` | `opendoc.semantics` | [src/opendoc/semantics.py](../../src/opendoc/semantics.py#L42) |
+| `iter_headings` | `opendoc.semantics` | [src/opendoc/semantics.py](../../src/opendoc/semantics.py#L83) |
+| `set_heading` | `opendoc.semantics` | [src/opendoc/semantics.py](../../src/opendoc/semantics.py#L56) |
 | `ArtifactLimitError` | `opendoc.storage` | [src/opendoc/storage.py](../../src/opendoc/storage.py#L10) |
+| `effective_text_style` | `opendoc.styles` | [src/opendoc/styles.py](../../src/opendoc/styles.py#L87) |
+| `resolve_style` | `opendoc.styles` | [src/opendoc/styles.py](../../src/opendoc/styles.py#L62) |
 | `TextPreservationPolicy` | `opendoc.text_quality_policy` | [src/opendoc/text_quality_policy.py](../../src/opendoc/text_quality_policy.py#L17) |
 | `SECTION_CONTENT_FIELDS` | `opendoc.traversal` | [src/opendoc/traversal.py](../../src/opendoc/traversal.py) |
 | `Element` | `opendoc.traversal` | [src/opendoc/traversal.py](../../src/opendoc/traversal.py) |
@@ -95,6 +122,35 @@
 
 ## Объявления
 
+### check_document
+
+[src/opendoc/checks.py](../../src/opendoc/checks.py#L38)
+
+```python
+check_document(document: DocumentModel, *, limits: DocumentLimits | None=None)
+```
+
+Validate and inspect without any filesystem lookup or output path.
+
+Structural errors have machine codes/paths; invalid models have no metrics.
+Valid external-only resources remain structurally valid with unknown sizes
+and hashes. DocumentLimits exhaustion continues to raise ArtifactLimitError.
+
+### compare_documents
+
+[src/opendoc/checks.py](../../src/opendoc/checks.py#L96)
+
+```python
+compare_documents(source: DocumentModel, target: DocumentModel, *, policies: Iterable[CheckPolicy] | None=None, limits: DocumentLimits | None=None)
+```
+
+Compare entire models in memory and apply explicit policies in order.
+
+No policy is implicit. LOSS differs from ERROR; a selected policy may turn
+loss or unavailable evidence into rejection. Both model issues and complete
+comparison snapshots are retained; reasons are obtained from measurements.
+Existing ConversionReport usage and policy return values remain supported.
+
 ### ColorSpace
 
 [src/opendoc/color.py](../../src/opendoc/color.py#L13)
@@ -105,19 +161,19 @@
 
 ### DocumentIdMap
 
-[src/opendoc/composition.py](../../src/opendoc/composition.py#L45)
+[src/opendoc/composition.py](../../src/opendoc/composition.py#L46)
 
 Original-to-result identifiers for one input, including unchanged IDs.
 
 ### DocumentMerge
 
-[src/opendoc/composition.py](../../src/opendoc/composition.py#L53)
+[src/opendoc/composition.py](../../src/opendoc/composition.py#L55)
 
 Independent merged model and per-input identifier snapshots.
 
 ### extract_document
 
-[src/opendoc/composition.py](../../src/opendoc/composition.py#L358)
+[src/opendoc/composition.py](../../src/opendoc/composition.py#L371)
 
 ```python
 extract_document(document: DocumentModel, location: NodeLocation[ModelNode], *, package_policy: PackagePolicy='error', additional_styles: Iterable[str]=(), additional_resources: Iterable[str]=(), limits: DocumentLimits | None=None)
@@ -133,7 +189,7 @@ partial extraction and keeps the entire opaque graph, without pruning bytes.
 
 ### merge_documents
 
-[src/opendoc/composition.py](../../src/opendoc/composition.py#L221)
+[src/opendoc/composition.py](../../src/opendoc/composition.py#L230)
 
 ```python
 merge_documents(documents: Iterable[DocumentModel], *, conflicts: IdentifierConflictPolicy='error', metadata_conflicts: MetadataConflictPolicy='error', package_policy: PackagePolicy='error', mode: ConversionMode | None=None, limits: DocumentLimits | None=None)
@@ -146,17 +202,33 @@ All definitions, including unused ones, are retained. Metadata overlap and
 differing modes require explicit decisions. Opaque packages are never rewritten.
 Input value/embedded-byte counts share a budget; output is validated separately.
 
+### CheckResult
+
+[src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L95)
+
+A model check result without a filesystem destination.
+
+Success means no ERROR; lossless additionally means no LOSS. Neither flag
+proves unrequested or unavailable measurements. Existing policies can use
+add/metrics/issues, and structured policy measurements are snapshotted.
+
 ### ConversionIssue
 
-[src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L19)
+[src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L23)
 
 ### ConversionReport
 
-[src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L27)
+[src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L31)
+
+### DiagnosticIssue
+
+[src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L66)
+
+Machine-readable issue; the message is explanatory, never a parser input.
 
 ### IssueSeverity
 
-[src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L11)
+[src/opendoc/diagnostics.py](../../src/opendoc/diagnostics.py#L15)
 
 ### document_from_dict
 
@@ -346,15 +418,15 @@ Attach a visual companion and record why the native representation is insufficie
 
 ### DocumentComparison
 
-[src/opendoc/inspection.py](../../src/opendoc/inspection.py#L89)
+[src/opendoc/inspection.py](../../src/opendoc/inspection.py#L91)
 
 ### DocumentInspection
 
-[src/opendoc/inspection.py](../../src/opendoc/inspection.py#L39)
+[src/opendoc/inspection.py](../../src/opendoc/inspection.py#L41)
 
 ### compare_inspections
 
-[src/opendoc/inspection.py](../../src/opendoc/inspection.py#L136)
+[src/opendoc/inspection.py](../../src/opendoc/inspection.py#L138)
 
 ```python
 compare_inspections(source: DocumentInspection, target: DocumentInspection)
@@ -364,22 +436,82 @@ compare_inspections(source: DocumentInspection, target: DocumentInspection)
 
 ### inspect_document_model
 
-[src/opendoc/inspection.py](../../src/opendoc/inspection.py#L622)
+[src/opendoc/inspection.py](../../src/opendoc/inspection.py#L704)
 
 ```python
-inspect_document_model(document: DocumentModel, *, source_path: str | Path | None=None, source_format: str | None=None, limits: DocumentLimits | None=None)
+inspect_document_model(document: DocumentModel, *, source_path: str | Path | None=None, source_format: str | None=None, limits: DocumentLimits | None=None, check_external_sources: bool=True)
 ```
 
 Собрать структурные метрики и диагностировать модель.
 
 ### DocumentLimits
 
-[src/opendoc/limits.py](../../src/opendoc/limits.py#L14)
+[src/opendoc/limits.py](../../src/opendoc/limits.py#L15)
 
 UTF-8/byte input, container depth, value count and embedded-byte budgets.
 
 Depth is capped at 128 to keep the recursive codec below Python&#x27;s normal
 recursion limit. Budgets apply separately to input and output trees.
+
+### ListItem
+
+[src/opendoc/lists.py](../../src/opendoc/lists.py#L38)
+
+Membership in an implicit list group; levels are 0–8.
+
+Kind/start must agree within (list_id, level). Restart applies to this
+occurrence only. A shallower item resets deeper counters of the same list.
+IDs describe groups, not references to a consuming application&#x27;s task store.
+
+### ListNumber
+
+[src/opendoc/lists.py](../../src/opendoc/lists.py#L60)
+
+One occurrence and its decimal number; unordered items have number None.
+
+### get_list_item
+
+[src/opendoc/lists.py](../../src/opendoc/lists.py#L96)
+
+```python
+get_list_item(paragraph: Paragraph, *, limits: DocumentLimits | None=None)
+```
+
+Read only the explicitly tagged list-item bag, preserving opaque extensions.
+
+### iter_list_items
+
+[src/opendoc/lists.py](../../src/opendoc/lists.py#L135)
+
+```python
+iter_list_items(root: ModelNode, *, limits: DocumentLimits | None=None)
+```
+
+Find marked list paragraphs in the common traversal order.
+
+### iter_list_numbers
+
+[src/opendoc/lists.py](../../src/opendoc/lists.py#L142)
+
+```python
+iter_list_numbers(root: ModelNode, *, limits: DocumentLimits | None=None)
+```
+
+Compute occurrence numbers in traversal order, validating all groups first.
+
+Groups can interleave and resume across sections. Plain paragraphs do not
+reset them. Levels need not have a parent occurrence; only the current
+level&#x27;s decimal number is returned, never a guessed hierarchical label.
+
+### set_list_item
+
+[src/opendoc/lists.py](../../src/opendoc/lists.py#L111)
+
+```python
+set_list_item(paragraph: Paragraph, item: ListItem | None, *, limits: DocumentLimits | None=None)
+```
+
+Set/remove membership in place after checking; do not overwrite opaque data.
 
 ### ObjectLossPolicy
 
@@ -470,11 +602,160 @@ propagate; no partial result is returned, and library edits never touch input.
 
 Лимит событий LOSS; не подменяет измерение сохранности объектов.
 
+### add_resource
+
+[src/opendoc/resources.py](../../src/opendoc/resources.py#L62)
+
+```python
+add_resource(document: DocumentModel, resource: Resource, *, conflicts: ResourceConflictPolicy='error', limits: DocumentLimits | None=None)
+```
+
+Add an independent copy in place; return its actual ID.
+
+Conflicts error, rename with the first free ~2/~3 suffix, or replace the
+existing definition keeping its links. No data-based deduplication or
+inference of custom references occurs. Failure leaves the model intact.
+
+### embed_resources
+
+[src/opendoc/resources.py](../../src/opendoc/resources.py#L229)
+
+```python
+embed_resources(document: DocumentModel, *, base_dir: str | Path | None=None, resource_ids: Iterable[str] | None=None, limits: DocumentLimits | None=None)
+```
+
+Return an independent document with selected local sources embedded.
+
+By default all resource definitions are selected, including unused ones.
+Existing data wins without I/O; selected sources become None. Relative
+source needs explicit absolute base_dir, absolute native paths are allowed.
+URLs/UNC/device paths and nonregular files are rejected. Reads are bounded
+by per-file max_bytes and remaining total embedded bytes (including package).
+Filesystem errors propagate. No source file or original model is changed.
+
+### find_duplicate_resources
+
+[src/opendoc/resources.py](../../src/opendoc/resources.py#L161)
+
+```python
+find_duplicate_resources(document: DocumentModel, *, limits: DocumentLimits | None=None)
+```
+
+Group exact equal embedded bytes, including empty data, in ID order.
+
+Kind/media type/properties are not an equality condition. External-only
+sources are not opened or guessed equal. This never redirects links.
+
+### find_resource_uses
+
+[src/opendoc/resources.py](../../src/opendoc/resources.py#L92)
+
+```python
+find_resource_uses(document: DocumentModel, resource_id: str, *, limits: DocumentLimits | None=None)
+```
+
+Return every known use in traversal order, with live owners and paths.
+
+### remove_resource
+
+[src/opendoc/resources.py](../../src/opendoc/resources.py#L122)
+
+```python
+remove_resource(document: DocumentModel, resource_id: str, *, replacement_id: str | None=None, limits: DocumentLimits | None=None)
+```
+
+Remove an unused definition or explicitly redirect all known uses.
+
+Referenced removal without a distinct existing replacement is an error.
+Snapshots preserve repeated nodes and shared property/surrogate objects.
+Failed final validation rolls back the links before returning control.
+
+### replace_resource
+
+[src/opendoc/resources.py](../../src/opendoc/resources.py#L102)
+
+```python
+replace_resource(document: DocumentModel, resource_id: str, resource: Resource, *, limits: DocumentLimits | None=None)
+```
+
+Replace a definition in place, normalizing the copy&#x27;s ID to the target.
+
+All links keep their ID. Return the detached original Resource; the caller&#x27;s
+replacement and existing structural nodes remain unchanged.
+
+### Heading
+
+[src/opendoc/semantics.py](../../src/opendoc/semantics.py#L19)
+
+A semantic heading level (1–9), independent of visual text styling.
+
+### get_heading
+
+[src/opendoc/semantics.py](../../src/opendoc/semantics.py#L42)
+
+```python
+get_heading(paragraph: Paragraph, *, limits: DocumentLimits | None=None)
+```
+
+Read only explicitly tagged heading data; never infer from styles/text.
+
+### iter_headings
+
+[src/opendoc/semantics.py](../../src/opendoc/semantics.py#L83)
+
+```python
+iter_headings(root: ModelNode, *, limits: DocumentLimits | None=None)
+```
+
+Yield explicitly marked headings in common traversal order, including tables/headers.
+
+### set_heading
+
+[src/opendoc/semantics.py](../../src/opendoc/semantics.py#L56)
+
+```python
+set_heading(paragraph: Paragraph, heading: Heading | None, *, limits: DocumentLimits | None=None)
+```
+
+Assign/remove a heading in place, preserving unknown tagged fields.
+
+Failure leaves properties intact; an opaque value occupying the key is
+never overwritten. Removal drops only the explicitly tagged heading bag.
+
 ### ArtifactLimitError
 
 [src/opendoc/storage.py](../../src/opendoc/storage.py#L10)
 
 Raised when a document or consumer artifact exceeds its byte quota.
+
+### effective_text_style
+
+[src/opendoc/styles.py](../../src/opendoc/styles.py#L87)
+
+```python
+effective_text_style(document: DocumentModel, paragraph: Paragraph, run: TextRun | None=None, *, limits: DocumentLimits | None=None)
+```
+
+Resolve paragraph style/properties and then a contained run&#x27;s style.
+
+A paragraph may be detached; references resolve against document styles
+and resources. A supplied run must occur in paragraph.content by identity.
+Paragraph alignment/geometry remain paragraph fields, not text styles.
+
+### resolve_style
+
+[src/opendoc/styles.py](../../src/opendoc/styles.py#L62)
+
+```python
+resolve_style(document: DocumentModel, style: str | TextStyle | None=None, *, overrides: TextStyle | None=None, limits: DocumentLimits | None=None)
+```
+
+Flatten a named/inline style, then overlay an optional inline chain.
+
+None inherits; false, zero and empty values override. Properties merge by
+key, including extensions; nested values replace whole values. The base
+pointer is consumed. No renderer defaults are guessed. Inputs are intact
+and the returned style owns its mutable values.
 
 ### TextPreservationPolicy
 

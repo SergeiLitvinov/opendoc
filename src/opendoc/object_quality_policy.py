@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from opendoc.diagnostics import ConversionReport, IssueSeverity
+from opendoc.diagnostics import CheckResult, ConversionReport, IssueSeverity
 from opendoc.object_inventory import OBJECT_INVENTORY_SCOPE
 
 if TYPE_CHECKING:
@@ -20,7 +20,7 @@ class ObjectLossPolicy:
         if type(self.max_lost_objects) is not int or self.max_lost_objects < 0:
             raise ValueError("max_lost_objects must be a non-negative integer")
 
-    def evaluate(self, report: ConversionReport, comparison: "DocumentComparison | None") -> bool:
+    def evaluate(self, report: ConversionReport | CheckResult, comparison: "DocumentComparison | None") -> bool:
         diff = comparison.object_diff if comparison is not None else {}
         matching = diff.get("matching") or {}
         available = comparison is not None and comparison.valid and diff.get("available") is True

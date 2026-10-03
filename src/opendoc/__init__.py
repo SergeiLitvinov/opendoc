@@ -2,6 +2,9 @@
 
 __version__ = "0.1.0"
 
+from .checks import CheckPolicy as CheckPolicy
+from .checks import check_document as check_document
+from .checks import compare_documents as compare_documents
 from .color import (
     ColorSpace as ColorSpace,
 )
@@ -29,12 +32,14 @@ from .composition import (
 from .composition import (
     merge_documents as merge_documents,
 )
+from .diagnostics import CheckResult as CheckResult
 from .diagnostics import (
     ConversionIssue as ConversionIssue,
 )
 from .diagnostics import (
     ConversionReport as ConversionReport,
 )
+from .diagnostics import DiagnosticIssue as DiagnosticIssue
 from .diagnostics import (
     IssueSeverity as IssueSeverity,
 )
@@ -186,6 +191,14 @@ from .inspection import (
     inspect_document_model as inspect_document_model,
 )
 from .limits import DocumentLimits as DocumentLimits
+from .lists import LIST_PROPERTY as LIST_PROPERTY
+from .lists import ListItem as ListItem
+from .lists import ListKind as ListKind
+from .lists import ListNumber as ListNumber
+from .lists import get_list_item as get_list_item
+from .lists import iter_list_items as iter_list_items
+from .lists import iter_list_numbers as iter_list_numbers
+from .lists import set_list_item as set_list_item
 from .object_quality_policy import (
     ObjectLossPolicy as ObjectLossPolicy,
 )
@@ -213,7 +226,35 @@ from .properties import (
 from .quality_policy import (
     QualityPolicy as QualityPolicy,
 )
+from .resources import (
+    ResourceConflictPolicy as ResourceConflictPolicy,
+)
+from .resources import (
+    add_resource as add_resource,
+)
+from .resources import (
+    embed_resources as embed_resources,
+)
+from .resources import (
+    find_duplicate_resources as find_duplicate_resources,
+)
+from .resources import (
+    find_resource_uses as find_resource_uses,
+)
+from .resources import (
+    remove_resource as remove_resource,
+)
+from .resources import (
+    replace_resource as replace_resource,
+)
+from .semantics import HEADING_PROPERTY as HEADING_PROPERTY
+from .semantics import Heading as Heading
+from .semantics import get_heading as get_heading
+from .semantics import iter_headings as iter_headings
+from .semantics import set_heading as set_heading
 from .storage import ArtifactLimitError as ArtifactLimitError
+from .styles import effective_text_style as effective_text_style
+from .styles import resolve_style as resolve_style
 from .text_quality_policy import (
     TextPreservationPolicy as TextPreservationPolicy,
 )
@@ -258,6 +299,33 @@ from .traversal import (
 )
 
 __all__ = [
+    "LIST_PROPERTY",
+    "ListItem",
+    "ListKind",
+    "ListNumber",
+    "get_list_item",
+    "iter_list_items",
+    "iter_list_numbers",
+    "set_list_item",
+    "HEADING_PROPERTY",
+    "Heading",
+    "get_heading",
+    "iter_headings",
+    "set_heading",
+    "CheckPolicy",
+    "CheckResult",
+    "DiagnosticIssue",
+    "check_document",
+    "compare_documents",
+    "ResourceConflictPolicy",
+    "add_resource",
+    "embed_resources",
+    "find_duplicate_resources",
+    "find_resource_uses",
+    "remove_resource",
+    "replace_resource",
+    "effective_text_style",
+    "resolve_style",
     "DocumentIdMap",
     "DocumentMerge",
     "IdentifierConflictPolicy",

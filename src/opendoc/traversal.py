@@ -256,6 +256,19 @@ def iter_resource_references(root: ModelNode, *, limits: DocumentLimits | None =
             yield from _references_at(cast(NodeLocation[Element], reference))
 
 
+def _set_resource_reference(reference: ResourceReference, identifier: str) -> None:
+    """Write a previously validated reference using the shared slot grammar."""
+    owner = reference.owner.node
+    if reference.kind == "image" and isinstance(owner, Image):
+        owner.resource_id = identifier
+    elif reference.kind == "surrogate":
+        if owner.visual_surrogate is None:
+            raise ValueError(f"{reference.path}: resource owner changed")
+        owner.visual_surrogate.resource_id = identifier
+    else:
+        owner.properties[reference.field.removeprefix("properties.")] = identifier
+
+
 __all__ = [
     "SECTION_CONTENT_FIELDS",
     "Element",

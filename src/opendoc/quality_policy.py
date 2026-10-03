@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from opendoc.diagnostics import ConversionReport, IssueSeverity
+from opendoc.diagnostics import CheckResult, ConversionReport, IssueSeverity
 
 
 @dataclass(frozen=True)
@@ -17,7 +17,7 @@ class QualityPolicy:
         if type(self.max_loss_issues) is not int or self.max_loss_issues < 0:
             raise ValueError("max_loss_issues must be a non-negative integer")
 
-    def evaluate(self, report: ConversionReport) -> bool:
+    def evaluate(self, report: ConversionReport | CheckResult) -> bool:
         losses = [issue for issue in report.issues if issue.severity is IssueSeverity.LOSS]
         accepted = len(losses) <= self.max_loss_issues
         report.metrics["quality_gate"] = {

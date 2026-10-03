@@ -6,6 +6,7 @@ from collections.abc import Mapping
 from dataclasses import dataclass, fields, is_dataclass
 from typing import Any
 
+from opendoc.diagnostics import _DiagnosticError
 from opendoc.document_model import PackagePart, Resource
 from opendoc.storage import ArtifactLimitError
 
@@ -54,7 +55,7 @@ def _utf8_size(value: str, maximum: int, path: str, *, used: int = 0) -> int:
         try:
             size += len(value[index : index + 8192].encode("utf-8"))
         except UnicodeEncodeError as error:
-            raise ValueError(f"{path}: string cannot be encoded as UTF-8") from error
+            raise _DiagnosticError(path, "string cannot be encoded as UTF-8", "json.utf8") from error
         if size + used > maximum:
             _quota(path, "bytes", maximum)
     return size
@@ -107,7 +108,7 @@ def _guard_model(value: Any, limits: DocumentLimits) -> tuple[int, int]:
             _quota(path, "nodes", limits.max_nodes)
         if isinstance(item, (Resource, PackagePart)) and item.data is not None:
             if not isinstance(item.data, bytes):
-                raise ValueError(f"{path}.data: expected bytes")
+                raise _DiagnosticError(f"{path}.data", "expected bytes", "model.type")
             embedded += len(item.data)
             if embedded > limits.max_embedded_bytes:
                 _quota(f"{path}.data", "embedded bytes", limits.max_embedded_bytes)
@@ -118,7 +119,7 @@ def _guard_model(value: Any, limits: DocumentLimits) -> tuple[int, int]:
             if len(item) > limits.max_nodes - nodes:
                 _quota(path, "nodes", limits.max_nodes)
             if any(not isinstance(key, str) for key in item):
-                raise ValueError(f"{path}: mapping keys must be strings")
+                raise _DiagnosticError(path, "mapping keys must be strings", "model.mapping-key")
             children = [(child, f"{path}[{key!r}]") for key, child in item.items()]
         elif isinstance(item, (list, tuple)):
             if len(item) > limits.max_nodes - nodes:
@@ -127,7 +128,7 @@ def _guard_model(value: Any, limits: DocumentLimits) -> tuple[int, int]:
         if children is None:
             continue
         if id(item) in active:
-            raise ValueError(f"{path}: cyclic document model")
+            raise _DiagnosticError(path, "cyclic document model", "model.cycle")
         active.add(id(item))
         if len(active) > limits.max_depth:
             _quota(path, "depth", limits.max_depth)

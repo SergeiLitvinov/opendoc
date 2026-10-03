@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any
 
 from opendoc._xml import _parse_xml, _xml_bytes
-from opendoc.diagnostics import ConversionReport, IssueSeverity
+from opendoc.diagnostics import CheckResult, ConversionReport, IssueSeverity
 from opendoc.document_model import Formula, FormulaFormat
 from opendoc.object_inventory import OBJECT_INVENTORY_SCOPE
 
@@ -73,7 +73,7 @@ class FormulaLossPolicy:
         if type(self.max_changed_formulas) is not int or self.max_changed_formulas < 0:
             raise ValueError("max_changed_formulas must be a non-negative integer")
 
-    def evaluate(self, report: ConversionReport, comparison: "DocumentComparison | None") -> bool:
+    def evaluate(self, report: ConversionReport | CheckResult, comparison: "DocumentComparison | None") -> bool:
         available = comparison is not None and comparison.valid
         counts = []
         for side in (comparison.source, comparison.target) if available else ():

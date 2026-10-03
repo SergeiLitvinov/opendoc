@@ -23,6 +23,12 @@ JSON сохраняет идентификатор `opendoc.document` и вер�
 
 [Руководство](docs/guide/index.md) · [API](docs/reference/api.md) · [Навигатор по коду](docs/reference/code.md) · [План](TODO.md).
 
+[Свойства и стили](docs/guide/styles.md): строгие чтение/запись известных полей и независимый эффективный стиль с разрешением наследования.
+
+[Ресурсы и переносимость](docs/guide/resources.md): явные конфликты ID, поиск использований и одинаковых данных, замена/удаление и встраивание локальных файлов на копии.
+
+[Проверка в памяти](docs/guide/checks.md): структурированные ошибки и сравнение с явными политиками без выходного пути и обращений к внешним файлам.
+
 Документация: `uv run python -m tools.docs generate`, затем `uv run python -m tools.docs check`. Локальный сайт: `uv run python -m tools.docs serve`, адрес http://127.0.0.1:8003/. [Как устроена автоматизация](docs/development/documentation.md).
 
 [Стандарты кодирования](CODING_STANDARDS.md) проверяются lint и форматированием в CI.

@@ -36,6 +36,11 @@ nav:
       - Обход и поиск: docs/guide/traversal.md
       - Копирование и изменения: docs/guide/operations.md
       - Объединение и извлечение: docs/guide/composition.md
+      - Свойства и стили: docs/guide/styles.md
+      - Ресурсы и переносимость: docs/guide/resources.md
+      - Проверка в памяти: docs/guide/checks.md
+      - Семантические заголовки: docs/guide/headings.md
+      - Списки и нумерация: docs/guide/lists.md
       - Изменения: docs/guide/changes.md
   - Справочник:
       - API: docs/reference/api.md

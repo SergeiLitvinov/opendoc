@@ -2,8 +2,14 @@
 
 from __future__ import annotations
 
+import math
+import re
 from collections.abc import Iterator, Mapping, MutableMapping
-from typing import Any, ClassVar, TypedDict, cast
+from copy import deepcopy
+from typing import TYPE_CHECKING, Any, ClassVar, TypedDict, cast
+
+if TYPE_CHECKING:
+    from opendoc.limits import DocumentLimits
 
 PROPERTY_SCHEMA_VERSION = 1
 
@@ -52,6 +58,20 @@ class VersionedProperties(MutableMapping[str, Any]):
 
     def to_dict(self) -> dict[str, Any]:
         return dict(self._values)
+
+    def get_typed(self, key: str, *, limits: DocumentLimits | None = None) -> Any:
+        """Read a known field with strict conversion, without changing storage.
+
+        Missing fields and explicit None return None, including containers.
+        Unknown fields raise ValueError; use mapping access for extensions.
+        """
+        if not isinstance(key, str):
+            raise ValueError("property key must be a string")
+        return _typed_value(self, key, self.get(key), limits)
+
+    def set_typed(self, key: str, value: Any, *, limits: DocumentLimits | None = None) -> None:
+        """Normalize a known field before assignment; failure leaves it intact."""
+        self[key] = _typed_value(self, key, value, limits)
 
 
 class SectionProperties(VersionedProperties):
@@ -346,6 +366,84 @@ def _optional_float(value: Any) -> float | None:
 
 def _optional_int(value: Any) -> int | None:
     return int(value) if value is not None else None
+
+
+# The existing accessor declarations are the schema's single source of field
+# names/types. Only these library classes participate; consumer descriptors
+# are never executed to discover a schema.
+_PROPERTY_TYPES: dict[type[VersionedProperties], dict[str, str]] = {
+    cls: {
+        name: member.fget.__annotations__["return"].removesuffix(" | None")
+        for name, member in vars(cls).items()
+        if isinstance(member, property) and member.fget is not None
+    }
+    for cls in (
+        SectionProperties,
+        ParagraphProperties,
+        TextStyleProperties,
+        ImageProperties,
+        TableProperties,
+        TableRowProperties,
+        TableCellProperties,
+    )
+}
+
+
+def _typed_value(bag: VersionedProperties, key: str, value: Any, limits: DocumentLimits | None) -> Any:
+    from opendoc._json_validation import _json_tree
+    from opendoc.limits import _resolve_limits
+
+    if not isinstance(key, str):
+        raise ValueError("property key must be a string")
+    kind = next((_PROPERTY_TYPES[cls][key] for cls in type(bag).__mro__ if key in _PROPERTY_TYPES.get(cls, {})), None)
+    path = f"{bag.schema_name}.{key}"
+    if kind is None:
+        raise ValueError(f"{path}: unknown typed field")
+    _json_tree(value, path, _resolve_limits(limits))
+    if value is None:
+        return None
+    return _convert_property(value, kind, path)
+
+
+def _convert_property(value: Any, kind: str, path: str) -> Any:
+    if kind == "str" and isinstance(value, str):
+        return value
+    if kind == "bool":
+        if type(value) is bool:
+            return value
+        if type(value) is int and value in (0, 1):
+            return bool(value)
+        if isinstance(value, str):
+            normalized = value.strip().lower()
+            if normalized in {"0", "false", "off", "no", "1", "true", "on", "yes"}:
+                return normalized in {"1", "true", "on", "yes"}
+    if kind == "int":
+        if type(value) is int:
+            return value
+        if isinstance(value, str) and re.fullmatch(r"[+-]?[0-9]+", value.strip()):
+            try:
+                return int(value)
+            except ValueError as error:
+                raise ValueError(f"{path}: integer conversion failed") from error
+    if kind == "float" and type(value) in (int, float, str):
+        try:
+            converted = float(value)
+        except (ValueError, OverflowError) as error:
+            raise ValueError(f"{path}: expected a finite number") from error
+        if math.isfinite(converted):
+            return converted
+    if kind in {"list[int]", "list[str]"} and isinstance(value, list):
+        return [_convert_property(item, kind[5:-1], f"{path}[{index}]") for index, item in enumerate(value)]
+    if kind == "dict[str, int]" and isinstance(value, dict) and all(isinstance(key, str) for key in value):
+        return {key: _convert_property(item, "int", f"{path}[{key!r}]") for key, item in value.items()}
+    if kind == "WrapPolygon" and isinstance(value, dict):
+        if type(value.get("edited")) is not bool or not isinstance(value.get("points"), list):
+            raise ValueError(f"{path}: expected edited:boolean and points:list")
+        for index, point in enumerate(value["points"]):
+            if not isinstance(point, dict) or any(type(point.get(axis)) is not int for axis in ("x", "y")):
+                raise ValueError(f"{path}.points[{index}]: expected integer x and y")
+        return deepcopy(value)
+    raise ValueError(f"{path}: expected {kind}")
 
 
 __all__ = [

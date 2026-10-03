@@ -4,7 +4,7 @@ from collections import Counter
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from opendoc.diagnostics import ConversionReport, IssueSeverity
+from opendoc.diagnostics import CheckResult, ConversionReport, IssueSeverity
 from opendoc.object_inventory import OBJECT_INVENTORY_SCOPE
 from opendoc.text_edit_budget import evaluate_text_edit_budget
 from opendoc.text_flow import TEXT_FLOW_VERSION
@@ -34,7 +34,7 @@ class TextPreservationPolicy:
             if type(self.max_text_edits) is not int or self.max_text_edits < 0 or self.mode != "flow":
                 raise ValueError("Допуск правок — целое неотрицательное число, применимое только к последовательности текста")
 
-    def evaluate(self, report: ConversionReport, comparison: "DocumentComparison | None") -> bool:
+    def evaluate(self, report: ConversionReport | CheckResult, comparison: "DocumentComparison | None") -> bool:
         if self.mode == "flow":
             return self._evaluate_flow(report, comparison)
         available = comparison is not None and comparison.valid
@@ -76,7 +76,7 @@ class TextPreservationPolicy:
             report.add(IssueSeverity.ERROR, "text-quality", message)
         return accepted
 
-    def _evaluate_flow(self, report: ConversionReport, comparison: "DocumentComparison | None") -> bool:
+    def _evaluate_flow(self, report: ConversionReport | CheckResult, comparison: "DocumentComparison | None") -> bool:
         source = comparison.source.metadata.get("text_flow", {}) if comparison is not None else {}
         target = comparison.target.metadata.get("text_flow", {}) if comparison is not None else {}
         available = (

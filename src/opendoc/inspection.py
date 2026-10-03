@@ -10,6 +10,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, cast
 
+from opendoc._validation import _model_issues
 from opendoc.diagnostics import ConversionIssue, IssueSeverity
 from opendoc.document_model import (
     Box,
@@ -27,6 +28,7 @@ from opendoc.document_model import (
 )
 from opendoc.emphasis_quality import EmphasisInventory
 from opendoc.limits import DocumentLimits, _resolve_limits
+from opendoc.lists import _list_inventory_valid, iter_list_numbers
 from opendoc.object_inventory import OBJECT_INVENTORY_SCOPE, _inventory_parent, _object_entry
 from opendoc.object_matching import match_objects
 from opendoc.text_flow import TextFlowFingerprint
@@ -220,14 +222,47 @@ def _compare_objects(
             "lost": [],
             "added": [],
             "retention_ratio": None,
+            "headings_available": False,
+            "changed_headings": None,
+            "lists_available": False,
+            "changed_list_items": None,
+            "list_numbers_available": False,
+            "changed_list_numbers": None,
             "recommendations": [],
         }, []
     matches, lost, added = match_objects(source_objects, target_objects)
+    lists_available = all(
+        "list_item" in item and _list_inventory_valid(item["list_item"])
+        for item in (*source_objects, *target_objects)
+        if item.get("type") == "paragraph"
+    )
+    list_numbers_available = lists_available and all(
+        "list_number" in item
+        and (
+            type(item["list_number"]) is int and item["list_number"] > 0
+            if item["list_item"] is not None and item["list_item"]["kind"] == "ordered"
+            else item["list_number"] is None
+        )
+        for item in (*source_objects, *target_objects)
+        if item.get("type") == "paragraph"
+    )
+    headings_available = all(
+        "heading" in item and (item["heading"] is None or type(item["heading"]) is int and 1 <= item["heading"] <= 9)
+        for item in (*source_objects, *target_objects)
+        if item.get("type") == "paragraph"
+    )
     retained: list[dict[str, Any]] = []
     changed: list[dict[str, Any]] = []
     for match in matches:
         before, after = match["source"], match["target"]
         changes = [name for name in ("content_hash", "geometry", "style_id", "location") if before.get(name) != after.get(name)]
+        if headings_available and before.get("type") == "paragraph" and before["heading"] != after["heading"]:
+            changes.append("heading")
+        if lists_available and before.get("type") == "paragraph":
+            if before["list_item"] != after["list_item"]:
+                changes.append("list_item")
+            if list_numbers_available and before["list_number"] != after["list_number"]:
+                changes.append("list_number")
         entry = {**match, "identity": f"occurrence:{match['source_index']}", "type": before.get("type")}
         if before.get("text_hash") is not None and after.get("text_hash") is not None:
             if before["text_hash"] != after["text_hash"]:
@@ -270,7 +305,43 @@ def _compare_objects(
         )
         for item in lost
     ]
+    if headings_available:
+        for item in changed:
+            if "heading" in item["changes"] and item["source"].get("heading") is not None:
+                removed = item["target"].get("heading") is None
+                issues.append(
+                    ConversionIssue(
+                        IssueSeverity.LOSS if removed else IssueSeverity.WARNING,
+                        "heading-loss" if removed else "heading-change",
+                        "Heading role removed" if removed else "Heading level changed",
+                        item["source"]["location"],
+                    )
+                )
+    if lists_available:
+        for item in changed:
+            if "list_number" in item["changes"] and "list_item" not in item["changes"]:
+                issues.append(
+                    ConversionIssue(
+                        IssueSeverity.WARNING, "list-number-change", "Derived list number changed", item["source"]["location"]
+                    )
+                )
+            if "list_item" in item["changes"] and item["source"].get("list_item") is not None:
+                removed = item["target"].get("list_item") is None
+                issues.append(
+                    ConversionIssue(
+                        IssueSeverity.LOSS if removed else IssueSeverity.WARNING,
+                        "list-loss" if removed else "list-change",
+                        "List membership removed" if removed else "List membership changed",
+                        item["source"]["location"],
+                    )
+                )
     return {
+        "lists_available": lists_available,
+        "changed_list_items": sum("list_item" in item["changes"] for item in changed) if lists_available else None,
+        "list_numbers_available": list_numbers_available,
+        "changed_list_numbers": sum("list_number" in item["changes"] for item in changed) if list_numbers_available else None,
+        "headings_available": headings_available,
+        "changed_headings": sum("heading" in item["changes"] for item in changed) if headings_available else None,
         "source_count": len(source_objects),
         "target_count": len(target_objects),
         "available": True,
@@ -437,6 +508,7 @@ def _compare_resources(
     *,
     available: bool = True,
 ) -> tuple[dict[str, Any], list[ConversionIssue]]:
+    inventories_available = available
     available = available and all(item.get("sha256") for item in (*source_resources, *target_resources))
     source_hashes = Counter(item["sha256"] for item in source_resources if item.get("sha256"))
     target_hashes = Counter(item["sha256"] for item in target_resources if item.get("sha256"))
@@ -473,12 +545,14 @@ def _compare_resources(
         and target_by_id[resource_id].get("sha256")
         and source_by_id[resource_id]["sha256"] != target_by_id[resource_id]["sha256"]
     ]
-    source_bytes = sum(int(item.get("size_bytes") or 0) for item in source_resources)
-    target_bytes = sum(int(item.get("size_bytes") or 0) for item in target_resources)
+    source_bytes = _resource_bytes(source_resources) if inventories_available else None
+    target_bytes = _resource_bytes(target_resources) if inventories_available else None
     matched_bytes = sum(
         int(next(item.get("size_bytes") or 0 for item in source_resources if item.get("sha256") == digest)) * count
         for digest, count in matched_hashes.items()
     )
+    if not inventories_available:
+        matched_bytes = None
     source_types = Counter(str(item.get("media_type") or "") for item in source_resources)
     target_types = Counter(str(item.get("media_type") or "") for item in target_resources)
     matched_types = sum((source_types & target_types).values())
@@ -491,7 +565,9 @@ def _compare_resources(
         "source_bytes": source_bytes,
         "target_bytes": target_bytes,
         "exact_bytes_retained": matched_bytes,
-        "exact_byte_retention_ratio": round(_ratio(matched_bytes, source_bytes), 4) if available else None,
+        "exact_byte_retention_ratio": round(_ratio(matched_bytes, source_bytes), 4)
+        if available and source_bytes is not None
+        else None,
         "media_type_retention_ratio": round(_ratio(matched_types, len(source_resources)), 4) if available else None,
         "lost_resources": lost_resources,
         "added_resources": added_resources,
@@ -556,12 +632,18 @@ def _compare_fonts(
     return comparison, issues
 
 
+def _resource_bytes(resources: list[dict[str, Any]]) -> int | None:
+    if any(type(item.get("size_bytes")) is not int or item["size_bytes"] < 0 for item in resources):
+        return None
+    return sum(item["size_bytes"] for item in resources)
+
+
 def _resource_identity(item: dict[str, Any]) -> dict[str, Any]:
     return {
         "id": item.get("id"),
         "kind": item.get("kind"),
         "media_type": item.get("media_type"),
-        "size_bytes": int(item.get("size_bytes") or 0),
+        "size_bytes": item.get("size_bytes"),
         "sha256": item.get("sha256"),
     }
 
@@ -625,17 +707,19 @@ def inspect_document_model(
     source_path: str | Path | None = None,
     source_format: str | None = None,
     limits: DocumentLimits | None = None,
+    check_external_sources: bool = True,
 ) -> DocumentInspection:
     """Собрать структурные метрики и диагностировать модель."""
 
     path = Path(source_path) if source_path is not None else None
+    if type(check_external_sources) is not bool:
+        raise ValueError("check_external_sources must be a boolean")
     model_format = document.source_format if isinstance(document.source_format, str) else None
     report = DocumentInspection(path, source_format or model_format or "document-model")
-    errors = document.validate(limits=limits)
+    errors = _model_issues(document, limits)
     if errors:
         for error in errors:
-            location, separator, message = error.partition(": ")
-            report.add(IssueSeverity.ERROR, "model-validation", message if separator else error, location if separator else "")
+            report.add(IssueSeverity.ERROR, "model-validation", error.message, error.location)
         return report
     report.metadata = dict(document.metadata)
     report.metadata["object_inventory_scope"] = OBJECT_INVENTORY_SCOPE
@@ -703,8 +787,14 @@ def inspect_document_model(
             _inspect_formula(node, location, section.page, report, counters, formula_formats)
         elif isinstance(node, Image):
             _inspect_image(node, location, section.page, report, counters)
+    numbers = {number.location.path: number.number for number in iter_list_numbers(document, limits=limits)}
+    counters["semantic_list_items"] = len(numbers)
+    counters["ordered_list_items"] = sum(number is not None for number in numbers.values())
+    for entry in report.objects:
+        if entry["type"] == "paragraph":
+            entry["list_number"] = numbers.get(entry["location"])
     for resource in document.resources.values():
-        report.resources.append(_inspect_resource(resource, report))
+        report.resources.append(_inspect_resource(resource, report, check_external_sources=check_external_sources))
     if document.package is not None:
         report.package_parts = [
             {
@@ -801,16 +891,18 @@ def _inspect_box(box: Box | None, page: PageSettings, report: DocumentInspection
         report.add(IssueSeverity.WARNING, "element-geometry", "element extends beyond the page", location)
 
 
-def _inspect_resource(resource: Resource, report: DocumentInspection) -> dict[str, Any]:
+def _inspect_resource(resource: Resource, report: DocumentInspection, *, check_external_sources: bool = True) -> dict[str, Any]:
     raw = resource.data
     source_exists = None
     if raw is None and resource.source is not None:
-        source = Path(resource.source)
-        source_exists = source.is_file()
-        size = source.stat().st_size if source_exists else 0
+        size = None
         digest = None
-        if not source_exists:
-            report.add(IssueSeverity.ERROR, "resource", f"resource source does not exist: {source}", resource.id)
+        if check_external_sources:
+            source = Path(resource.source)
+            source_exists = source.is_file()
+            size = source.stat().st_size if source_exists else 0
+            if not source_exists:
+                report.add(IssueSeverity.ERROR, "resource", f"resource source does not exist: {source}", resource.id)
     else:
         size = len(raw or b"")
         digest = hashlib.sha256(raw).hexdigest() if raw is not None else None

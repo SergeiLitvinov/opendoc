@@ -1062,6 +1062,49 @@
           "wrap_text": {
             "property": true,
             "writable": false
+          },
+          "get_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
+          },
+          "set_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "value",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
           }
         }
       },
@@ -1539,6 +1582,49 @@
                 "default": null
               }
             ]
+          },
+          "get_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
+          },
+          "set_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "value",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
           }
         }
       },
@@ -1965,6 +2051,49 @@
                 "default": null
               }
             ]
+          },
+          "get_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
+          },
+          "set_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "value",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
           }
         }
       },
@@ -2199,6 +2328,49 @@
           "width_twips": {
             "property": true,
             "writable": false
+          },
+          "get_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
+          },
+          "set_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "value",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
           }
         }
       },
@@ -2359,6 +2531,49 @@
                 "name": "self",
                 "kind": "POSITIONAL_OR_KEYWORD",
                 "default": null
+              }
+            ]
+          },
+          "get_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
+          },
+          "set_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "value",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
               }
             ]
           }
@@ -2528,6 +2743,49 @@
                 "name": "self",
                 "kind": "POSITIONAL_OR_KEYWORD",
                 "default": null
+              }
+            ]
+          },
+          "get_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
+          },
+          "set_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "value",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
               }
             ]
           }
@@ -2878,6 +3136,49 @@
                 "default": null
               }
             ]
+          },
+          "get_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
+          },
+          "set_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "value",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
           }
         }
       },
@@ -3007,6 +3308,16 @@
             "name": "source_format",
             "kind": "KEYWORD_ONLY",
             "default": "None"
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          },
+          {
+            "name": "check_external_sources",
+            "kind": "KEYWORD_ONLY",
+            "default": "True"
           }
         ]
       },
@@ -3485,6 +3796,400 @@
             "default": "None"
           }
         ]
+      },
+      "effective_text_style": {
+        "parameters": [
+          {
+            "name": "document",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "paragraph",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "run",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "None"
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "resolve_style": {
+        "parameters": [
+          {
+            "name": "document",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "style",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "None"
+          },
+          {
+            "name": "overrides",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "ResourceConflictPolicy": {
+        "constant": "typing.Literal['error', 'rename', 'replace']"
+      },
+      "add_resource": {
+        "parameters": [
+          {
+            "name": "document",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "resource",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "conflicts",
+            "kind": "KEYWORD_ONLY",
+            "default": "'error'"
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "embed_resources": {
+        "parameters": [
+          {
+            "name": "document",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "base_dir",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          },
+          {
+            "name": "resource_ids",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "find_duplicate_resources": {
+        "parameters": [
+          {
+            "name": "document",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "find_resource_uses": {
+        "parameters": [
+          {
+            "name": "document",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "resource_id",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "remove_resource": {
+        "parameters": [
+          {
+            "name": "document",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "resource_id",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "replacement_id",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "replace_resource": {
+        "parameters": [
+          {
+            "name": "document",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "resource_id",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "resource",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "CheckPolicy": {
+        "constant": "opendoc.quality_policy.QualityPolicy | opendoc.text_quality_policy.TextPreservationPolicy | opendoc.object_quality_policy.ObjectLossPolicy | opendoc.formula_quality_policy.FormulaLossPolicy | opendoc.emphasis_quality.EmphasisLossPolicy"
+      },
+      "check_document": {
+        "parameters": [
+          {
+            "name": "document",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "compare_documents": {
+        "parameters": [
+          {
+            "name": "source",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "target",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "policies",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "CheckResult": {
+        "parameters": [
+          {
+            "name": "issues",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "<factory>"
+          },
+          {
+            "name": "metrics",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "<factory>"
+          }
+        ],
+        "members": {
+          "add": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "severity",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "feature",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "message",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "location",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": "''"
+              }
+            ]
+          },
+          "lossless": {
+            "property": true,
+            "writable": false
+          },
+          "success": {
+            "property": true,
+            "writable": false
+          },
+          "to_dict": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
+          }
+        },
+        "factories": {
+          "issues": "[]",
+          "metrics": "{}"
+        }
+      },
+      "DiagnosticIssue": {
+        "parameters": [
+          {
+            "name": "code",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "severity",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "message",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "location",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "''"
+          },
+          {
+            "name": "measurement",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "None"
+          },
+          {
+            "name": "reason",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "None"
+          }
+        ],
+        "members": {
+          "feature": {
+            "property": true,
+            "writable": false
+          }
+        },
+        "factories": {}
+      },
+      "HEADING_PROPERTY": {
+        "constant": "opendoc.heading"
+      },
+      "Heading": {
+        "parameters": [
+          {
+            "name": "level",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          }
+        ],
+        "members": {},
+        "factories": {}
+      },
+      "get_heading": {
+        "parameters": [
+          {
+            "name": "paragraph",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "iter_headings": {
+        "parameters": [
+          {
+            "name": "root",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "set_heading": {
+        "parameters": [
+          {
+            "name": "paragraph",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "heading",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
       }
     },
     "opendoc.color": {
@@ -3809,6 +4514,118 @@
           "LOSS": "loss",
           "ERROR": "error"
         }
+      },
+      "CheckResult": {
+        "parameters": [
+          {
+            "name": "issues",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "<factory>"
+          },
+          {
+            "name": "metrics",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "<factory>"
+          }
+        ],
+        "members": {
+          "add": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "severity",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "feature",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "message",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "location",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": "''"
+              }
+            ]
+          },
+          "lossless": {
+            "property": true,
+            "writable": false
+          },
+          "success": {
+            "property": true,
+            "writable": false
+          },
+          "to_dict": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
+          }
+        },
+        "factories": {
+          "issues": "[]",
+          "metrics": "{}"
+        }
+      },
+      "DiagnosticIssue": {
+        "parameters": [
+          {
+            "name": "code",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "severity",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "message",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "location",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "''"
+          },
+          {
+            "name": "measurement",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "None"
+          },
+          {
+            "name": "reason",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "None"
+          }
+        ],
+        "members": {
+          "feature": {
+            "property": true,
+            "writable": false
+          }
+        },
+        "factories": {}
       }
     },
     "opendoc.document_codec": {
@@ -4365,6 +5182,49 @@
           "wrap_text": {
             "property": true,
             "writable": false
+          },
+          "get_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
+          },
+          "set_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "value",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
           }
         }
       },
@@ -4803,6 +5663,49 @@
                 "default": null
               }
             ]
+          },
+          "get_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
+          },
+          "set_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "value",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
           }
         }
       },
@@ -5203,6 +6106,49 @@
                 "default": null
               }
             ]
+          },
+          "get_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
+          },
+          "set_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "value",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
           }
         }
       },
@@ -5437,6 +6383,49 @@
           "width_twips": {
             "property": true,
             "writable": false
+          },
+          "get_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
+          },
+          "set_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "value",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
           }
         }
       },
@@ -5597,6 +6586,49 @@
                 "name": "self",
                 "kind": "POSITIONAL_OR_KEYWORD",
                 "default": null
+              }
+            ]
+          },
+          "get_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
+          },
+          "set_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "value",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
               }
             ]
           }
@@ -5766,6 +6798,49 @@
                 "name": "self",
                 "kind": "POSITIONAL_OR_KEYWORD",
                 "default": null
+              }
+            ]
+          },
+          "get_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
+          },
+          "set_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "value",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
               }
             ]
           }
@@ -6078,6 +7153,49 @@
                 "name": "self",
                 "kind": "POSITIONAL_OR_KEYWORD",
                 "default": null
+              }
+            ]
+          },
+          "get_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
+          },
+          "set_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "value",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
               }
             ]
           }
@@ -6478,6 +7596,16 @@
             "name": "source_format",
             "kind": "KEYWORD_ONLY",
             "default": "None"
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          },
+          {
+            "name": "check_external_sources",
+            "kind": "KEYWORD_ONLY",
+            "default": "True"
           }
         ]
       }
@@ -6814,6 +7942,49 @@
           "wrap_text": {
             "property": true,
             "writable": false
+          },
+          "get_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
+          },
+          "set_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "value",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
           }
         }
       },
@@ -7006,6 +8177,49 @@
                 "name": "self",
                 "kind": "POSITIONAL_OR_KEYWORD",
                 "default": null
+              }
+            ]
+          },
+          "get_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
+          },
+          "set_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "value",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
               }
             ]
           }
@@ -7202,6 +8416,49 @@
                 "default": null
               }
             ]
+          },
+          "get_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
+          },
+          "set_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "value",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
           }
         }
       },
@@ -7368,6 +8625,49 @@
           "width_twips": {
             "property": true,
             "writable": false
+          },
+          "get_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
+          },
+          "set_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "value",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
           }
         }
       },
@@ -7530,6 +8830,49 @@
                 "default": null
               }
             ]
+          },
+          "get_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
+          },
+          "set_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "value",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
           }
         }
       },
@@ -7678,6 +9021,49 @@
                 "name": "self",
                 "kind": "POSITIONAL_OR_KEYWORD",
                 "default": null
+              }
+            ]
+          },
+          "get_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
+          },
+          "set_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "value",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
               }
             ]
           }
@@ -7890,6 +9276,49 @@
                 "default": null
               }
             ]
+          },
+          "get_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
+          },
+          "set_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "value",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
           }
         }
       },
@@ -8034,6 +9463,49 @@
                 "name": "self",
                 "kind": "POSITIONAL_OR_KEYWORD",
                 "default": null
+              }
+            ]
+          },
+          "get_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
+              }
+            ]
+          },
+          "set_typed": {
+            "parameters": [
+              {
+                "name": "self",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "key",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "value",
+                "kind": "POSITIONAL_OR_KEYWORD",
+                "default": null
+              },
+              {
+                "name": "limits",
+                "kind": "KEYWORD_ONLY",
+                "default": "None"
               }
             ]
           }
@@ -8908,6 +10380,296 @@
           }
         ]
       }
+    },
+    "opendoc.styles": {
+      "effective_text_style": {
+        "parameters": [
+          {
+            "name": "document",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "paragraph",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "run",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "None"
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "resolve_style": {
+        "parameters": [
+          {
+            "name": "document",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "style",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": "None"
+          },
+          {
+            "name": "overrides",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      }
+    },
+    "opendoc.resources": {
+      "ResourceConflictPolicy": {
+        "constant": "typing.Literal['error', 'rename', 'replace']"
+      },
+      "add_resource": {
+        "parameters": [
+          {
+            "name": "document",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "resource",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "conflicts",
+            "kind": "KEYWORD_ONLY",
+            "default": "'error'"
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "embed_resources": {
+        "parameters": [
+          {
+            "name": "document",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "base_dir",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          },
+          {
+            "name": "resource_ids",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "find_duplicate_resources": {
+        "parameters": [
+          {
+            "name": "document",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "find_resource_uses": {
+        "parameters": [
+          {
+            "name": "document",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "resource_id",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "remove_resource": {
+        "parameters": [
+          {
+            "name": "document",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "resource_id",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "replacement_id",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "replace_resource": {
+        "parameters": [
+          {
+            "name": "document",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "resource_id",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "resource",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      }
+    },
+    "opendoc.checks": {
+      "CheckPolicy": {
+        "constant": "opendoc.quality_policy.QualityPolicy | opendoc.text_quality_policy.TextPreservationPolicy | opendoc.object_quality_policy.ObjectLossPolicy | opendoc.formula_quality_policy.FormulaLossPolicy | opendoc.emphasis_quality.EmphasisLossPolicy"
+      },
+      "check_document": {
+        "parameters": [
+          {
+            "name": "document",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "compare_documents": {
+        "parameters": [
+          {
+            "name": "source",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "target",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "policies",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      }
+    },
+    "opendoc.semantics": {
+      "HEADING_PROPERTY": {
+        "constant": "opendoc.heading"
+      },
+      "Heading": {
+        "parameters": [
+          {
+            "name": "level",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          }
+        ],
+        "members": {},
+        "factories": {}
+      },
+      "get_heading": {
+        "parameters": [
+          {
+            "name": "paragraph",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "iter_headings": {
+        "parameters": [
+          {
+            "name": "root",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      },
+      "set_heading": {
+        "parameters": [
+          {
+            "name": "paragraph",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "heading",
+            "kind": "POSITIONAL_OR_KEYWORD",
+            "default": null
+          },
+          {
+            "name": "limits",
+            "kind": "KEYWORD_ONLY",
+            "default": "None"
+          }
+        ]
+      }
     }
   },
   "root_identities": {
@@ -8989,6 +10751,25 @@
     "MetadataConflictPolicy": "opendoc.composition",
     "PackagePolicy": "opendoc.composition",
     "extract_document": "opendoc.composition",
-    "merge_documents": "opendoc.composition"
+    "merge_documents": "opendoc.composition",
+    "effective_text_style": "opendoc.styles",
+    "resolve_style": "opendoc.styles",
+    "ResourceConflictPolicy": "opendoc.resources",
+    "add_resource": "opendoc.resources",
+    "embed_resources": "opendoc.resources",
+    "find_duplicate_resources": "opendoc.resources",
+    "find_resource_uses": "opendoc.resources",
+    "remove_resource": "opendoc.resources",
+    "replace_resource": "opendoc.resources",
+    "CheckPolicy": "opendoc.checks",
+    "check_document": "opendoc.checks",
+    "compare_documents": "opendoc.checks",
+    "CheckResult": "opendoc.diagnostics",
+    "DiagnosticIssue": "opendoc.diagnostics",
+    "HEADING_PROPERTY": "opendoc.semantics",
+    "Heading": "opendoc.semantics",
+    "get_heading": "opendoc.semantics",
+    "iter_headings": "opendoc.semantics",
+    "set_heading": "opendoc.semantics"
   }
 }
