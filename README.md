@@ -1,5 +1,9 @@
 # OpenDoc
 
+[![CI](https://github.com/SergeiLitvinov/opendoc/actions/workflows/ci.yml/badge.svg)](https://github.com/SergeiLitvinov/opendoc/actions/workflows/ci.yml)
+
+[Сайт документации](https://SergeiLitvinov.github.io/opendoc/) · [Выпуски и пакеты](https://github.com/SergeiLitvinov/opendoc/releases) · [MIT](docs/LICENSE)
+
 Независимая Python-библиотека структур документов: пакет `opendoc`, импорт `opendoc`, Python 3.11+.
 
 Модель, свойства, геометрия, цвета, ресурсы, формулы, обход и изменения, объединение/извлечение с зависимостями, JSON-сериализация, валидация и сравнение структуры работают самостоятельно. Обязательных внешних зависимостей нет. Дополнение `math` предоставляет `lxml` для сравнения поддержанного MathML/Office Math. Без него непроверяемая формула диагностируется, строгий допуск не считается соблюдённым.
@@ -13,15 +17,15 @@ restored = load_document("document.json")
 assert restored.validate() == []
 ```
 
-Сборка из каталога OpenDoc: `uv build --out-dir dist`. Полученный wheel можно установить в другом проекте через `uv pip install путь/к/opendoc-0.1.0-py3-none-any.whl`. Публикация в реестр пока не выполнялась.
+Установка: скачайте wheel из [GitHub Releases](https://github.com/SergeiLitvinov/opendoc/releases) и выполните `uv pip install путь/к/opendoc-<версия>-py3-none-any.whl`. Сборка из исходников: `uv build --out-dir .opendoc/release-dist`. Для XML-формул добавьте extra: `uv pip install "./opendoc-<версия>-py3-none-any.whl[math]"`. Публикация на PyPI пока не выполнялась.
 
 JSON сохраняет идентификатор `opendoc.document` и версию 2, читает версию 1. Версии пакета и JSON независимы. Дополнительные ключи `properties` и `metadata` сохраняются; неизвестные версии и типы блоков отклоняются. Это не обещание чтения произвольной будущей схемы без миграции.
 
 Обработчики прикладных форматов, миграции прежних форматов приложений, шаблоны, задачи, CLI и web принадлежат потребителям. Библиотека работает без редактора; его интерфейс, сеансы и история отмены относятся к отдельному приложению. Чтение JSON сохраняет ресурсы без автоматического преобразования прикладных ролей в пакет OOXML.
 
-Разработка: `uv sync --all-extras`, `uv run ruff check`, `uv run ruff format --check`, `uv run pytest`.
+Разработка: [контракт участника](docs/development/AGENTS.md), затем `uv sync --all-extras`, `uv run ruff check`, `uv run ruff format --check`, `uv run pytest`.
 
-[Руководство](docs/guide/index.md) · [API](docs/reference/api.md) · [Навигатор по коду](docs/reference/code.md) · [План](TODO.md).
+[Руководство](docs/guide/index.md) · [API](docs/reference/api.md) · [Навигатор по коду](docs/reference/code.md) · [Возможности](docs/development/completed.md).
 
 [Свойства и стили](docs/guide/styles.md): строгие чтение/запись известных полей и независимый эффективный стиль с разрешением наследования.
 
@@ -35,4 +39,8 @@ JSON сохраняет идентификатор `opendoc.document` и вер�
 
 Документация: `uv run python -m tools.docs generate`, затем `uv run python -m tools.docs check`. Локальный сайт: `uv run python -m tools.docs serve`, адрес http://127.0.0.1:8003/. [Как устроена автоматизация](docs/development/documentation.md).
 
-[Стандарты кодирования](CODING_STANDARDS.md) проверяются lint и форматированием в CI.
+[Стандарты кодирования](docs/development/CODING_STANDARDS.md) проверяются lint и форматированием в CI.
+
+Автоматический выпуск: **Actions → Release → Run workflow**. Выберите `current` для первого выпуска, `patch`, `minor`, `major` или точную версию. Проверки, изменение версии, тег, wheel, исходный архив, SHA-256 и описание выпуска выполняются автоматически. Документация обновляется в Pages после успешных проверок `main`. [Процесс выпуска](docs/guide/release.md).
+
+Вся документация находится в `docs/`; реализованные вехи описаны в [завершённых возможностях](docs/development/completed.md). Временные файлы помещаются в `.opendoc/`. Очистка старых сборок и тестовых окружений: `uv run python -m tools.release clean`.

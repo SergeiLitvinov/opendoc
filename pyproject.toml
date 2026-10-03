@@ -9,8 +9,14 @@ description = "Independent document structures, serialization and structural com
 readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
-license-files = ["LICENSE"]
+license-files = ["docs/LICENSE"]
 dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/SergeiLitvinov/opendoc"
+Documentation = "https://SergeiLitvinov.github.io/opendoc/"
+Repository = "https://github.com/SergeiLitvinov/opendoc"
+Issues = "https://github.com/SergeiLitvinov/opendoc/issues"
 
 [project.optional-dependencies]
 math = ["lxml>=5.0.0"]
@@ -23,6 +29,7 @@ dev = [
 docs = ["mkdocs>=1.6,<2"]
 
 [tool.ruff]
+cache-dir = ".opendoc/ruff-cache"
 line-length = 130
 target-version = "py311"
 exclude = ["build", ".venv", ".opendoc"]
@@ -37,6 +44,8 @@ ignore = ["ANN401"]
 "examples/**" = ["ANN"]
 
 [tool.pytest.ini_options]
+addopts = "--basetemp=.opendoc/pytest-temp"
+cache_dir = ".opendoc/pytest-cache"
 testpaths = ["tests"]
 pythonpath = ["."]
 
@@ -55,3 +64,6 @@ version = {attr = "opendoc.__version__"}
 
 [tool.setuptools.package-data]
 opendoc = ["py.typed"]
+
+[tool.uv]
+cache-dir = ".opendoc/uv-cache"

@@ -32,7 +32,7 @@
   <nav class="docs-top-nav" aria-label="Основные разделы">
     <a href="{{ doc_url('docs/reference/user-guide.md') }}">Руководство</a>
     <a href="{{ doc_url('docs/reference/code.md') }}">Код</a>
-    <a href="{{ doc_url('TODO.md') }}">План</a>
+    <a href="{{ doc_url('docs/development/completed.md') }}">Возможности</a>
   </nav>
   <button class="docs-theme-button" type="button" aria-label="Включить тёмную тему" title="Переключить тему">◐</button>
   <button class="docs-menu-button" type="button" aria-expanded="false" aria-controls="docs-navigation">Разделы</button>
@@ -55,7 +55,7 @@
       <a class="docs-card" href="{{ doc_url('docs/guide/index.md') }}"><span class="card-number">02 / ВОЗМОЖНОСТИ</span><h2>Понять границы</h2><p>Контракт модели, совместимость JSON и границы измерений.</p><span class="card-link">Изучить контракт →</span></a>
       <a class="docs-card" href="{{ doc_url('docs/reference/code.md') }}"><span class="card-number">03 / РАЗРАБОТКА</span><h2>Найти реализацию</h2><p>Модули, определения, импорты и тесты, собранные из исходников.</p><span class="card-link">Открыть навигатор →</span></a>
     </section>
-    <div class="docs-home-note"><strong>Документация рядом с кодом.</strong> Справочники обновляются автоматически. Статус будущих возможностей находится в <a href="{{ doc_url('TODO.md') }}">плане по вехам</a>.</div>
+    <div class="docs-home-note"><strong>Самодостаточная библиотека.</strong> Руководство описывает законченный вариант OpenDoc, а <a href="{{ doc_url('docs/development/completed.md') }}">завершённые возможности</a> связывают его функции с проверками.</div>
     <details class="docs-overview"><summary>О проекте, установке и примерах</summary><article class="docs-prose">{{ page.content }}</article></details>
     {% else %}
     <article class="docs-prose">{{ page.content if page else '<h1>Страница не найдена</h1>' }}</article>
@@ -64,7 +64,7 @@
       {% if page.next_page %}<a href="{{ page.next_page.url|url }}"><small>Далее →</small>{{ page.next_page.title }}</a>{% endif %}
     </nav>{% endif %}
     {% endif %}
-    <footer class="docs-footer">OpenDoc · Руководство и справочник проекта · Собрано локально с MkDocs</footer>
+    <footer class="docs-footer">OpenDoc · <a href="{{ config.repo_url }}">GitHub</a> · Руководство и справочник проекта</footer>
   </main>
   {% if page and not page.is_homepage %}<aside class="docs-outline" aria-label="На странице"><strong>На странице</strong>{{ outline(page.toc) }}<a class="docs-back-top" href="#main-content">Наверх ↑</a></aside>{% endif %}
 </div>

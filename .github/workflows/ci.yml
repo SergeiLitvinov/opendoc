@@ -1,46 +1,26 @@
-name: OpenDoc checks
-on: [push, pull_request]
+name: OpenDoc CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  library:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ["3.11", "3.12", "3.13"]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v5
-      - uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-      - run: uv sync --all-extras
-      - run: uv run ruff check
-      - run: uv run ruff format --check
-      - run: uv run pytest
-      - run: uv run mypy
-      - run: uv run python -m tools.docs check
-      - run: uv build --out-dir dist
-      - run: |
-          uv build --wheel dist/*.tar.gz --out-dir .opendoc/sdist-dist
-          uv run python -m tools.check_distribution --dist dist --rebuilt .opendoc/sdist-dist
-          uv venv --python "${{ matrix.python-version }}" .opendoc/sdist-env
-          uv pip install --python .opendoc/sdist-env/bin/python --no-deps --no-index .opendoc/sdist-dist/*.whl
-          uv run python -m tools.check_wheel --python .opendoc/sdist-env/bin/python
-          uv run python -m tools.check_types --python .opendoc/sdist-env/bin/python
-      - run: |
-          uv venv --python "${{ matrix.python-version }}" .opendoc/wheel-env
-          uv pip install --python .opendoc/wheel-env/bin/python --no-deps --no-index dist/*.whl
-          uv run python -m tools.check_wheel --python .opendoc/wheel-env/bin/python
-          uv run python -m tools.check_types --python .opendoc/wheel-env/bin/python
-          .opendoc/wheel-env/bin/python -I examples/optional_math.py
-          uv venv --python "${{ matrix.python-version }}" .opendoc/math-env
-          uv pip install --python .opendoc/math-env/bin/python --no-deps --no-index dist/*.whl
-          uv export --locked --extra math --no-dev --no-emit-project --no-editable --output-file .opendoc/math-requirements.txt > /dev/null
-          uv pip install --python .opendoc/math-env/bin/python --require-hashes -r .opendoc/math-requirements.txt
-          uv run python -m tools.check_math --python .opendoc/math-env/bin/python --with-math
-          .opendoc/math-env/bin/python -I examples/optional_math.py
-      - uses: actions/upload-artifact@v4
-        with:
-          name: opendoc-docs-${{ matrix.python-version }}
-          path: .opendoc/docs-site
-          include-hidden-files: true
+  checks:
+    uses: ./.github/workflows/checks.yml
+  pages:
+    needs: checks
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/pages.yml

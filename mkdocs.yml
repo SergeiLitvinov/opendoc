@@ -1,4 +1,6 @@
 site_name: OpenDoc — документация
+site_url: https://SergeiLitvinov.github.io/opendoc/
+repo_url: https://github.com/SergeiLitvinov/opendoc
 site_description: Структуры документов, руководство и навигатор по коду
 docs_dir: .opendoc/docs-source
 site_dir: .opendoc/docs-site
@@ -18,7 +20,7 @@ markdown_extensions:
   - toc:
       slugify: !!python/name:markdown.extensions.toc.slugify_unicode
 hooks: [tools/docs_hook.py]
-watch: [src, docs, examples, README.md, TODO.md, AGENTS.md]
+watch: [src, docs, examples, README.md]
 validation:
   links:
     anchors: warn
@@ -55,7 +57,7 @@ nav:
       - Навигатор по коду: docs/reference/code.md
   - Разработка:
       - Документация и проверки: docs/development/documentation.md
-      - Контракт разработки: AGENTS.md
-      - Стандарты кодирования: CODING_STANDARDS.md
+      - Контракт разработки: docs/development/AGENTS.md
+      - Стандарты кодирования: docs/development/CODING_STANDARDS.md
       - Проверка стандартов: docs/development/code-audit.md
-  - Развитие библиотеки: TODO.md
+      - Завершённые возможности: docs/development/completed.md

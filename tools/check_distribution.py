@@ -11,11 +11,7 @@ from pathlib import Path, PurePosixPath
 ROOT = Path(__file__).resolve().parent.parent
 FORBIDDEN = {".git", ".venv", ".opendoc", ".pytest_cache", ".ruff_cache", ".mypy_cache", "__pycache__", "build", "dist"}
 ROOT_FILES = {
-    "LICENSE",
     "README.md",
-    "TODO.md",
-    "AGENTS.md",
-    "CODING_STANDARDS.md",
     "mkdocs.yml",
     "uv.lock",
     "pyproject.toml",
@@ -49,7 +45,7 @@ def check_metadata(payload, version):
     expected = {"Name": "opendoc", "Version": version, "Requires-Python": ">=3.11", "License-Expression": "MIT"}
     if any(data[key] != value for key, value in expected.items()):
         raise ValueError("Incorrect release metadata")
-    if data.get_all("License-File") != ["LICENSE"] or set(data.get_all("Provides-Extra", [])) != {"math", "dev", "docs"}:
+    if data.get_all("License-File") != ["docs/LICENSE"] or set(data.get_all("Provides-Extra", [])) != {"math", "dev", "docs"}:
         raise ValueError("Incorrect license or extras metadata")
     if any("extra ==" not in item for item in data.get_all("Requires-Dist", [])):
         raise ValueError("Unexpected core dependency")
@@ -65,13 +61,13 @@ def read_wheel(path, version, license_bytes):
             parts = safe_path(name)
             package = parts[0] == "opendoc" and (name.endswith(".py") or name == "opendoc/py.typed")
             metadata = name in {
-                f"{info}/{entry}" for entry in ("METADATA", "WHEEL", "RECORD", "top_level.txt", "licenses/LICENSE")
+                f"{info}/{entry}" for entry in ("METADATA", "WHEEL", "RECORD", "top_level.txt", "licenses/docs/LICENSE")
             }
             if not package and not metadata:
                 raise ValueError("Unexpected wheel entry: " + name)
         contents = {name: archive.read(name) for name in names}
     check_metadata(contents[f"{info}/METADATA"], version)
-    if contents[f"{info}/licenses/LICENSE"] != license_bytes or "opendoc/py.typed" not in contents:
+    if contents[f"{info}/licenses/docs/LICENSE"] != license_bytes or "opendoc/py.typed" not in contents:
         raise ValueError("Missing or incorrect license/py.typed")
     if source_version(contents["opendoc/__init__.py"]) != version:
         raise ValueError("Wheel source version differs from metadata")
@@ -97,7 +93,7 @@ def read_sdist(path, version, license_bytes):
             assert stream is not None
             contents[name] = stream.read()
     check_metadata(contents["PKG-INFO"], version)
-    if contents["LICENSE"] != license_bytes or "src/opendoc/py.typed" not in contents:
+    if contents["docs/LICENSE"] != license_bytes or "src/opendoc/py.typed" not in contents:
         raise ValueError("Missing or incorrect sdist license/py.typed")
     project = tomllib.loads(contents["pyproject.toml"].decode("utf-8"))
     if "version" in project["project"] or project["tool"]["setuptools"]["dynamic"]["version"] != {"attr": "opendoc.__version__"}:
@@ -109,7 +105,7 @@ def read_sdist(path, version, license_bytes):
 
 def verify(dist, rebuilt=None):
     version = source_version((ROOT / "src/opendoc/__init__.py").read_bytes())
-    license_bytes = (ROOT / "LICENSE").read_bytes()
+    license_bytes = (ROOT / "docs/LICENSE").read_bytes()
     wheel = read_wheel(Path(dist) / f"opendoc-{version}-py3-none-any.whl", version, license_bytes)
     sdist = read_sdist(Path(dist) / f"opendoc-{version}.tar.gz", version, license_bytes)
     for name, value in wheel.items():

@@ -19,7 +19,7 @@ Name: opendoc
 Version: 0.1.0
 Requires-Python: >=3.11
 License-Expression: MIT
-License-File: LICENSE
+License-File: docs/LICENSE
 Provides-Extra: math
 Provides-Extra: dev
 Provides-Extra: docs
@@ -32,7 +32,7 @@ def _wheel(path, change=None):
         "opendoc/__init__.py": b'__version__ = "0.1.0"\n',
         "opendoc/py.typed": b"",
         "opendoc-0.1.0.dist-info/METADATA": METADATA,
-        "opendoc-0.1.0.dist-info/licenses/LICENSE": LICENSE,
+        "opendoc-0.1.0.dist-info/licenses/docs/LICENSE": LICENSE,
     }
     if change is not None:
         change(entries)
@@ -46,7 +46,7 @@ def _wheel(path, change=None):
     [
         lambda entries: entries.update({"consumer_app/main.py": b""}),
         lambda entries: entries.update({"opendoc/__pycache__/model.pyc": b""}),
-        lambda entries: entries.update({"opendoc-0.1.0.dist-info/licenses/LICENSE": b"Different owner"}),
+        lambda entries: entries.update({"opendoc-0.1.0.dist-info/licenses/docs/LICENSE": b"Different owner"}),
         lambda entries: entries.update({"opendoc-0.1.0.dist-info/METADATA": METADATA.replace(b"0.1.0", b"0.2.0")}),
         lambda entries: entries.update({"opendoc/__init__.py": b'__version__ = "0.2.0"\n'}),
     ],
@@ -75,7 +75,7 @@ def test_release_verifier_rejects_duplicate_wheel_entry(tmp_path):
 def test_release_verifier_rejects_sdist_contamination(tmp_path, unexpected):
     entries = {
         "PKG-INFO": METADATA,
-        "LICENSE": LICENSE,
+        "docs/LICENSE": LICENSE,
         "src/opendoc/__init__.py": b'__version__ = "0.1.0"\n',
         "src/opendoc/py.typed": b"",
         "pyproject.toml": PROJECT,
@@ -90,7 +90,7 @@ def test_release_verifier_rejects_sdist_contamination(tmp_path, unexpected):
                 archive.addfile(member, io.BytesIO(data))
 
     write()
-    assert read_sdist(path, "0.1.0", LICENSE)["LICENSE"] == LICENSE
+    assert read_sdist(path, "0.1.0", LICENSE)["docs/LICENSE"] == LICENSE
     entries[unexpected] = b"unwanted"
     write()
     with pytest.raises(ValueError):
