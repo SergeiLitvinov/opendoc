@@ -250,12 +250,16 @@ print('Independent wheel: extensions, packages, model, traversal, operations, co
       'footnotes, resources, styles, typed properties, memory checks, persistence, comparison and optional math behavior OK')
 """
 
+PROBE += (
+    "\nimport runpy\nrunpy.run_path("
+    + repr(str(Path(__file__).resolve().parent.parent / "examples/integration_model.py"))
+    + ", run_name='__main__')\n"
+)
+
 
 def verify(python: str) -> None:
     with tempfile.TemporaryDirectory(prefix="document-core-probe-") as directory:
         subprocess.run([str(Path(python).absolute()), "-I", "-c", PROBE], cwd=directory, check=True)
-        example = Path(__file__).resolve().parent.parent / "examples/integration_model.py"
-        subprocess.run([str(Path(python).absolute()), "-I", str(example)], cwd=directory, check=True)
     verify_math(python)
 
 
