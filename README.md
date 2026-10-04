@@ -1,10 +1,19 @@
+<img src="https://raw.githubusercontent.com/SergeiLitvinov/opendoc/main/docs/assets/documentation-logo.svg" width="64" height="64" align="right" alt="OpenDoc">
+
 # OpenDoc
 
+**Структура документа и операции над ней.**
+
 [![CI](https://github.com/SergeiLitvinov/opendoc/actions/workflows/ci.yml/badge.svg)](https://github.com/SergeiLitvinov/opendoc/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/SergeiLitvinov/opendoc)](https://github.com/SergeiLitvinov/opendoc/releases)
+[![MIT](https://img.shields.io/badge/license-MIT-blue)](docs/LICENSE)
 
-[Сайт документации](https://SergeiLitvinov.github.io/opendoc/) · [Выпуски и пакеты](https://github.com/SergeiLitvinov/opendoc/releases) · [Группа проектов okidoki](https://github.com/search?q=user%3ASergeiLitvinov+topic%3Aokidoki&type=repositories) · [MIT](docs/LICENSE)
+[Документация](https://SergeiLitvinov.github.io/opendoc/) · [Руководство](docs/guide/index.md) · [API](docs/reference/api.md) · [Выпуски](https://github.com/SergeiLitvinov/opendoc/releases)
 
-Независимая Python-библиотека структур документов: пакет `opendoc`, импорт `opendoc`, Python 3.11+.
+Независимая Python-библиотека модели документов и операций в памяти.
+Пакет и импорт: `opendoc`; Python 3.11+. Обязательных внешних зависимостей нет.
+
+Проект экосистемы [okidoki](https://github.com/search?q=user%3ASergeiLitvinov+topic%3Aokidoki&type=repositories), со своими версиями, тестами и выпусками.
 
 Модель, свойства, геометрия, цвета, ресурсы, формулы, обход и изменения, объединение/извлечение с зависимостями, JSON-сериализация, валидация и сравнение структуры работают самостоятельно. Обязательных внешних зависимостей нет. Дополнение `math` предоставляет `lxml` для сравнения поддержанного MathML/Office Math. Без него непроверяемая формула диагностируется, строгий допуск не считается соблюдённым.
 
