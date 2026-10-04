@@ -48,3 +48,38 @@ def test_dependency_table_must_include_all_locked_packages(tmp_path):
     (root / "docs/development/dependencies.md").write_text("# Missing table", encoding="utf-8")
     with pytest.raises(ValueError, match="documentation is stale"):
         dependencies.verify(root, installed=False)
+
+
+def test_platform_markers_keep_inventory_complete_and_filter_active_installation():
+    complete = dependencies.locked()
+    linux = dependencies.locked(environment={"sys_platform": "linux"})
+    windows = dependencies.locked(environment={"sys_platform": "win32"})
+    assert "colorama" in complete and "colorama" in windows and "colorama" not in linux
+    assert linux["lxml"]["profiles"] == ["math"]
+    assert set(linux) == set(complete) - {"colorama"}
+
+
+def test_inactive_platform_package_is_not_required_in_installed_environment(monkeypatch):
+    original = dependencies.importlib.metadata.distribution
+
+    def distribution(name):
+        if name == "colorama":
+            raise AssertionError("inactive Windows-only package was requested")
+        return original(name)
+
+    monkeypatch.setattr(dependencies, "default_environment", lambda: {"sys_platform": "linux"})
+    monkeypatch.setattr(dependencies.importlib.metadata, "distribution", distribution)
+    dependencies.verify()
+
+
+def test_missing_active_dependency_still_fails_the_installed_audit(monkeypatch):
+    original = dependencies.importlib.metadata.distribution
+
+    def distribution(name):
+        if name == "lxml":
+            raise dependencies.importlib.metadata.PackageNotFoundError(name)
+        return original(name)
+
+    monkeypatch.setattr(dependencies.importlib.metadata, "distribution", distribution)
+    with pytest.raises(dependencies.importlib.metadata.PackageNotFoundError):
+        dependencies.verify()

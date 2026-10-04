@@ -7,6 +7,8 @@ import json
 import tomllib
 from pathlib import Path
 
+from packaging.markers import Marker, default_environment
+
 ROOT = Path(__file__).resolve().parent.parent
 INVENTORY = ROOT / "docs/development/dependency-inventory.json"
 LICENSES = {
@@ -48,21 +50,25 @@ LICENSES = {
 }
 
 
-def locked(root=ROOT):
+def locked(root=ROOT, environment=None):
     project = tomllib.loads((root / "pyproject.toml").read_text(encoding="utf-8"))
     lock = tomllib.loads((root / "uv.lock").read_text(encoding="utf-8"))
     packages = {item["name"]: item for item in lock["package"]}
     roles = {name: set() for name in packages if name != "opendoc"}
     for profile, dependencies in packages["opendoc"].get("optional-dependencies", {}).items():
-        pending = [item["name"] for item in dependencies]
+        pending = list(dependencies)
         seen = set()
         while pending:
-            name = pending.pop()
+            dependency = pending.pop()
+            marker = dependency.get("marker")
+            if environment is not None and marker and not Marker(marker).evaluate({**environment, "extra": profile}):
+                continue
+            name = dependency["name"]
             if name in seen:
                 continue
             seen.add(name)
             roles[name].add(profile)
-            pending.extend(item["name"] for item in packages[name].get("dependencies", []))
+            pending.extend(packages[name].get("dependencies", []))
     result = {
         name: {
             "name": name,
@@ -71,6 +77,7 @@ def locked(root=ROOT):
             "dependencies": sorted(item["name"] for item in packages[name].get("dependencies", [])),
         }
         for name, profiles in roles.items()
+        if profiles or environment is None
     }
     (requirement,) = project["build-system"]["requires"]
     name, version = requirement.split("==")
@@ -130,6 +137,7 @@ def verify(root=ROOT, installed=True):
     snapshot = json.loads((root / "docs/development/dependency-inventory.json").read_text(encoding="utf-8"))
     recorded = {item["name"]: item for item in snapshot["packages"]}
     current = locked(root)
+    active = locked(root, default_environment()) if installed else {}
     if set(current) != set(recorded):
         raise ValueError("Dependency set changed; review and regenerate the inventory")
     guide = (root / "docs/development/dependencies.md").read_text(encoding="utf-8")
@@ -141,7 +149,7 @@ def verify(root=ROOT, installed=True):
             raise ValueError(f"Dependency documentation is stale: {name}")
         if not item["notices"] or any(len(notice["sha256"]) != 64 for notice in item["notices"]):
             raise ValueError(f"Missing license evidence: {name}")
-        if installed and name != "setuptools":
+        if installed and name in active and name != "setuptools":
             distribution = importlib.metadata.distribution(name)
             if distribution.version != item["version"]:
                 raise ValueError(f"Installed dependency differs from lock: {name}")
