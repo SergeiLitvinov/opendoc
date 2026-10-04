@@ -599,6 +599,12 @@ def _validate_model(
                 code="semantic.footnote.missing",
                 measurement={"identifier": identifier},
             )
+    if not validator.errors:
+        from opendoc.integration import _integration_issue
+
+        issue = _integration_issue(document, validator.limits)
+        if issue is not None:
+            validator.error(issue.location, issue.message, code=issue.code)
     return validator.errors
 
 

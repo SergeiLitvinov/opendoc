@@ -24,6 +24,7 @@
 | Заголовки, списки, ссылки и сноски | [headings.py](../../examples/headings.py), [lists.py](../../examples/lists.py), [references.py](../../examples/references.py), [footnotes.py](../../examples/footnotes.py) | Семантические роли, JSON, номера и замыкание зависимостей |
 | Расширить модель потребительскими данными | [extensions.py](../../examples/extensions.py) | Явную схему/версию, неизвестную схему и отказ валидатора |
 | Сохранить непрозрачный пакет | [packages.py](../../examples/packages.py) | Нейтральный корень, байты, связи и сохранность JSON |
+| Передать данные из адаптера форматов | [integration_model.py](../../examples/integration_model.py) | Версионированную модель, явную полноту отчёта, JSON и диапазоны Unicode |
 
 Один сценарий можно запустить отдельно: `uv run python examples/section_content.py`.
 

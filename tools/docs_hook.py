@@ -16,3 +16,11 @@ def on_config(config):
 
 def on_pre_build(config):
     prepare()
+
+
+def on_files(files, config):
+    """The custom theme uses its own assets; omit unused vendor fonts/CSS/JS."""
+    for file in list(files):
+        if file.src_uri.startswith(("css/", "js/", "webfonts/")) or file.src_uri == "img/favicon.ico":
+            files.remove(file)
+    return files

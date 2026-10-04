@@ -275,6 +275,9 @@ def _rewrite(document: DocumentModel, identifiers: DocumentIdMap, limits: Docume
         resource.id = identifiers.resources[identifier]
         remapped_resources[resource.id] = resource
     document.resources = remapped_resources
+    from opendoc.integration import _remap_integration
+
+    _remap_integration(document, identifiers.anchors, identifiers.resources, limits)
 
 
 def merge_documents(
@@ -448,6 +451,9 @@ def _dependencies(
     needed_resources = {
         reference.resource_id for reference in iter_resource_references(selected, limits=limits)
     } | additional_resources
+    from opendoc.integration import _integration_links
+
+    needed_resources.update(key for domain, key, _ in _integration_links(selected, limits) if domain == "resource")
     return needed_styles, needed_resources
 
 
@@ -464,6 +470,10 @@ def _owner(location: NodeLocation[ModelNode]) -> tuple[str, str | int]:
 
 
 def _semantic_links(root: ModelNode, limits: DocumentLimits) -> Iterator[tuple[str, str]]:
+    if isinstance(root, DocumentModel):
+        from opendoc.integration import _integration_links
+
+        yield from ((domain, key) for domain, key, _ in _integration_links(root, limits) if domain == "anchor")
     for location in iter_internal_links(root, limits=limits):
         link = get_internal_link(location.node, limits=limits)
         assert link is not None

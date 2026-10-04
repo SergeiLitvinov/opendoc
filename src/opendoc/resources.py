@@ -140,14 +140,26 @@ def remove_resource(
         if replacement_id == resource_id:
             raise ValueError("replacement_id must differ from resource_id")
     links = tuple(link for link in iter_resource_references(document, limits=resolved) if link.resource_id == resource_id)
+    from opendoc.integration import _integration_links, _remap_integration
+
+    integration_links = [
+        path for domain, key, path in _integration_links(document, resolved) if domain == "resource" and key == resource_id
+    ]
+    if integration_links and replacement_id is None:
+        raise ValueError(f"resource {resource_id!r} is used at {integration_links[0]}")
     if links and replacement_id is None:
         raise ValueError(f"resource {resource_id!r} is used at {links[0].path}")
-    candidate = replace(document, resources={key: value for key, value in document.resources.items() if key != resource_id})
+    candidate = replace(
+        document,
+        resources={key: value for key, value in document.resources.items() if key != resource_id},
+        metadata=deepcopy(document.metadata),
+    )
     committed = False
     try:
         if replacement_id is not None:
             for link in links:
                 _set_resource_reference(link, replacement_id)
+            _remap_integration(candidate, {}, {resource_id: replacement_id}, resolved)
         _require_document(candidate, resolved)
         committed = True
     finally:
@@ -155,6 +167,8 @@ def remove_resource(
             for link in links:
                 _set_resource_reference(link, resource_id)
     del document.resources[resource_id]
+    if integration_links:
+        document.metadata = candidate.metadata
     return old
 
 

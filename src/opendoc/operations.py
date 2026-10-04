@@ -96,10 +96,15 @@ def _commit_edit(
     limits: DocumentLimits,
 ) -> None:
     previous = values[index : index + removed]
+    from opendoc.integration import _guard_integration_edit, _integration_edit_snapshot
+
+    snapshot = _integration_edit_snapshot(root, limits) if isinstance(root, DocumentModel) else None
     committed = False
     values[index : index + removed] = added
     try:
         _check_tree(root, limits)
+        if isinstance(root, DocumentModel):
+            _guard_integration_edit(root, snapshot, limits)
         committed = True
     finally:
         if not committed:
@@ -253,6 +258,9 @@ def transform_elements(
         raise ValueError("transform/predicate: expected callable")
     budget = _resolve_limits(limits)
     result = clone_model(root, limits=budget)
+    from opendoc.integration import _guard_integration_edit, _integration_edit_snapshot
+
+    snapshot = _integration_edit_snapshot(root, budget) if isinstance(root, DocumentModel) else None
     selected = list(iter_elements(result, types, limits=budget))
     if predicate is not None:
         selected = [reference for reference in selected if predicate(reference)]
@@ -275,6 +283,8 @@ def transform_elements(
         elif replacement is not reference.node:
             values[index] = _copy_for_slot(replacement, expected, budget)
     _check_tree(result, budget)
+    if isinstance(result, DocumentModel):
+        _guard_integration_edit(result, snapshot, budget)
     return result
 
 

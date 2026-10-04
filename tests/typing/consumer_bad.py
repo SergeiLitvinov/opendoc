@@ -1,6 +1,18 @@
 """Deliberate static errors; checked but never executed."""
 
-from opendoc import CheckResult, ColorValue, ConversionReport, DocumentComparison, DocumentInspection, MatchingLimits, TextRun
+from opendoc import (
+    CapabilityProfile,
+    CheckResult,
+    ColorValue,
+    ConversionReport,
+    DocumentComparison,
+    DocumentInspection,
+    MatchingLimits,
+    PathCommand,
+    SheetCell,
+    TextPosition,
+    TextRun,
+)
 
 
 def incorrect(
@@ -14,3 +26,7 @@ def incorrect(
     result.to_dict()["issues"][0]["reason"] = 42  # type-error: typeddict-item
     result.to_dict()["issues"][0]["measurement"] = "text"  # type-error: typeddict-item
     report.to_dict()["lossless"] = "yes"  # type-error: typeddict-item
+    TextPosition("anchor", "one")  # type-error: arg-type
+    PathCommand("execute")  # type-error: arg-type
+    SheetCell(0, 0, value=[])  # type-error: arg-type
+    CapabilityProfile("profile", 1, features=["text"])  # type-error: arg-type

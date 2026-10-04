@@ -178,12 +178,21 @@ from .emphasis_quality import (
 )
 from .extensions import ExtensionCallback as ExtensionCallback
 from .extensions import ExtensionContext as ExtensionContext
+from .extensions import (
+    ExtensionMigration as ExtensionMigration,
+)
+from .extensions import (
+    ExtensionMigrationCallback as ExtensionMigrationCallback,
+)
 from .extensions import ExtensionSchema as ExtensionSchema
 from .extensions import ExtensionScope as ExtensionScope
 from .extensions import ExtensionValue as ExtensionValue
 from .extensions import UnknownExtensionPolicy as UnknownExtensionPolicy
 from .extensions import check_extensions as check_extensions
 from .extensions import get_extension as get_extension
+from .extensions import (
+    migrate_extension as migrate_extension,
+)
 from .extensions import remove_extension as remove_extension
 from .extensions import set_extension as set_extension
 from .footnotes import FOOTNOTE_REFERENCE_PROPERTY as FOOTNOTE_REFERENCE_PROPERTY
@@ -212,6 +221,153 @@ from .inspection import (
 )
 from .inspection import (
     inspect_document_model as inspect_document_model,
+)
+from .integration import (
+    INTEGRATION_PROPERTY as INTEGRATION_PROPERTY,
+)
+from .integration import (
+    INTEGRATION_VERSION as INTEGRATION_VERSION,
+)
+from .integration import (
+    edit_anchored_text as edit_anchored_text,
+)
+from .integration import (
+    get_integration as get_integration,
+)
+from .integration import (
+    integration_resource_uses as integration_resource_uses,
+)
+from .integration import (
+    negotiate_capabilities as negotiate_capabilities,
+)
+from .integration import (
+    preservation_result as preservation_result,
+)
+from .integration import (
+    resolve_scene_style as resolve_scene_style,
+)
+from .integration import (
+    set_integration as set_integration,
+)
+from .integration_types import (
+    Accessibility as Accessibility,
+)
+from .integration_types import (
+    AffineTransform as AffineTransform,
+)
+from .integration_types import (
+    Annotation as Annotation,
+)
+from .integration_types import (
+    BibliographyEntry as BibliographyEntry,
+)
+from .integration_types import (
+    CapabilityProfile as CapabilityProfile,
+)
+from .integration_types import (
+    Chart as Chart,
+)
+from .integration_types import (
+    ChartAxis as ChartAxis,
+)
+from .integration_types import (
+    ChartSeries as ChartSeries,
+)
+from .integration_types import (
+    Comment as Comment,
+)
+from .integration_types import (
+    ContentControl as ContentControl,
+)
+from .integration_types import (
+    Diagram as Diagram,
+)
+from .integration_types import (
+    DocumentPage as DocumentPage,
+)
+from .integration_types import (
+    FeatureCapability as FeatureCapability,
+)
+from .integration_types import (
+    Field as Field,
+)
+from .integration_types import (
+    FormControl as FormControl,
+)
+from .integration_types import (
+    FormulaTree as FormulaTree,
+)
+from .integration_types import (
+    IntegrationModel as IntegrationModel,
+)
+from .integration_types import (
+    IntegrationRecord as IntegrationRecord,
+)
+from .integration_types import (
+    MathNode as MathNode,
+)
+from .integration_types import (
+    MediaObject as MediaObject,
+)
+from .integration_types import (
+    Paint as Paint,
+)
+from .integration_types import (
+    PathCommand as PathCommand,
+)
+from .integration_types import (
+    PreservationRecord as PreservationRecord,
+)
+from .integration_types import (
+    PreservationState as PreservationState,
+)
+from .integration_types import (
+    Revision as Revision,
+)
+from .integration_types import (
+    SceneStyle as SceneStyle,
+)
+from .integration_types import (
+    Sheet as Sheet,
+)
+from .integration_types import (
+    SheetCell as SheetCell,
+)
+from .integration_types import (
+    SourceFile as SourceFile,
+)
+from .integration_types import (
+    SourceMap as SourceMap,
+)
+from .integration_types import (
+    SourceMapping as SourceMapping,
+)
+from .integration_types import (
+    SourceSpan as SourceSpan,
+)
+from .integration_types import (
+    TextPosition as TextPosition,
+)
+from .integration_types import (
+    TextRange as TextRange,
+)
+from .integration_types import (
+    Timing as Timing,
+)
+from .integration_types import (
+    UnknownFragment as UnknownFragment,
+)
+from .integration_types import (
+    VectorGroup as VectorGroup,
+)
+from .integration_types import (
+    VectorPath as VectorPath,
+)
+from .integration_types import (
+    VectorScene as VectorScene,
+)
+from .integration_types import (
+    Workbook as Workbook,
 )
 from .limits import DocumentLimits as DocumentLimits
 from .lists import LIST_PROPERTY as LIST_PROPERTY
@@ -352,6 +508,58 @@ from .traversal import (
 )
 
 __all__ = [
+    "Accessibility",
+    "AffineTransform",
+    "Annotation",
+    "BibliographyEntry",
+    "CapabilityProfile",
+    "Chart",
+    "ChartAxis",
+    "ChartSeries",
+    "Comment",
+    "ContentControl",
+    "Diagram",
+    "DocumentPage",
+    "FeatureCapability",
+    "Field",
+    "FormControl",
+    "FormulaTree",
+    "IntegrationModel",
+    "IntegrationRecord",
+    "MathNode",
+    "MediaObject",
+    "Paint",
+    "PathCommand",
+    "PreservationRecord",
+    "PreservationState",
+    "Revision",
+    "SceneStyle",
+    "Sheet",
+    "SheetCell",
+    "SourceFile",
+    "SourceMap",
+    "SourceMapping",
+    "SourceSpan",
+    "TextPosition",
+    "TextRange",
+    "Timing",
+    "UnknownFragment",
+    "VectorGroup",
+    "VectorPath",
+    "VectorScene",
+    "Workbook",
+    "INTEGRATION_PROPERTY",
+    "INTEGRATION_VERSION",
+    "edit_anchored_text",
+    "get_integration",
+    "integration_resource_uses",
+    "negotiate_capabilities",
+    "preservation_result",
+    "resolve_scene_style",
+    "set_integration",
+    "ExtensionMigration",
+    "ExtensionMigrationCallback",
+    "migrate_extension",
     "CheckData",
     "ComparisonData",
     "ConversionIssueData",

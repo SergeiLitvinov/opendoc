@@ -12,9 +12,21 @@
 Document structures, serialization and comparison without application backends.
 
 
-Импорты: [opendoc.checks](#opendoc-checks), [opendoc.color](#opendoc-color), [opendoc.composition](#opendoc-composition), [opendoc.diagnostics](#opendoc-diagnostics), [opendoc.document_codec](#opendoc-document_codec), [opendoc.document_model](#opendoc-document_model), [opendoc.emphasis_quality](#opendoc-emphasis_quality), [opendoc.extensions](#opendoc-extensions), [opendoc.footnotes](#opendoc-footnotes), [opendoc.formula_quality_policy](#opendoc-formula_quality_policy), [opendoc.inspection](#opendoc-inspection), [opendoc.limits](#opendoc-limits), [opendoc.lists](#opendoc-lists), [opendoc.object_matching](#opendoc-object_matching), [opendoc.object_quality_policy](#opendoc-object_quality_policy), [opendoc.operations](#opendoc-operations), [opendoc.properties](#opendoc-properties), [opendoc.quality_policy](#opendoc-quality_policy), [opendoc.references](#opendoc-references), [opendoc.resources](#opendoc-resources), [opendoc.result_types](#opendoc-result_types), [opendoc.semantics](#opendoc-semantics), [opendoc.storage](#opendoc-storage), [opendoc.styles](#opendoc-styles), [opendoc.text_quality_policy](#opendoc-text_quality_policy), [opendoc.traversal](#opendoc-traversal).
+Импорты: [opendoc.checks](#opendoc-checks), [opendoc.color](#opendoc-color), [opendoc.composition](#opendoc-composition), [opendoc.diagnostics](#opendoc-diagnostics), [opendoc.document_codec](#opendoc-document_codec), [opendoc.document_model](#opendoc-document_model), [opendoc.emphasis_quality](#opendoc-emphasis_quality), [opendoc.extensions](#opendoc-extensions), [opendoc.footnotes](#opendoc-footnotes), [opendoc.formula_quality_policy](#opendoc-formula_quality_policy), [opendoc.inspection](#opendoc-inspection), [opendoc.integration](#opendoc-integration), [opendoc.integration_types](#opendoc-integration_types), [opendoc.limits](#opendoc-limits), [opendoc.lists](#opendoc-lists), [opendoc.object_matching](#opendoc-object_matching), [opendoc.object_quality_policy](#opendoc-object_quality_policy), [opendoc.operations](#opendoc-operations), [opendoc.properties](#opendoc-properties), [opendoc.quality_policy](#opendoc-quality_policy), [opendoc.references](#opendoc-references), [opendoc.resources](#opendoc-resources), [opendoc.result_types](#opendoc-result_types), [opendoc.semantics](#opendoc-semantics), [opendoc.storage](#opendoc-storage), [opendoc.styles](#opendoc-styles), [opendoc.text_quality_policy](#opendoc-text_quality_policy), [opendoc.traversal](#opendoc-traversal).
 
-Прямые импорты в тестах: [tests/test_architecture.py](../../tests/test_architecture.py), [tests/test_checks.py](../../tests/test_checks.py), [tests/test_compatibility.py](../../tests/test_compatibility.py), [tests/test_composition.py](../../tests/test_composition.py), [tests/test_document_api.py](../../tests/test_document_api.py), [tests/test_document_json.py](../../tests/test_document_json.py), [tests/test_document_limits.py](../../tests/test_document_limits.py), [tests/test_document_roundtrip.py](../../tests/test_document_roundtrip.py), [tests/test_extensions.py](../../tests/test_extensions.py), [tests/test_footnotes.py](../../tests/test_footnotes.py), [tests/test_formula_xml.py](../../tests/test_formula_xml.py), [tests/test_headings.py](../../tests/test_headings.py), [tests/test_lists.py](../../tests/test_lists.py), [tests/test_matching_limits.py](../../tests/test_matching_limits.py), [tests/test_mathml.py](../../tests/test_mathml.py), [tests/test_model_validation.py](../../tests/test_model_validation.py), [tests/test_operations.py](../../tests/test_operations.py), [tests/test_package_contract.py](../../tests/test_package_contract.py), [tests/test_performance_contracts.py](../../tests/test_performance_contracts.py), [tests/test_properties.py](../../tests/test_properties.py), [tests/test_quality_contracts.py](../../tests/test_quality_contracts.py), [tests/test_references.py](../../tests/test_references.py), [tests/test_resources.py](../../tests/test_resources.py), [tests/test_storage.py](../../tests/test_storage.py), [tests/test_styles.py](../../tests/test_styles.py), [tests/test_traversal.py](../../tests/test_traversal.py).
+Прямые импорты в тестах: [tests/test_architecture.py](../../tests/test_architecture.py), [tests/test_checks.py](../../tests/test_checks.py), [tests/test_compatibility.py](../../tests/test_compatibility.py), [tests/test_composition.py](../../tests/test_composition.py), [tests/test_document_api.py](../../tests/test_document_api.py), [tests/test_document_json.py](../../tests/test_document_json.py), [tests/test_document_limits.py](../../tests/test_document_limits.py), [tests/test_document_roundtrip.py](../../tests/test_document_roundtrip.py), [tests/test_extensions.py](../../tests/test_extensions.py), [tests/test_footnotes.py](../../tests/test_footnotes.py), [tests/test_formula_xml.py](../../tests/test_formula_xml.py), [tests/test_headings.py](../../tests/test_headings.py), [tests/test_integration.py](../../tests/test_integration.py), [tests/test_lists.py](../../tests/test_lists.py), [tests/test_matching_limits.py](../../tests/test_matching_limits.py), [tests/test_mathml.py](../../tests/test_mathml.py), [tests/test_model_validation.py](../../tests/test_model_validation.py), [tests/test_operations.py](../../tests/test_operations.py), [tests/test_package_contract.py](../../tests/test_package_contract.py), [tests/test_performance_contracts.py](../../tests/test_performance_contracts.py), [tests/test_properties.py](../../tests/test_properties.py), [tests/test_quality_contracts.py](../../tests/test_quality_contracts.py), [tests/test_references.py](../../tests/test_references.py), [tests/test_resources.py](../../tests/test_resources.py), [tests/test_storage.py](../../tests/test_storage.py), [tests/test_styles.py](../../tests/test_styles.py), [tests/test_traversal.py](../../tests/test_traversal.py).
+
+<a id="opendoc-_integration_codec"></a>
+## opendoc._integration_codec
+
+[src/opendoc/_integration_codec.py](../../src/opendoc/_integration_codec.py)
+
+Closed typed codec: JSON never selects Python classes, imports or callbacks.
+
+
+Импорты: [opendoc._json_validation](#opendoc-_json_validation), [opendoc.diagnostics](#opendoc-diagnostics), [opendoc.integration_types](#opendoc-integration_types), [opendoc.limits](#opendoc-limits).
+
+Прямые импорты в тестах: не найдены.
 
 <a id="opendoc-_json_validation"></a>
 ## opendoc._json_validation
@@ -36,7 +48,7 @@ Validate the JSON boundary before constructing document objects.
 Structural model checks shared by persistence and inspection.
 
 
-Импорты: [opendoc._json_validation](#opendoc-_json_validation), [opendoc.color](#opendoc-color), [opendoc.diagnostics](#opendoc-diagnostics), [opendoc.document_model](#opendoc-document_model), [opendoc.footnotes](#opendoc-footnotes), [opendoc.limits](#opendoc-limits), [opendoc.lists](#opendoc-lists), [opendoc.properties](#opendoc-properties), [opendoc.references](#opendoc-references), [opendoc.semantics](#opendoc-semantics), [opendoc.storage](#opendoc-storage), [opendoc.traversal](#opendoc-traversal).
+Импорты: [opendoc._json_validation](#opendoc-_json_validation), [opendoc.color](#opendoc-color), [opendoc.diagnostics](#opendoc-diagnostics), [opendoc.document_model](#opendoc-document_model), [opendoc.footnotes](#opendoc-footnotes), [opendoc.integration](#opendoc-integration), [opendoc.limits](#opendoc-limits), [opendoc.lists](#opendoc-lists), [opendoc.properties](#opendoc-properties), [opendoc.references](#opendoc-references), [opendoc.semantics](#opendoc-semantics), [opendoc.storage](#opendoc-storage), [opendoc.traversal](#opendoc-traversal).
 
 Прямые импорты в тестах: не найдены.
 
@@ -90,10 +102,10 @@ Dependency-complete extraction and explicit, independent document merging.
 
 - `DocumentIdMap` — [src/opendoc/composition.py](../../src/opendoc/composition.py#L55)
 - `DocumentMerge` — [src/opendoc/composition.py](../../src/opendoc/composition.py#L66)
-- `merge_documents` — [src/opendoc/composition.py](../../src/opendoc/composition.py#L280)
-- `extract_document` — [src/opendoc/composition.py](../../src/opendoc/composition.py#L521)
+- `merge_documents` — [src/opendoc/composition.py](../../src/opendoc/composition.py#L283)
+- `extract_document` — [src/opendoc/composition.py](../../src/opendoc/composition.py#L531)
 
-Импорты: [opendoc._validation](#opendoc-_validation), [opendoc.document_model](#opendoc-document_model), [opendoc.footnotes](#opendoc-footnotes), [opendoc.limits](#opendoc-limits), [opendoc.lists](#opendoc-lists), [opendoc.operations](#opendoc-operations), [opendoc.references](#opendoc-references), [opendoc.storage](#opendoc-storage), [opendoc.traversal](#opendoc-traversal).
+Импорты: [opendoc._validation](#opendoc-_validation), [opendoc.document_model](#opendoc-document_model), [opendoc.footnotes](#opendoc-footnotes), [opendoc.integration](#opendoc-integration), [opendoc.limits](#opendoc-limits), [opendoc.lists](#opendoc-lists), [opendoc.operations](#opendoc-operations), [opendoc.references](#opendoc-references), [opendoc.storage](#opendoc-storage), [opendoc.traversal](#opendoc-traversal).
 
 Прямые импорты в тестах: не найдены.
 
@@ -191,15 +203,17 @@ Bounded evidence for bold/italic changes in the inspected text flow.
 
 Explicit consumer namespaces and per-call validation of preserved JSON extensions.
 
-- `ExtensionValue` — [src/opendoc/extensions.py](../../src/opendoc/extensions.py#L45)
-- `ExtensionContext` — [src/opendoc/extensions.py](../../src/opendoc/extensions.py#L55)
-- `ExtensionSchema` — [src/opendoc/extensions.py](../../src/opendoc/extensions.py#L70)
-- `get_extension` — [src/opendoc/extensions.py](../../src/opendoc/extensions.py#L105)
-- `set_extension` — [src/opendoc/extensions.py](../../src/opendoc/extensions.py#L116)
-- `remove_extension` — [src/opendoc/extensions.py](../../src/opendoc/extensions.py#L132)
-- `check_extensions` — [src/opendoc/extensions.py](../../src/opendoc/extensions.py#L285)
+- `ExtensionValue` — [src/opendoc/extensions.py](../../src/opendoc/extensions.py#L48)
+- `ExtensionContext` — [src/opendoc/extensions.py](../../src/opendoc/extensions.py#L58)
+- `ExtensionMigration` — [src/opendoc/extensions.py](../../src/opendoc/extensions.py#L74)
+- `ExtensionSchema` — [src/opendoc/extensions.py](../../src/opendoc/extensions.py#L93)
+- `get_extension` — [src/opendoc/extensions.py](../../src/opendoc/extensions.py#L128)
+- `set_extension` — [src/opendoc/extensions.py](../../src/opendoc/extensions.py#L139)
+- `remove_extension` — [src/opendoc/extensions.py](../../src/opendoc/extensions.py#L155)
+- `migrate_extension` — [src/opendoc/extensions.py](../../src/opendoc/extensions.py#L166)
+- `check_extensions` — [src/opendoc/extensions.py](../../src/opendoc/extensions.py#L369)
 
-Импорты: [opendoc._json_validation](#opendoc-_json_validation), [opendoc._validation](#opendoc-_validation), [opendoc.diagnostics](#opendoc-diagnostics), [opendoc.document_model](#opendoc-document_model), [opendoc.limits](#opendoc-limits), [opendoc.traversal](#opendoc-traversal).
+Импорты: [opendoc._json_validation](#opendoc-_json_validation), [opendoc._validation](#opendoc-_validation), [opendoc.diagnostics](#opendoc-diagnostics), [opendoc.document_model](#opendoc-document_model), [opendoc.limits](#opendoc-limits), [opendoc.properties](#opendoc-properties), [opendoc.traversal](#opendoc-traversal).
 
 Прямые импорты в тестах: не найдены.
 
@@ -254,6 +268,77 @@ Budget changed or removed source formulas using reproducible fingerprints.
 Импорты: [opendoc._validation](#opendoc-_validation), [opendoc.diagnostics](#opendoc-diagnostics), [opendoc.document_model](#opendoc-document_model), [opendoc.emphasis_quality](#opendoc-emphasis_quality), [opendoc.footnotes](#opendoc-footnotes), [opendoc.limits](#opendoc-limits), [opendoc.lists](#opendoc-lists), [opendoc.object_inventory](#opendoc-object_inventory), [opendoc.object_matching](#opendoc-object_matching), [opendoc.references](#opendoc-references), [opendoc.result_types](#opendoc-result_types), [opendoc.text_flow](#opendoc-text_flow), [opendoc.traversal](#opendoc-traversal).
 
 Прямые импорты в тестах: [tests/test_object_matching.py](../../tests/test_object_matching.py).
+
+<a id="opendoc-integration"></a>
+## opendoc.integration
+
+[src/opendoc/integration.py](../../src/opendoc/integration.py)
+
+Bounded adapter contracts, semantic references and transactional range-aware editing.
+
+- `get_integration` — [src/opendoc/integration.py](../../src/opendoc/integration.py#L395)
+- `set_integration` — [src/opendoc/integration.py](../../src/opendoc/integration.py#L411)
+- `preservation_result` — [src/opendoc/integration.py](../../src/opendoc/integration.py#L451)
+- `negotiate_capabilities` — [src/opendoc/integration.py](../../src/opendoc/integration.py#L478)
+- `resolve_scene_style` — [src/opendoc/integration.py](../../src/opendoc/integration.py#L505)
+- `edit_anchored_text` — [src/opendoc/integration.py](../../src/opendoc/integration.py#L531)
+- `integration_resource_uses` — [src/opendoc/integration.py](../../src/opendoc/integration.py#L644)
+
+Импорты: [opendoc._integration_codec](#opendoc-_integration_codec), [opendoc._json_validation](#opendoc-_json_validation), [opendoc._validation](#opendoc-_validation), [opendoc.diagnostics](#opendoc-diagnostics), [opendoc.document_model](#opendoc-document_model), [opendoc.integration_types](#opendoc-integration_types), [opendoc.limits](#opendoc-limits), [opendoc.operations](#opendoc-operations), [opendoc.references](#opendoc-references), [opendoc.traversal](#opendoc-traversal).
+
+Прямые импорты в тестах: не найдены.
+
+<a id="opendoc-integration_types"></a>
+## opendoc.integration_types
+
+[src/opendoc/integration_types.py](../../src/opendoc/integration_types.py)
+
+Format-neutral, inert adapter data; coordinates are points, offsets are Unicode code points.
+
+- `PreservationState` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L14)
+- `IntegrationRecord` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L23)
+- `FeatureCapability` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L30)
+- `CapabilityProfile` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L37)
+- `PreservationRecord` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L44)
+- `SourceSpan` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L54)
+- `SourceFile` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L65)
+- `SourceMapping` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L76)
+- `SourceMap` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L82)
+- `UnknownFragment` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L89)
+- `TextPosition` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L101)
+- `TextRange` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L108)
+- `Field` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L115)
+- `BibliographyEntry` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L126)
+- `Comment` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L135)
+- `Revision` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L144)
+- `ContentControl` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L153)
+- `AffineTransform` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L162)
+- `PathCommand` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L172)
+- `Paint` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L178)
+- `VectorPath` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L184)
+- `VectorGroup` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L198)
+- `VectorScene` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L209)
+- `ChartSeries` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L220)
+- `ChartAxis` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L229)
+- `Chart` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L238)
+- `SceneStyle` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L249)
+- `Diagram` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L257)
+- `Accessibility` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L267)
+- `DocumentPage` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L275)
+- `Annotation` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L283)
+- `FormControl` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L295)
+- `MediaObject` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L306)
+- `Timing` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L316)
+- `SheetCell` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L325)
+- `Sheet` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L336)
+- `Workbook` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L343)
+- `MathNode` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L349)
+- `FormulaTree` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L356)
+- `IntegrationModel` — [src/opendoc/integration_types.py](../../src/opendoc/integration_types.py#L363)
+
+Импорты: [opendoc.color](#opendoc-color), [opendoc.diagnostics](#opendoc-diagnostics), [opendoc.document_model](#opendoc-document_model).
+
+Прямые импорты в тестах: не найдены.
 
 <a id="opendoc-limits"></a>
 ## opendoc.limits
@@ -348,13 +433,13 @@ Budget for unmatched recursive model objects with conservative verification.
 Standalone copying, structural edits, text extraction and transformations.
 
 - `clone_model` — [src/opendoc/operations.py](../../src/opendoc/operations.py#L32)
-- `insert_node` — [src/opendoc/operations.py](../../src/opendoc/operations.py#L116)
-- `replace_node` — [src/opendoc/operations.py](../../src/opendoc/operations.py#L140)
-- `remove_node` — [src/opendoc/operations.py](../../src/opendoc/operations.py#L160)
-- `extract_text` — [src/opendoc/operations.py](../../src/opendoc/operations.py#L172)
-- `transform_elements` — [src/opendoc/operations.py](../../src/opendoc/operations.py#L236)
+- `insert_node` — [src/opendoc/operations.py](../../src/opendoc/operations.py#L121)
+- `replace_node` — [src/opendoc/operations.py](../../src/opendoc/operations.py#L145)
+- `remove_node` — [src/opendoc/operations.py](../../src/opendoc/operations.py#L165)
+- `extract_text` — [src/opendoc/operations.py](../../src/opendoc/operations.py#L177)
+- `transform_elements` — [src/opendoc/operations.py](../../src/opendoc/operations.py#L241)
 
-Импорты: [opendoc.document_model](#opendoc-document_model), [opendoc.limits](#opendoc-limits), [opendoc.traversal](#opendoc-traversal).
+Импорты: [opendoc.document_model](#opendoc-document_model), [opendoc.integration](#opendoc-integration), [opendoc.limits](#opendoc-limits), [opendoc.traversal](#opendoc-traversal).
 
 Прямые импорты в тестах: не найдены.
 
@@ -425,10 +510,10 @@ Bounded resource management and explicit local-file embedding.
 - `find_resource_uses` — [src/opendoc/resources.py](../../src/opendoc/resources.py#L92)
 - `replace_resource` — [src/opendoc/resources.py](../../src/opendoc/resources.py#L102)
 - `remove_resource` — [src/opendoc/resources.py](../../src/opendoc/resources.py#L122)
-- `find_duplicate_resources` — [src/opendoc/resources.py](../../src/opendoc/resources.py#L161)
-- `embed_resources` — [src/opendoc/resources.py](../../src/opendoc/resources.py#L229)
+- `find_duplicate_resources` — [src/opendoc/resources.py](../../src/opendoc/resources.py#L175)
+- `embed_resources` — [src/opendoc/resources.py](../../src/opendoc/resources.py#L243)
 
-Импорты: [opendoc._validation](#opendoc-_validation), [opendoc.document_model](#opendoc-document_model), [opendoc.limits](#opendoc-limits), [opendoc.traversal](#opendoc-traversal).
+Импорты: [opendoc._validation](#opendoc-_validation), [opendoc.document_model](#opendoc-document_model), [opendoc.integration](#opendoc-integration), [opendoc.limits](#opendoc-limits), [opendoc.traversal](#opendoc-traversal).
 
 Прямые импорты в тестах: [tests/test_resources.py](../../tests/test_resources.py).
 

@@ -4,6 +4,8 @@ from pathlib import Path
 from typing import Any, assert_type
 
 from opendoc import (
+    Anchor,
+    CapabilityProfile,
     CheckData,
     CheckResult,
     ColorValue,
@@ -18,20 +20,30 @@ from opendoc import (
     DocumentModel,
     Footnote,
     InspectionData,
+    IntegrationModel,
     IssueSeverity,
     NodeLocation,
     Paragraph,
     ParagraphProperties,
+    PreservationState,
     Section,
+    TextPosition,
+    TextRange,
     TextRun,
     check_document,
     clone_model,
     compare_inspections,
     document_from_json,
     document_to_json,
+    edit_anchored_text,
+    get_integration,
     inspect_document_model,
     iter_elements,
     iter_footnotes,
+    negotiate_capabilities,
+    preservation_result,
+    set_anchor,
+    set_integration,
 )
 from opendoc.object_matching import ObjectMatch, match_objects
 from opendoc.text_flow import TextFlowData, TextFlowFingerprint
@@ -89,6 +101,18 @@ def main() -> None:
     assert_type(flow.to_dict(), TextFlowData)
     assert_type(flow.to_dict()["tokens"], list[str] | None)
     assert result.success and snapshot["valid"] and measured["valid"]
+    run = paragraph.content[0]
+    assert isinstance(run, TextRun)
+    set_anchor(run, Anchor("typed-run"))
+    model = IntegrationModel(
+        ranges=(TextRange("typed-range", TextPosition("typed-run", 0), TextPosition("typed-run", len(run.text))),)
+    )
+    set_integration(document, model)
+    assert_type(get_integration(document), IntegrationModel | None)
+    assert_type(edit_anchored_text(document, "typed-run", 0, 1, "x"), DocumentModel)
+    assert_type(preservation_result(model), CheckResult)
+    profile = CapabilityProfile("typed-profile", 1)
+    assert_type(negotiate_capabilities(profile, profile), dict[str, tuple[PreservationState, ...]])
     print("Installed typed consumer: runtime and named result fields OK")
 
 

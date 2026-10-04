@@ -10,14 +10,16 @@ from typing import Any, Literal, TypeAlias
 
 from opendoc._json_validation import _json_tree
 from opendoc.diagnostics import CheckResult, DiagnosticIssue, IssueSeverity, _DiagnosticError
-from opendoc.document_model import DocumentModel, Footnote, TextRun
+from opendoc.document_model import DocumentModel, Footnote, Paragraph, Section, TextRun
 from opendoc.limits import DocumentLimits, _quota, _resolve_limits
+from opendoc.properties import ParagraphProperties
 from opendoc.traversal import _walk_locations
 
 ExtensionScope: TypeAlias = Literal["metadata", "properties"]
 UnknownExtensionPolicy: TypeAlias = Literal["error", "preserve"]
 _KEY = re.compile(r"[a-z][a-z0-9_-]*(?:\.[a-z][a-z0-9_-]*)+")
 _BUILTINS = {
+    "opendoc.integration",
     "opendoc.heading",
     "opendoc.list-item",
     "opendoc.anchor",
@@ -26,6 +28,7 @@ _BUILTINS = {
     "opendoc.footnote-reference",
 }
 _BUILTIN_OWNERS = {
+    "opendoc.integration": {"DocumentModel"},
     "opendoc.heading": {"Paragraph"},
     "opendoc.list-item": {"Paragraph"},
     "opendoc.anchor": {"Paragraph", "Table", "TextRun", "Formula", "Image"},
@@ -64,6 +67,26 @@ class ExtensionContext:
 
 
 ExtensionCallback: TypeAlias = Callable[[ExtensionContext], Iterable[DiagnosticIssue] | None]
+ExtensionMigrationCallback: TypeAlias = Callable[[ExtensionValue], Any]
+
+
+@dataclass(frozen=True)
+class ExtensionMigration:
+    """Explicit trusted migration, never loaded by a name in stored JSON."""
+
+    key: str
+    source_version: int
+    target_version: int
+    migrate: ExtensionMigrationCallback
+
+    def __post_init__(self) -> None:
+        _key(self.key)
+        if type(self.source_version) is not int or type(self.target_version) is not int:
+            raise ValueError("migration versions must be integers")
+        if not 1 <= self.source_version < self.target_version:
+            raise ValueError("migration target must be newer than a positive source version")
+        if not callable(self.migrate):
+            raise ValueError("migration callback must be callable")
 
 
 @dataclass(frozen=True)
@@ -140,6 +163,63 @@ def remove_extension(bag: MutableMapping[str, Any], key: str, *, limits: Documen
         del bag[key]
 
 
+def migrate_extension(
+    bag: MutableMapping[str, Any],
+    key: str,
+    target_version: int,
+    migrations: Iterable[ExtensionMigration],
+    *,
+    schema: ExtensionSchema | None = None,
+    scope: ExtensionScope = "metadata",
+    limits: DocumentLimits | None = None,
+) -> ExtensionValue:
+    """Run a unique explicit forward chain atomically, preserving unknown envelope fields.
+
+    Callbacks receive independent values; exceptions propagate without modifying
+    the bag. Their runtime and external side effects remain the caller's responsibility.
+    Unknown extensions are never automatically declared understood or migrated.
+    """
+    budget = _resolve_limits(limits)
+    if scope not in ("metadata", "properties"):
+        raise ValueError("scope must be metadata or properties")
+    value = get_extension(bag, key, limits=budget)
+    if not isinstance(bag, MutableMapping) or value is None:
+        raise ValueError("migration requires a mutable bag with a recognized envelope")
+    if type(target_version) is not int or target_version < value.version:
+        raise ValueError("target version must be an integer >= the current version")
+    selected: dict[int, ExtensionMigration] = {}
+    for index, migration in enumerate(migrations):
+        if index >= budget.max_nodes:
+            _quota("migrations", "nodes", budget.max_nodes)
+        if not isinstance(migration, ExtensionMigration) or migration.key != key:
+            raise ValueError("migrations must belong to the requested extension key")
+        if migration.source_version in selected:
+            raise ValueError("ambiguous migration chain")
+        selected[migration.source_version] = migration
+    working = {key: deepcopy(bag[key])}
+    while value.version != target_version:
+        step = selected.get(value.version)
+        if step is None or step.target_version > target_version:
+            raise ValueError("no migration chain reaches the requested version")
+        data = step.migrate(deepcopy(value))
+        set_extension(working, key, data, version=step.target_version, limits=budget)
+        value = get_extension(working, key, limits=budget)
+        assert value is not None
+    if schema is not None:
+        if not isinstance(schema, ExtensionSchema) or schema.key != key:
+            raise ValueError("schema must belong to the requested extension key")
+        carrier = (
+            DocumentModel(metadata=working)
+            if scope == "metadata"
+            else DocumentModel(sections=[Section(blocks=[Paragraph(properties=ParagraphProperties(working))])])
+        )
+        result = check_extensions(carrier, [schema], limits=budget)
+        if not result.success:
+            raise ValueError("migrated extension failed schema validation")
+    bag[key] = working[key]
+    return value
+
+
 def _schemas(schemas: Iterable[ExtensionSchema], limits: DocumentLimits) -> dict[str, ExtensionSchema]:
     try:
         iterator = iter(schemas)
@@ -208,7 +288,11 @@ def _check_extensions(
             builtin = key in _BUILTINS
             tagged = isinstance(raw, dict) and raw.get("format") == key
             if builtin:
-                if tagged and (owner not in _BUILTIN_OWNERS[key] or key == "opendoc.footnotes" and path != "metadata"):
+                if tagged and (
+                    owner not in _BUILTIN_OWNERS[key]
+                    or key in {"opendoc.footnotes", "opendoc.integration"}
+                    and path != "metadata"
+                ):
                     add(
                         DiagnosticIssue(
                             "extension.builtin-scope",
@@ -309,12 +393,15 @@ def check_extensions(
 __all__ = [
     "ExtensionCallback",
     "ExtensionContext",
+    "ExtensionMigration",
+    "ExtensionMigrationCallback",
     "ExtensionSchema",
     "ExtensionScope",
     "ExtensionValue",
     "UnknownExtensionPolicy",
     "check_extensions",
     "get_extension",
+    "migrate_extension",
     "remove_extension",
     "set_extension",
 ]
