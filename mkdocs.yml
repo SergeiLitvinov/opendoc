@@ -64,4 +64,4 @@ nav:
       - Завершённые возможности: docs/development/completed.md
       - Контракт расширенной модели: docs/development/model-contract.md
       - Зависимости и лицензии: docs/development/dependencies.md
-      - Аудит 0.2.0: docs/development/audit.md
+      - Аудиты библиотеки: docs/development/audit.md
