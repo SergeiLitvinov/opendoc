@@ -52,6 +52,12 @@ compare_documents(source, target, *, policies=None, limits=None)
 не является доказанной потерей. [Сравнение и качество](quality.md) описывает
 границы метрик, эвристики и строгие допуски.
 
+В частности, две модели с одинаковым URI изображения и `data=None` могут
+получить `lossless=True` при `policies=None`: известных потерь нет, но содержимое
+изображения не сравнивалось. Проверьте `measurement.unavailable` с причиной
+`external-data-not-loaded` и неизвестные хеши в снимках, если для вашей задачи
+нужно подтверждение сохранности байтов. URI сам по себе этого не подтверждает.
+
 `CheckPolicy` объединяет поддержанные `QualityPolicy`, `TextPreservationPolicy`,
 `ObjectLossPolicy`, `FormulaLossPolicy` и `EmphasisLossPolicy`. Передавайте iterable
 готовых политик; неизвестная политика даёт `ValueError`. Потребление iterable
