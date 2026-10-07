@@ -5,7 +5,7 @@ from copy import deepcopy
 
 import pytest
 
-from opendoc import (
+from opendoc_model import (
     ANCHOR_PROPERTY,
     INTERNAL_LINK_PROPERTY,
     SECTION_CONTENT_FIELDS,

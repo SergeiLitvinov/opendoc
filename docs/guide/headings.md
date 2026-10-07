@@ -5,7 +5,7 @@
 и не выбирает визуальное оформление. Пример — `examples/headings.py`.
 
 ```python
-from opendoc import Heading, Paragraph, get_heading, set_heading
+from opendoc_model import Heading, Paragraph, get_heading, set_heading
 
 paragraph = Paragraph()
 set_heading(paragraph, Heading(2))

@@ -1,6 +1,6 @@
 """Create, persist and compose document-local links without a format importer."""
 
-from opendoc import (
+from opendoc_model import (
     Anchor,
     DocumentModel,
     InternalLink,
@@ -33,4 +33,4 @@ merged = merge_documents([document, restored], conflicts="rename")
 assert merged.id_maps[1].anchors == {"chapter": "chapter~2"}
 assert [get_internal_link(item.node).target_id for item in iter_internal_links(merged.document)] == ["chapter", "chapter~2"]
 assert compare_documents(document, restored).lossless
-print("OpenDoc internal references example: OK")
+print("OpenDoc Model internal references example: OK")

@@ -15,7 +15,7 @@ from pathlib import Path
 
 enabled = sys.argv[1] == 'math'
 assert {dist.metadata['Name'].lower() for dist in distributions()} == (
-    {'opendoc', 'lxml'} if enabled else {'opendoc'})
+    {'opendoc-model', 'lxml'} if enabled else {'opendoc-model'})
 
 class NoEagerMath(importlib.abc.MetaPathFinder):
     def find_spec(self, fullname, path=None, target=None):
@@ -24,12 +24,12 @@ class NoEagerMath(importlib.abc.MetaPathFinder):
 
 guard = NoEagerMath()
 sys.meta_path.insert(0, guard)
-import opendoc as core
+import opendoc_model as core
 assert Path(core.__file__).resolve().is_relative_to(Path(sys.prefix).resolve())
 for module in pkgutil.walk_packages(core.__path__, core.__name__ + '.'):
     importlib.import_module(module.name)
-from opendoc.formula_quality_policy import formula_fingerprint
-from opendoc.mathml import mathml_to_omml
+from opendoc_model.formula_quality_policy import formula_fingerprint
+from opendoc_model.mathml import mathml_to_omml
 
 # Even when lxml is installed, model operations and LaTeX must not attempt it.
 latex = core.Formula('x^2', core.FormulaFormat.LATEX, fallback_text='x^2')
@@ -85,7 +85,7 @@ print('Installed math boundary: lazy imports, core operations and ' + ('XML enab
 
 
 def verify(python, with_math=False):
-    with tempfile.TemporaryDirectory(prefix="opendoc-math-probe-") as directory:
+    with tempfile.TemporaryDirectory(prefix="opendoc_model-math-probe-") as directory:
         subprocess.run(
             [str(Path(python).absolute()), "-I", "-c", PROBE, "math" if with_math else "core"], cwd=directory, check=True
         )
@@ -94,6 +94,6 @@ def verify(python, with_math=False):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--python", required=True, help="Installed wheel environment")
-    parser.add_argument("--with-math", action="store_true", help="Require only opendoc and lxml distributions")
+    parser.add_argument("--with-math", action="store_true", help="Require only opendoc_model and lxml distributions")
     args = parser.parse_args()
     verify(args.python, args.with_math)

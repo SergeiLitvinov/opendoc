@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from opendoc import DocumentModel, document_from_dict, document_from_json, document_to_dict, document_to_json, save_document
+from opendoc_model import DocumentModel, document_from_dict, document_from_json, document_to_dict, document_to_json, save_document
 
 FIXTURES = Path(__file__).parent / "fixtures/compatibility"
 

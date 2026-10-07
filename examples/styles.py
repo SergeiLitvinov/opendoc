@@ -1,6 +1,6 @@
 """Resolve inherited styles and edit typed properties without an application."""
 
-from opendoc import (
+from opendoc_model import (
     DocumentModel,
     Length,
     Paragraph,

@@ -1,4 +1,4 @@
-/* Controls for the independent OpenDoc documentation theme. */
+/* Controls for the independent OpenDoc Model documentation theme. */
 window.addEventListener('DOMContentLoaded', () => {
     const root = document.documentElement;
     const themeButton = document.querySelector('.docs-theme-button');

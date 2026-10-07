@@ -1,4 +1,4 @@
-name: OpenDoc CI
+name: OpenDoc Model CI
 
 on:
   push:

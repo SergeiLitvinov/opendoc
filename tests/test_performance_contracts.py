@@ -2,7 +2,7 @@
 
 import hashlib
 
-from opendoc import DocumentModel, Paragraph, Section, Table, TableCell, TableRow, TextRun, inspect_document_model
+from opendoc_model import DocumentModel, Paragraph, Section, Table, TableCell, TableRow, TextRun, inspect_document_model
 
 
 def test_nested_table_content_is_computed_once_without_collapsing_aliased_occurrences(monkeypatch):
@@ -33,7 +33,7 @@ def test_nested_table_content_is_computed_once_without_collapsing_aliased_occurr
 
 
 def test_unknown_table_content_remains_unknown_with_repeated_occurrences():
-    from opendoc import Image, Resource, ResourceKind
+    from opendoc_model import Image, Resource, ResourceKind
 
     table = Table([TableRow([TableCell([Image("remote")])])])
     document = DocumentModel(

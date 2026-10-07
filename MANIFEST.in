@@ -1,4 +1,4 @@
-graft src/opendoc
+graft src/opendoc_model
 graft docs
 graft tools
 graft examples

@@ -1,6 +1,6 @@
 """Deliberate static errors; checked but never executed."""
 
-from opendoc import (
+from opendoc_model import (
     CapabilityProfile,
     CheckResult,
     ColorValue,

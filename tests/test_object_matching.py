@@ -1,7 +1,7 @@
 """Mutation cases for occurrence-preserving structural comparison."""
 
-from opendoc.document_model import DocumentModel, Paragraph, Provenance, Section, TextRun
-from opendoc.inspection import compare_inspections, inspect_document_model
+from opendoc_model.document_model import DocumentModel, Paragraph, Provenance, Section, TextRun
+from opendoc_model.inspection import compare_inspections, inspect_document_model
 
 
 def _inspect(*texts, provenance=None):
@@ -80,7 +80,7 @@ def test_page_provenance_without_object_id_is_not_unique_identity():
 
 
 def test_missing_inventory_is_unknown_not_total_loss():
-    from opendoc.inspection import DocumentInspection
+    from opendoc_model.inspection import DocumentInspection
 
     comparison = compare_inspections(_inspect("Text"), DocumentInspection(None, "html"))
     diff = comparison.object_diff
@@ -98,7 +98,7 @@ def test_known_empty_inventory_still_detects_real_deletion():
 
 
 def test_images_match_by_bytes_not_package_resource_ids():
-    from opendoc.document_model import Image, Resource, ResourceKind
+    from opendoc_model.document_model import Image, Resource, ResourceKind
 
     def image_inspection(resource_id, data):
         return inspect_document_model(
@@ -118,7 +118,7 @@ def test_images_match_by_bytes_not_package_resource_ids():
 
 
 def test_duplicate_index_prefers_equal_location_then_first_compatible_occurrence():
-    from opendoc.object_matching import match_objects
+    from opendoc_model.object_matching import match_objects
 
     source = [{"type": "paragraph", "content_hash": "same", "location": str(index)} for index in range(3000)]
     matches, lost, added = match_objects(source, list(reversed(source[:2000])))
@@ -129,7 +129,7 @@ def test_duplicate_index_prefers_equal_location_then_first_compatible_occurrence
 
 
 def test_indexed_origin_pools_merge_unknown_and_same_identity_in_original_order():
-    from opendoc.object_matching import match_objects
+    from opendoc_model.object_matching import match_objects
 
     def item(identity, location):
         return {
@@ -150,7 +150,7 @@ def test_indexed_origin_pools_merge_unknown_and_same_identity_in_original_order(
 
 
 def test_conflicting_duplicate_origins_do_not_gain_matches_from_indexing():
-    from opendoc.object_matching import match_objects
+    from opendoc_model.object_matching import match_objects
 
     source = [
         {

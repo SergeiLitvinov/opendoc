@@ -19,7 +19,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="{{ config.site_description }}">
-  <title>{% if page and not page.is_homepage %}{{ page.title }} · {% endif %}OpenDoc — документация</title>
+  <title>{% if page and not page.is_homepage %}{{ page.title }} · {% endif %}OpenDoc Model — документация</title>
   <link rel="icon" type="image/svg+xml" href="{{ 'docs/assets/documentation-logo.svg'|url }}">
   <script>try { document.documentElement.dataset.theme = localStorage.getItem('opendoc.docs.theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); } catch (_) {}</script>
   {% for path in config.extra_css %}<link rel="stylesheet" href="{{ path|url }}">{% endfor %}
@@ -27,7 +27,7 @@
 <body {% if page and page.is_homepage %}class="docs-home"{% endif %}>
 <a class="skip-link" href="#main-content">Перейти к содержимому</a>
 <header class="docs-header">
-  <a class="docs-brand" href="{{ nav.homepage.url|url }}"><img src="{{ 'docs/assets/documentation-logo.svg'|url }}" width="32" height="32" alt=""><span>OpenDoc<small>Документация</small></span></a>
+  <a class="docs-brand" href="{{ nav.homepage.url|url }}"><img src="{{ 'docs/assets/documentation-logo.svg'|url }}" width="32" height="32" alt=""><span>OpenDoc Model<small>Документация</small></span></a>
   <button class="docs-search-button" type="button" data-open-search>Поиск <kbd>Ctrl K</kbd></button>
   <nav class="docs-top-nav" aria-label="Основные разделы">
     <a href="{{ doc_url('docs/reference/user-guide.md') }}">Руководство</a>
@@ -45,7 +45,7 @@
   <main id="main-content" role="main" tabindex="-1">
     {% if page and page.is_homepage %}
     <section class="docs-hero" aria-labelledby="hero-title">
-      <div><p class="eyebrow">Работа с документами</p><h1 id="hero-title"><span>OpenDoc</span><br>Документы.<br>Структура. Контроль.</h1>
+      <div><p class="eyebrow">Работа с документами</p><h1 id="hero-title"><span>OpenDoc Model</span><br>Документы.<br>Структура. Контроль.</h1>
       <p class="hero-description">Структуры документов, хранение и проверка изменений. Самостоятельная библиотека для ваших приложений.</p>
       <div class="hero-actions"><a class="docs-button" href="{{ doc_url('docs/guide/index.md') }}">Начать работу <span aria-hidden="true">→</span></a><a class="docs-button secondary" href="{{ doc_url('docs/reference/code.md') }}">Изучить код</a></div></div>
       <div class="hero-art" aria-hidden="true"><div class="art-page back"></div><div class="art-page front"><span class="art-label">OD / DOCUMENT</span><strong>Aa</strong><i></i><i></i><i></i><div class="art-formula">x² + y²</div><span class="art-check">✓</span></div></div>
@@ -55,7 +55,7 @@
       <a class="docs-card" href="{{ doc_url('docs/guide/index.md') }}"><span class="card-number">02 / ВОЗМОЖНОСТИ</span><h2>Понять границы</h2><p>Контракт модели, совместимость JSON и границы измерений.</p><span class="card-link">Изучить контракт →</span></a>
       <a class="docs-card" href="{{ doc_url('docs/reference/code.md') }}"><span class="card-number">03 / РАЗРАБОТКА</span><h2>Найти реализацию</h2><p>Модули, определения, импорты и тесты, собранные из исходников.</p><span class="card-link">Открыть навигатор →</span></a>
     </section>
-    <div class="docs-home-note"><strong>Самодостаточная библиотека.</strong> Руководство описывает законченный вариант OpenDoc, а <a href="{{ doc_url('docs/development/completed.md') }}">завершённые возможности</a> связывают его функции с проверками.</div>
+    <div class="docs-home-note"><strong>Самодостаточная библиотека.</strong> Руководство описывает законченный вариант OpenDoc Model, а <a href="{{ doc_url('docs/development/completed.md') }}">завершённые возможности</a> связывают его функции с проверками.</div>
     <details class="docs-overview"><summary>О проекте, установке и примерах</summary><article class="docs-prose">{{ page.content }}</article></details>
     {% else %}
     <article class="docs-prose">{{ page.content if page else '<h1>Страница не найдена</h1>' }}</article>
@@ -64,7 +64,7 @@
       {% if page.next_page %}<a href="{{ page.next_page.url|url }}"><small>Далее →</small>{{ page.next_page.title }}</a>{% endif %}
     </nav>{% endif %}
     {% endif %}
-    <footer class="docs-footer">OpenDoc · <a href="{{ config.repo_url }}">GitHub</a> · <a href="{{ doc_url('docs/development/dependencies.md') }}">Зависимости и лицензии</a></footer>
+    <footer class="docs-footer">OpenDoc Model · <a href="{{ config.repo_url }}">GitHub</a> · <a href="{{ doc_url('docs/development/dependencies.md') }}">Зависимости и лицензии</a></footer>
   </main>
   {% if page and not page.is_homepage %}<aside class="docs-outline" aria-label="На странице"><strong>На странице</strong>{{ outline(page.toc) }}<a class="docs-back-top" href="#main-content">Наверх ↑</a></aside>{% endif %}
 </div>

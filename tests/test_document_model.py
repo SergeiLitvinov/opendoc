@@ -2,7 +2,7 @@
 
 import pytest
 
-from opendoc.document_model import (
+from opendoc_model.document_model import (
     ConversionMode,
     DocumentModel,
     Formula,

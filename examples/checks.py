@@ -2,7 +2,7 @@
 
 import json
 
-from opendoc import (
+from opendoc_model import (
     DocumentModel,
     Paragraph,
     Section,
@@ -30,4 +30,4 @@ invalid = check_document(target)
 issue = next(issue for issue in invalid.issues if issue.code == "model.reference.missing")
 assert issue.location == "sections[0].blocks[0].style_id"
 assert issue.measurement["identifier"] == "missing"
-print("OpenDoc memory checks example: OK")
+print("OpenDoc Model memory checks example: OK")

@@ -1,6 +1,6 @@
 """Nested tables and all six header/footer collections survive public operations."""
 
-from opendoc import (
+from opendoc_model import (
     DocumentModel,
     Paragraph,
     Section,

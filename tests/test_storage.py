@@ -2,7 +2,7 @@
 
 import pytest
 
-from opendoc import ArtifactLimitError, storage
+from opendoc_model import ArtifactLimitError, storage
 
 
 def test_quota_rejection_keeps_previous_file(tmp_path):

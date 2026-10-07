@@ -1,8 +1,8 @@
 """Optional XML support is a measured capability, never an implicit requirement."""
 
-from opendoc import DocumentModel, Formula, FormulaFormat, FormulaLossPolicy, Section, clone_model, compare_documents
-from opendoc.formula_quality_policy import formula_fingerprint
-from opendoc.mathml import mathml_to_omml
+from opendoc_model import DocumentModel, Formula, FormulaFormat, FormulaLossPolicy, Section, clone_model, compare_documents
+from opendoc_model.formula_quality_policy import formula_fingerprint
+from opendoc_model.mathml import mathml_to_omml
 
 latex = Formula("x^2", FormulaFormat.LATEX)
 assert formula_fingerprint(latex)

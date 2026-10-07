@@ -1,6 +1,6 @@
 """Keep an arbitrary opaque package independently of application formats."""
 
-from opendoc import DocumentModel, PackageGraph, PackagePart, PackageRelationship, document_from_json, document_to_json
+from opendoc_model import DocumentModel, PackageGraph, PackagePart, PackageRelationship, document_from_json, document_to_json
 
 part = PackagePart("/данные%2Fraw", "application/octet-stream", b"\x00\xffopaque")
 graph = PackageGraph.create(
@@ -21,4 +21,4 @@ part.data = b"changed input"
 assert graph.parts[part.name].data == b"\x00\xffopaque"
 assert PackageGraph("example.archive").root == "/word/document.xml"
 assert graph.validate() == []
-print("OpenDoc format-neutral package example: OK")
+print("OpenDoc Model format-neutral package example: OK")

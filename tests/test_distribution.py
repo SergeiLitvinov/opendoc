@@ -12,10 +12,10 @@ LICENSE = b"Approved license fixture"
 PROJECT = b"""[project]
 dynamic = ["version"]
 [tool.setuptools.dynamic]
-version = {attr = "opendoc.__version__"}
+version = {attr = "opendoc_model.__version__"}
 """
 METADATA = b"""Metadata-Version: 2.4
-Name: opendoc
+Name: opendoc-model
 Version: 0.1.0
 Requires-Python: >=3.11
 License-Expression: MIT
@@ -29,10 +29,10 @@ Requires-Dist: lxml>=5.0; extra == "math"
 
 def _wheel(path, change=None):
     entries = {
-        "opendoc/__init__.py": b'__version__ = "0.1.0"\n',
-        "opendoc/py.typed": b"",
-        "opendoc-0.1.0.dist-info/METADATA": METADATA,
-        "opendoc-0.1.0.dist-info/licenses/docs/LICENSE": LICENSE,
+        "opendoc_model/__init__.py": b'__version__ = "0.1.0"\n',
+        "opendoc_model/py.typed": b"",
+        "opendoc_model-0.1.0.dist-info/METADATA": METADATA,
+        "opendoc_model-0.1.0.dist-info/licenses/docs/LICENSE": LICENSE,
     }
     if change is not None:
         change(entries)
@@ -45,16 +45,16 @@ def _wheel(path, change=None):
     "change",
     [
         lambda entries: entries.update({"consumer_app/main.py": b""}),
-        lambda entries: entries.update({"opendoc/__pycache__/model.pyc": b""}),
-        lambda entries: entries.update({"opendoc-0.1.0.dist-info/licenses/docs/LICENSE": b"Different owner"}),
-        lambda entries: entries.update({"opendoc-0.1.0.dist-info/METADATA": METADATA.replace(b"0.1.0", b"0.2.0")}),
-        lambda entries: entries.update({"opendoc/__init__.py": b'__version__ = "0.2.0"\n'}),
+        lambda entries: entries.update({"opendoc_model/__pycache__/model.pyc": b""}),
+        lambda entries: entries.update({"opendoc_model-0.1.0.dist-info/licenses/docs/LICENSE": b"Different owner"}),
+        lambda entries: entries.update({"opendoc_model-0.1.0.dist-info/METADATA": METADATA.replace(b"0.1.0", b"0.2.0")}),
+        lambda entries: entries.update({"opendoc_model/__init__.py": b'__version__ = "0.2.0"\n'}),
     ],
 )
 def test_release_verifier_rejects_contaminated_or_inconsistent_wheel(tmp_path, change):
     path = tmp_path / "artifact.whl"
     _wheel(path)
-    assert read_wheel(path, "0.1.0", LICENSE)["opendoc/py.typed"] == b""
+    assert read_wheel(path, "0.1.0", LICENSE)["opendoc_model/py.typed"] == b""
     _wheel(path, change)
     with pytest.raises(ValueError):
         read_wheel(path, "0.1.0", LICENSE)
@@ -64,7 +64,7 @@ def test_release_verifier_rejects_duplicate_wheel_entry(tmp_path):
     path = tmp_path / "artifact.whl"
     _wheel(path)
     with zipfile.ZipFile(path, "a") as archive, pytest.warns(UserWarning, match="Duplicate"):
-        archive.writestr("opendoc/py.typed", b"")
+        archive.writestr("opendoc_model/py.typed", b"")
     with pytest.raises(ValueError, match="Duplicate"):
         read_wheel(path, "0.1.0", LICENSE)
 
@@ -76,8 +76,8 @@ def test_release_verifier_rejects_sdist_contamination(tmp_path, unexpected):
     entries = {
         "PKG-INFO": METADATA,
         "docs/LICENSE": LICENSE,
-        "src/opendoc/__init__.py": b'__version__ = "0.1.0"\n',
-        "src/opendoc/py.typed": b"",
+        "src/opendoc_model/__init__.py": b'__version__ = "0.1.0"\n',
+        "src/opendoc_model/py.typed": b"",
         "pyproject.toml": PROJECT,
     }
     path = tmp_path / "artifact.tar.gz"
@@ -85,7 +85,7 @@ def test_release_verifier_rejects_sdist_contamination(tmp_path, unexpected):
     def write():
         with tarfile.open(path, "w:gz") as archive:
             for name, data in entries.items():
-                member = tarfile.TarInfo("opendoc-0.1.0/" + name)
+                member = tarfile.TarInfo("opendoc_model-0.1.0/" + name)
                 member.size = len(data)
                 archive.addfile(member, io.BytesIO(data))
 

@@ -5,7 +5,7 @@
 ## Независимая копия
 
 ```python
-from opendoc import DocumentModel, Paragraph, Section, TextRun, clone_model, extract_text
+from opendoc_model import DocumentModel, Paragraph, Section, TextRun, clone_model, extract_text
 
 original = DocumentModel(sections=[Section(blocks=[Paragraph([TextRun("Черновик")])])])
 copied = clone_model(original)
@@ -31,7 +31,7 @@ assert extract_text(copied) == "Готово"
 Эти три операции меняют переданный корень **на месте**. `parent`/`location` берётся из обхода именно этого корня; расположение от оригинала не подходит копии. Сначала копируйте документ, если нужно сохранить оригинал.
 
 ```python
-from opendoc import insert_node, iter_sections, replace_node, remove_node
+from opendoc_model import insert_node, iter_sections, replace_node, remove_node
 
 section = next(iter_sections(copied))
 added = insert_node(copied, section, "blocks", 1, Paragraph([TextRun("Приложение")]))
@@ -58,7 +58,7 @@ assert extract_text(copied) == "Готово"
 - `None`, чтобы удалить вхождение.
 
 ```python
-from opendoc import iter_elements, transform_elements
+from opendoc_model import iter_elements, transform_elements
 
 
 def finalize(location):

@@ -1,16 +1,16 @@
 # Зависимости и лицензии
 
-OpenDoc распространяется под [MIT](../LICENSE). Copyright:
+OpenDoc Model распространяется под [MIT](../LICENSE). Copyright:
 **2026 Сергей Литвинов (Sergei Litvinov)**. Данные о лицензии включены в wheel
 и исходный архив. Сторонние Python-пакеты и native-библиотеки не включаются
-в wheel OpenDoc. Проверка архитектуры и чистая установка wheel подтверждают
+в wheel OpenDoc Model. Проверка архитектуры и чистая установка wheel подтверждают
 самостоятельность ядра. Уведомления компонентов сайта сохраняют их собственные лицензии.
 
 ## Ядро и дополнения
 
 Обязательные внешние runtime-зависимости отсутствуют: `dependencies = []`.
 Поддерживается Python 3.11–3.13; стандартная библиотека поставляется с Python,
-а не внутри OpenDoc. Сведения об интерпретаторе и его PSF-лицензии доступны в
+а не внутри OpenDoc Model. Сведения об интерпретаторе и его PSF-лицензии доступны в
 его собственной поставке.
 
 Дополнения устанавливаются явно:
@@ -25,7 +25,7 @@ OpenDoc распространяется под [MIT](../LICENSE). Copyright:
 Версии зависимостей для разработки/CI зафиксированы в `uv.lock`; установка —
 `uv sync --all-extras --locked`. Диапазоны extras в опубликованном wheel не
 являются обещанием тех же бинарных файлов: конечное окружение фиксирует потребитель.
-Wheel OpenDoc не включает lxml, его native-библиотеки или инструменты разработки.
+Wheel OpenDoc Model не включает lxml, его native-библиотеки или инструменты разработки.
 
 ## Полный состав Python-пакетов
 
@@ -82,13 +82,13 @@ Wheel OpenDoc не включает lxml, его native-библиотеки и�
 Проверенный lxml 6.1.3 объявляет BSD-3-Clause, но его `LICENSES.txt` отдельно
 перечисляет ElementTree/PSF-код и bundled zlib (Zlib), iconv (LGPL-2.1), libxml2,
 libxslt и libexslt (MIT с собственными уведомлениями). Конкретная native-поставка
-зависит от ОС и способа сборки. OpenDoc использует только ограниченный XML API;
+зависит от ОС и способа сборки. OpenDoc Model использует только ограниченный XML API;
 ни XML, ни DTD не получают доступа к сети или внешним ресурсам.
 
 В установленном wheel lxml также присутствуют ресурсы isoschematron. Upstream
 прямо называет `RNG2Schtrn.xsl` и `XSD2Schtrn.xsl` **unlicensed**. Они не
-используются OpenDoc и не входят в его wheel. Поэтому аудит подтверждает MIT и
-отсутствие чужих бинарных компонентов у самого OpenDoc, но не объявляет весь
+используются OpenDoc Model и не входят в его wheel. Поэтому аудит подтверждает MIT и
+отсутствие чужих бинарных компонентов у самого OpenDoc Model, но не объявляет весь
 optional lxml wheel безусловно лицензионно чистым. Если потребитель перепаковывает
 lxml или native-библиотеки, он отдельно проверяет их состав и условия, включая
 LGPL и эти ресурсы. Исходные сведения: [lxml LICENSES](https://github.com/lxml/lxml/blob/lxml-6.1.3/LICENSES.txt).
@@ -99,7 +99,7 @@ LGPL и эти ресурсы. Исходные сведения: [lxml LICENSES
 `ruff`, `ast-serialize`, `mypy` и `setuptools` включают свои дополнительные
 copyright/license notices для заимствованных частей, Rust-компонентов, typeshed
 и vendored пакетов. Инвентаризация сохраняет пути и хеши этих файлов.
-Они остаются в собственных поставках инструментов и не включаются в wheel OpenDoc.
+Они остаются в собственных поставках инструментов и не включаются в wheel OpenDoc Model.
 
 Backend setuptools включает autocommand, backports.tarfile, importlib-metadata,
 jaraco.text/context/functools, more-itertools, packaging, platformdirs, tomli,
@@ -111,7 +111,7 @@ wheel, zipp и отдельные NOTICE для config/validate-pyproject. Их 
 (GPL-2.0) и GitHub Actions checkout/setup-uv/upload-artifact/download-artifact/
 configure-pages/upload-pages-artifact/deploy-pages. Actions зафиксированы точными
 commit SHA в `.github/workflows/`; они используются как инструменты CI и не
-распространяются внутри OpenDoc. Их основные лицензии — MIT. ОС runner и
+распространяются внутри OpenDoc Model. Их основные лицензии — MIT. ОС runner и
 установленные в ней системные пакеты не являются runtime-зависимостями библиотеки.
 
 ## Сайт документации

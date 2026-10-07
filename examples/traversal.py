@@ -1,6 +1,6 @@
 """Find and edit nested document content through the standalone traversal API."""
 
-from opendoc import (
+from opendoc_model import (
     DocumentModel,
     Image,
     Paragraph,
@@ -49,7 +49,7 @@ def main():
     assert not any(issue.feature == "unused-resource" for issue in inspect_document_model(document).issues)
     restored = document_from_json(document_to_json(document))
     assert [item.node.text for item in iter_elements(restored, TextRun)] == ["header", "nested text"]
-    print("OpenDoc traversal example: OK")
+    print("OpenDoc Model traversal example: OK")
 
 
 if __name__ == "__main__":

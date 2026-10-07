@@ -4,7 +4,7 @@ import json
 
 import pytest
 
-from opendoc import (
+from opendoc_model import (
     HEADING_PROPERTY,
     SECTION_CONTENT_FIELDS,
     ArtifactLimitError,

@@ -15,7 +15,7 @@
 Повреждённая структура или значение вызывает `ValueError` с расположением и причиной. Например, `$.document.resources['image'].data_base64: invalid base64 data`. Синтаксически неверный JSON даёт `json.JSONDecodeError`, подкласс `ValueError`, с позицией ошибки. Текст сообщений не является стабильным машинным протоколом.
 
 ```python
-from opendoc import document_from_dict
+from opendoc_model import document_from_dict
 
 try:
     document_from_dict({"format": "opendoc.document", "version": True, "document": {}})

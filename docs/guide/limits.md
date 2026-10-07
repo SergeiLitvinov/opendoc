@@ -23,7 +23,7 @@
 Методы `DocumentModel.validate()`, `PackageGraph.validate()` и функция `inspect_document_model()` также принимают `limits` для ограниченного обхода модели в памяти.
 
 ```python
-from opendoc import DocumentLimits, DocumentModel, document_from_json, document_to_json
+from opendoc_model import DocumentLimits, DocumentModel, document_from_json, document_to_json
 
 limits = DocumentLimits(max_bytes=1024 * 1024, max_depth=32, max_nodes=10_000, max_embedded_bytes=512 * 1024)
 text = document_to_json(DocumentModel(metadata={"custom": "example"}), limits=limits)

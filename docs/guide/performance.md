@@ -17,7 +17,7 @@ uv run python -m tools.performance --sizes 128 512 2048 --repeats 3 --output .op
 
 ## Измерение индексов до введения бюджета
 
-Дата: 2026-10-03. Python 3.12.13, Windows 11 10.0.26300, AMD64, OpenDoc 0.1.0.
+Дата: 2026-10-03. Python 3.12.13, Windows 11 10.0.26300, AMD64, OpenDoc Model 0.1.0.
 Для обхода и инспекции N означает число абзацев с отдельным текстовым фрагментом.
 Вложенность таблиц — 8: все абзацы расположены в самой глубокой ячейке.
 Для JSON встроены N KiB байтов одного ресурса; для сопоставления имеются N
@@ -70,7 +70,7 @@ uv run python -m tools.performance --sizes 128 512 2048 --repeats 3 --output .op
 `MatchingLimits(max_work=1_000_000)` задаёт отдельный неотрицательный целочисленный
 бюджет работы. Он передаётся через `compare_documents(..., matching_limits=...)`
 и `compare_inspections(..., matching_limits=...)`. В прямом API
-`opendoc.object_matching.match_objects` аргумент называется `limits`.
+`opendoc_model.object_matching.match_objects` аргумент называется `limits`.
 `None` выбирает тот же конечный бюджет по умолчанию, а не отключает ограничение.
 Пустое сопоставление допускает нулевой бюджет. Пример отказа и успешной проверки —
 [examples/matching_limits.py](../../examples/matching_limits.py).

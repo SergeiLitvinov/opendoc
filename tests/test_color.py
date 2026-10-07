@@ -2,7 +2,7 @@
 
 import pytest
 
-from opendoc.color import ColorSpace, ColorValue, color_to_css
+from opendoc_model.color import ColorSpace, ColorValue, color_to_css
 
 
 def test_hex_color_roundtrip_preserves_alpha():

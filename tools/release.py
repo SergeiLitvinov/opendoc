@@ -34,7 +34,7 @@ def plan(selector, current):
 
 
 def set_version(version, root=ROOT):
-    path = root / "src/opendoc/__init__.py"
+    path = root / "src/opendoc_model/__init__.py"
     text = path.read_text(encoding="utf-8")
     current = source_version(text)
     plan(version, current)
@@ -52,8 +52,8 @@ def set_version(version, root=ROOT):
 
 
 def assets(dist, root=ROOT):
-    version = source_version((root / "src/opendoc/__init__.py").read_bytes())
-    names = [f"opendoc-{version}-py3-none-any.whl", f"opendoc-{version}.tar.gz"]
+    version = source_version((root / "src/opendoc_model/__init__.py").read_bytes())
+    names = [f"opendoc_model-{version}-py3-none-any.whl", f"opendoc_model-{version}.tar.gz"]
     directory = Path(dist)
     marker = directory / ".gitignore"
     if marker.exists():
@@ -83,7 +83,9 @@ def clean(root=ROOT):
         "performance-l16-old-mixed.json",
     }
     output = root / ".opendoc"
-    targets = [root / name for name in ("build", "dist", ".pytest_cache", ".ruff_cache", ".mypy_cache", "src/opendoc.egg-info")]
+    targets = [
+        root / name for name in ("build", "dist", ".pytest_cache", ".ruff_cache", ".mypy_cache", "src/opendoc_model.egg-info")
+    ]
     if output.is_symlink():
         raise ValueError("Generated output directory must not be a symlink")
     if output.exists():
@@ -110,7 +112,7 @@ def main(argv=None):
     commands.add_parser("clean")
     args = parser.parse_args(argv)
     if args.command == "plan":
-        version = plan(args.selector, source_version((ROOT / "src/opendoc/__init__.py").read_bytes()))
+        version = plan(args.selector, source_version((ROOT / "src/opendoc_model/__init__.py").read_bytes()))
         print(version)
         if os.environ.get("GITHUB_OUTPUT"):
             with Path(os.environ["GITHUB_OUTPUT"]).open("a", encoding="utf-8") as stream:

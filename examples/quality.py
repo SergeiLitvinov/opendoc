@@ -1,6 +1,6 @@
 """Independent quality decisions: text, objects, emphasis, formulas and losses."""
 
-from opendoc import (
+from opendoc_model import (
     CheckResult,
     DocumentModel,
     EmphasisLossPolicy,

@@ -1,6 +1,6 @@
 """Finite import assessment and range-aware edits without an adapter or editor."""
 
-from opendoc import (
+from opendoc_model import (
     Anchor,
     DiagnosticIssue,
     DocumentModel,

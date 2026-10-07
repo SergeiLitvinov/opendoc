@@ -1,1 +1,1 @@
-"""OpenDoc development tools."""
+"""OpenDoc Model development tools."""

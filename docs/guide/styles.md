@@ -1,6 +1,6 @@
 # Свойства и эффективный стиль
 
-OpenDoc сохраняет заданные стили и отдельно вычисляет их эффективные значения.
+OpenDoc Model сохраняет заданные стили и отдельно вычисляет их эффективные значения.
 Разрешение стиля не меняет документ, не материализует свойства в каждом run и не
 добавляет историю преобразований. Исполняемый сценарий — `examples/styles.py`.
 
@@ -58,7 +58,7 @@ resolve_style(document, style=None, *, overrides=None, limits=None)
 effective_text_style(document, paragraph, run=None, *, limits=None)
 ```
 
-Обе функции экспортированы из `opendoc` и возвращают независимый `TextStyle`.
+Обе функции экспортированы из `opendoc_model` и возвращают независимый `TextStyle`.
 `resolve_style` принимает ID из `document.styles`, самостоятельный `TextStyle`
 или `None`. Сначала разрешается цепочка `base_style_id` до корня, затем значения
 накладываются от корня к потомку. `overrides`, если задан, должен быть `TextStyle`;

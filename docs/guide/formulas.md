@@ -2,15 +2,15 @@
 
 `Formula` хранит исходник, `FormulaFormat` (`LATEX`, `MATHML`, `OMML`), признак `display`, переносимый `fallback_text`, геометрию, свойства и происхождение. JSON сохраняет исходник точно; чтение документа не исполняет его и не преобразует офисный файл.
 
-`formula_fingerprint(formula)` из `opendoc.formula_quality_policy` возвращает воспроизводимый SHA-256 или `None`, когда представление не поддержано, повреждено, слишком сложно или требует отсутствующей зависимости. `FormulaLossPolicy` использует эти отпечатки и учитывает повторные вхождения формул. Недоступность не проходит строгий допуск, даже если исходные строки одинаковы и задан большой бюджет.
+`formula_fingerprint(formula)` из `opendoc_model.formula_quality_policy` возвращает воспроизводимый SHA-256 или `None`, когда представление не поддержано, повреждено, слишком сложно или требует отсутствующей зависимости. `FormulaLossPolicy` использует эти отпечатки и учитывает повторные вхождения формул. Недоступность не проходит строгий допуск, даже если исходные строки одинаковы и задан большой бюджет.
 
 ## Без дополнительных зависимостей
 
-LaTeX сохраняется и проверяется через точный отпечаток исходной строки. Пробелы и написание команд значимы; OpenDoc не объявляет математически эквивалентные выражения равными и не рендерит их.
+LaTeX сохраняется и проверяется через точный отпечаток исходной строки. Пробелы и написание команд значимы; OpenDoc Model не объявляет математически эквивалентные выражения равными и не рендерит их.
 
 ```python
 from pathlib import Path
-from opendoc import (
+from opendoc_model import (
     ConversionReport,
     DocumentModel,
     Formula,
@@ -27,7 +27,7 @@ report = ConversionReport(Path("formula.json"))
 assert FormulaLossPolicy().evaluate(report, compare_inspections(inspection, inspection))
 ```
 
-Для MathML/OMML без extra `math` отпечаток равен `None`. Структура модели может быть допустимой, а XML-измерение — недоступным. Прямой вызов `opendoc.mathml.mathml_to_omml()` без бэкенда даёт `ImportError`; обычный импорт OpenDoc не загружает `lxml`. Установить поддержку в окружении проекта можно через `uv sync --extra math`, в окружении потребителя — установкой wheel с `[math]`.
+Для MathML/OMML без extra `math` отпечаток равен `None`. Структура модели может быть допустимой, а XML-измерение — недоступным. Прямой вызов `opendoc_model.mathml.mathml_to_omml()` без бэкенда даёт `ImportError`; обычный импорт OpenDoc Model не загружает `lxml`. Установить поддержку в окружении проекта можно через `uv sync --extra math`, в окружении потребителя — установкой wheel с `[math]`.
 
 ## Поддержанное MathML
 
@@ -53,16 +53,16 @@ assert FormulaLossPolicy().evaluate(report, compare_inspections(inspection, insp
 Пример с установленным `math`:
 
 ```python
-from opendoc import Formula, FormulaFormat
-from opendoc.formula_quality_policy import formula_fingerprint
-from opendoc.mathml import mathml_to_omml
+from opendoc_model import Formula, FormulaFormat
+from opendoc_model.formula_quality_policy import formula_fingerprint
+from opendoc_model.mathml import mathml_to_omml
 
 source = '<math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mi>x</mi><mn>2</mn></mfrac></math>'
 native = mathml_to_omml(source)
 assert formula_fingerprint(Formula(source, FormulaFormat.MATHML)) == formula_fingerprint(Formula(native, FormulaFormat.OMML))
 ```
 
-Это подмножество OpenDoc, а не реализация всей [спецификации Presentation MathML](https://www.w3.org/TR/MathML/chapter3-d.html).
+Это подмножество OpenDoc Model, а не реализация всей [спецификации Presentation MathML](https://www.w3.org/TR/MathML/chapter3-d.html).
 
 ## Отпечаток OMML
 
@@ -87,9 +87,9 @@ API принимает Unicode-строку, кодируемую в UTF-8. До
 ## Независимость установки
 
 `tools/check_wheel.py` исполняет основные сценарии в отдельном процессе,
-во временном каталоге, с `-I` и окружением только с установленным OpenDoc.
+во временном каталоге, с `-I` и окружением только с установленным OpenDoc Model.
 Модель, изменение, ресурсы, композиция, JSON и сравнение работают без `math`.
-Проверка также импортирует все модули и подпакеты OpenDoc под наблюдением,
+Проверка также импортирует все модули и подпакеты OpenDoc Model под наблюдением,
 которое отвергает любую попытку импорта `lxml` во время загрузки библиотеки,
 работы с моделью или LaTeX.
 
@@ -102,13 +102,13 @@ JSON сохраняет исходники MathML/OMML в обеих устан�
 неподдержанная конструкция и DTD остаются недоступными.
 
 ```text
-uv run python -m tools.check_wheel --python <python-окружения-только-с-opendoc>
-uv run python -m tools.check_math --python <python-окружения-с-opendoc-и-lxml> --with-math
+uv run python -m tools.check_wheel --python <python-окружения-только-с-opendoc_model>
+uv run python -m tools.check_math --python <python-окружения-с-opendoc_model-и-lxml> --with-math
 ```
 
 В CI эти установки проверяются на Python 3.11/3.12/3.13. Math-зависимость
 экспортируется из `uv.lock` без dev/docs extras и устанавливается с проверкой
-хешей; тест требует ровно дистрибутивы `opendoc` и `lxml`. Это проверка границы
+хешей; тест требует ровно дистрибутивы `opendoc-model` и `lxml`. Это проверка границы
 библиотеки, а не обещание поддержки произвольного математического языка.
 Архитектурный тест обходит исходники рекурсивно, включая будущие подпакеты,
 и отвергает импорты приложения-потребителя.

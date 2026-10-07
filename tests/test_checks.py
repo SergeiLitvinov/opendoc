@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from opendoc import (
+from opendoc_model import (
     ArtifactLimitError,
     CheckResult,
     ConversionReport,

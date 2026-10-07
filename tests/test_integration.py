@@ -6,7 +6,7 @@ from hashlib import sha256
 
 import pytest
 
-from opendoc import (
+from opendoc_model import (
     INTEGRATION_PROPERTY,
     Accessibility,
     AffineTransform,

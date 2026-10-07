@@ -5,7 +5,7 @@ from copy import deepcopy
 
 import pytest
 
-from opendoc import (
+from opendoc_model import (
     FOOTNOTE_REFERENCE_PROPERTY,
     FOOTNOTES_PROPERTY,
     SECTION_CONTENT_FIELDS,

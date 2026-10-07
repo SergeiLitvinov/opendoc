@@ -2,7 +2,7 @@
 
 import pytest
 
-from opendoc.units import (
+from opendoc_model.units import (
     CoordinateOrigin,
     Point2D,
     Rect2D,

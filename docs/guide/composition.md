@@ -1,11 +1,11 @@
 # Объединение и извлечение документов
 
-`opendoc.composition` создаёт самостоятельную модель вместе с поддержанными зависимостями. Исходные документы остаются неизменными; результат проходит семантическую валидацию перед возвратом. Операции не требуют редактора, файлового назначения или адаптера офисного формата. [Исполняемый пример](../../examples/composition.py) объединяет конфликтующие документы, извлекает абзац из вложенной таблицы и сохраняет/читает его JSON.
+`opendoc_model.composition` создаёт самостоятельную модель вместе с поддержанными зависимостями. Исходные документы остаются неизменными; результат проходит семантическую валидацию перед возвратом. Операции не требуют редактора, файлового назначения или адаптера офисного формата. [Исполняемый пример](../../examples/composition.py) объединяет конфликтующие документы, извлекает абзац из вложенной таблицы и сохраняет/читает его JSON.
 
 ## Объединение
 
 ```python
-from opendoc import DocumentModel, Paragraph, Section, TextRun, TextStyle, merge_documents, save_document
+from opendoc_model import DocumentModel, Paragraph, Section, TextRun, TextStyle, merge_documents, save_document
 
 first = DocumentModel(
     sections=[Section(blocks=[Paragraph([TextRun("Первый")], style_id="body")])], styles={"body": TextStyle(bold=True)}
@@ -57,7 +57,7 @@ save_document(merged.document, "merged.json")
 ## Извлечение с зависимостями
 
 ```python
-from opendoc import extract_document, iter_elements
+from opendoc_model import extract_document, iter_elements
 
 location = list(iter_elements(merged.document, Paragraph))[1]
 extracted = extract_document(merged.document, location)

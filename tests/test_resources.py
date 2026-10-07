@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from opendoc import (
+from opendoc_model import (
     SECTION_CONTENT_FIELDS,
     ArtifactLimitError,
     DocumentLimits,
@@ -266,7 +266,7 @@ def test_selection_keeps_unselected_external_and_deduplicates_requested_ids(tmp_
     document = DocumentModel(
         resources={"local": _resource("local", None, str(file)), "remote": _resource("remote", None, "https://invalid.test/a")}
     )
-    from opendoc import resources
+    from opendoc_model import resources
 
     original = resources._read_local
     calls = []

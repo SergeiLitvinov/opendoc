@@ -1,6 +1,6 @@
 """Persist consumer data and explicitly validate its version and semantics."""
 
-from opendoc import (
+from opendoc_model import (
     DiagnosticIssue,
     DocumentModel,
     ExtensionContext,
@@ -39,4 +39,4 @@ assert issue.location == "metadata['org.example.review'].data.approved"
 assert not check_extensions(document, []).success
 unverified = check_extensions(document, [], unknown="preserve")
 assert unverified.success and unverified.metrics["extensions"]["unknown"] == 1
-print("OpenDoc explicit extension validation example: OK")
+print("OpenDoc Model explicit extension validation example: OK")

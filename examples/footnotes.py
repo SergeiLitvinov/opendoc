@@ -1,6 +1,6 @@
 """Rich notes and their links work without a consuming application."""
 
-from opendoc import (
+from opendoc_model import (
     DocumentModel,
     Footnote,
     FootnoteReference,
@@ -31,4 +31,4 @@ assert get_footnote(selected, "source").blocks[0].plain_text == "Source and expl
 merged = merge_documents([document, restored], conflicts="rename")
 assert merged.id_maps[1].footnotes == {"source": "source~2"}
 assert [item.number for item in iter_footnote_numbers(merged.document)] == [1, 2]
-print("OpenDoc rich footnotes example: OK")
+print("OpenDoc Model rich footnotes example: OK")

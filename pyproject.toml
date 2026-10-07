@@ -3,7 +3,7 @@ requires = ["setuptools==84.0.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "opendoc"
+name = "opendoc-model"
 dynamic = ["version"]
 description = "Independent document structures, serialization and structural comparison"
 readme = "README.md"
@@ -13,10 +13,10 @@ license-files = ["docs/LICENSE"]
 dependencies = []
 
 [project.urls]
-Homepage = "https://github.com/SergeiLitvinov/opendoc"
-Documentation = "https://SergeiLitvinov.github.io/opendoc/"
-Repository = "https://github.com/SergeiLitvinov/opendoc"
-Issues = "https://github.com/SergeiLitvinov/opendoc/issues"
+Homepage = "https://github.com/SergeiLitvinov/opendoc-model"
+Documentation = "https://SergeiLitvinov.github.io/opendoc-model/"
+Repository = "https://github.com/SergeiLitvinov/opendoc-model"
+Issues = "https://github.com/SergeiLitvinov/opendoc-model/issues"
 
 [project.optional-dependencies]
 math = ["lxml>=5.0.0"]
@@ -51,7 +51,7 @@ pythonpath = ["."]
 
 [tool.mypy]
 python_version = "3.11"
-files = ["src/opendoc"]
+files = ["src/opendoc_model"]
 strict = true
 cache_dir = ".opendoc/mypy-cache"
 show_error_codes = true
@@ -60,10 +60,10 @@ show_error_codes = true
 where = ["src"]
 
 [tool.setuptools.dynamic]
-version = {attr = "opendoc.__version__"}
+version = {attr = "opendoc_model.__version__"}
 
 [tool.setuptools.package-data]
-opendoc = ["py.typed"]
+opendoc_model = ["py.typed"]
 
 [tool.uv]
 cache-dir = ".opendoc/uv-cache"

@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from opendoc import (
+from opendoc_model import (
     ConversionReport,
     DocumentModel,
     Formula,
@@ -16,8 +16,8 @@ from opendoc import (
     compare_inspections,
     inspect_document_model,
 )
-from opendoc.formula_quality_policy import formula_fingerprint
-from opendoc.mathml import mathml_to_omml
+from opendoc_model.formula_quality_policy import formula_fingerprint
+from opendoc_model.mathml import mathml_to_omml
 
 MATHML = "http://www.w3.org/1998/Math/MathML"
 OMML = "http://schemas.openxmlformats.org/officeDocument/2006/math"

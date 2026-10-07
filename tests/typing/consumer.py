@@ -3,7 +3,7 @@
 from pathlib import Path
 from typing import Any, assert_type
 
-from opendoc import (
+from opendoc_model import (
     Anchor,
     CapabilityProfile,
     CheckData,
@@ -45,8 +45,8 @@ from opendoc import (
     set_anchor,
     set_integration,
 )
-from opendoc.object_matching import ObjectMatch, match_objects
-from opendoc.text_flow import TextFlowData, TextFlowFingerprint
+from opendoc_model.object_matching import ObjectMatch, match_objects
+from opendoc_model.text_flow import TextFlowData, TextFlowFingerprint
 
 
 def main() -> None:

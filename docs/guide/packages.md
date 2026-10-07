@@ -1,7 +1,7 @@
 # Непрозрачные пакеты
 
 `PackageGraph` хранит объявленный формат, логический корень, части и направленные
-связи. Он отделён от семантических ресурсов документа. OpenDoc сохраняет байты
+связи. Он отделён от семантических ресурсов документа. OpenDoc Model сохраняет байты
 и топологию без распаковки, исполнения, конвертации или чтения внешних целей.
 Смысл media type, relationship type и самих байтов задаёт потребитель.
 
@@ -15,7 +15,7 @@
 части отклоняется даже при равных данных.
 
 ```python
-from opendoc import PackageGraph, PackagePart, PackageRelationship
+from opendoc_model import PackageGraph, PackagePart, PackageRelationship
 
 graph = PackageGraph.create(
     "example.archive",

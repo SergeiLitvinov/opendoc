@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from opendoc import (
+from opendoc_model import (
     ArtifactLimitError,
     DocumentLimits,
     DocumentModel,
@@ -28,7 +28,7 @@ from opendoc import (
     load_document,
     save_document,
 )
-from opendoc.storage import _atomic_write_chunks
+from opendoc_model.storage import _atomic_write_chunks
 
 
 def _small_payload(metadata=None):
@@ -129,7 +129,7 @@ def test_embedded_data_budget_sums_resources_and_package_parts():
 
 
 def test_rejected_embedded_size_does_not_decode_the_binary_data(monkeypatch):
-    import opendoc._json_validation as validation
+    import opendoc_model._json_validation as validation
 
     payload = document_to_dict(_with_embedded_data())
 

@@ -3,7 +3,7 @@
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from opendoc import (
+from opendoc_model import (
     DocumentModel,
     Paragraph,
     Provenance,
@@ -76,7 +76,7 @@ def main():
     with TemporaryDirectory(dir=generated_dir, prefix="operations-example-") as directory:
         path = save_document(result, Path(directory) / "document.json")
         assert extract_text(load_document(path)) == "Draft header\nFinal body"
-    print("OpenDoc operations example: OK")
+    print("OpenDoc Model operations example: OK")
 
 
 if __name__ == "__main__":

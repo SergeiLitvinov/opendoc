@@ -2,7 +2,7 @@
 
 import pytest
 
-from opendoc import (
+from opendoc_model import (
     ArtifactLimitError,
     DocumentModel,
     MatchingLimits,
@@ -14,7 +14,7 @@ from opendoc import (
     compare_inspections,
     inspect_document_model,
 )
-from opendoc.object_matching import match_objects
+from opendoc_model.object_matching import match_objects
 
 
 @pytest.mark.parametrize("value", [-1, True, 1.5, None, "100"])
@@ -119,7 +119,7 @@ def test_invalid_models_keep_their_validation_error_with_zero_matching_work():
 
 
 def test_comparison_domains_share_work_and_discard_partial_semantic_losses():
-    from opendoc import Anchor, Footnote, set_anchor
+    from opendoc_model import Anchor, Footnote, set_anchor
 
     paragraph = Paragraph([TextRun("target")])
     set_anchor(paragraph, Anchor("target"))

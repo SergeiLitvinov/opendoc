@@ -12,8 +12,8 @@ from typing import get_args, get_origin, get_type_hints
 
 import pytest
 
-import opendoc
-from opendoc import ColorValue, FormulaFormat, document_from_json, document_to_json
+import opendoc_model
+from opendoc_model import ColorValue, FormulaFormat, document_from_json, document_to_json
 
 FIXTURES = Path(__file__).parent / "fixtures/compatibility"
 
@@ -53,7 +53,7 @@ def _describe(value):
         return {"enum": {name: item.value for name, item in value.__members__.items()}}
     if inspect.isclass(value) and issubclass(value, BaseException):
         return {"exception_bases": [base.__name__ for base in value.__mro__[1:]]}
-    if inspect.isfunction(value) or (inspect.isclass(value) and value.__module__.startswith("opendoc")):
+    if inspect.isfunction(value) or (inspect.isclass(value) and value.__module__.startswith("opendoc_model")):
         # TypedDict classes expose a mapping schema rather than a runtime signature.
         if hasattr(value, "__required_keys__"):
             return {
@@ -79,6 +79,8 @@ def _describe(value):
         return result
     if isinstance(value, frozenset):
         return {"constant": sorted(value)}
+    if isinstance(value, types.UnionType) or get_origin(value) is not None:
+        return {"constant": str(value).replace("opendoc_model.", "opendoc.")}
     return {"constant": str(value)}
 
 
@@ -89,7 +91,15 @@ def _type_contract(annotation):
         return {"union": sorted((_type_contract(item) for item in get_args(annotation)), key=lambda item: json.dumps(item))}
     if origin is not None:
         return {"origin": _type_contract(origin), "arguments": [_type_contract(item) for item in get_args(annotation)]}
-    return f"{annotation.__module__}.{annotation.__qualname__}"
+    module = annotation.__module__
+    if module == "opendoc_model" or module.startswith("opendoc_model."):
+        module = "opendoc" + module[len("opendoc_model") :]
+    return f"{module}.{annotation.__qualname__}"
+
+
+def _saved_module(name):
+    """Retain the original API fixture while checking its explicitly renamed namespace."""
+    return importlib.import_module("opendoc_model" + name[len("opendoc") :])
 
 
 def _assert_parameters_compatible(expected, actual, label):
@@ -117,15 +127,17 @@ def _assert_contract(expected, actual, label):
 def test_saved_public_api_contract():
     baseline = json.loads((FIXTURES / "api-0.1.json").read_text(encoding="utf-8"))
     for module_name, exports in baseline["modules"].items():
-        module = importlib.import_module(module_name)
+        module = _saved_module(module_name)
         assert set(exports) <= set(_exports(module)), module_name
         for name, contract in exports.items():
             value = getattr(module, name)
             _assert_contract(contract, _describe(value), f"{module_name}.{name}")
     for name, source_module in baseline["root_identities"].items():
-        assert getattr(opendoc, name) is getattr(importlib.import_module(source_module), name), name
+        assert getattr(opendoc_model, name) is getattr(_saved_module(source_module), name), name
     for class_name, expected in baseline.get("result_returns", {}).items():
-        annotations = get_type_hints(getattr(opendoc, class_name).to_dict, localns={"DocumentLimits": opendoc.DocumentLimits})
+        annotations = get_type_hints(
+            getattr(opendoc_model, class_name).to_dict, localns={"DocumentLimits": opendoc_model.DocumentLimits}
+        )
         assert _type_contract(annotations["return"]) == expected, class_name
 
 

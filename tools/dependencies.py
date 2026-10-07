@@ -54,8 +54,8 @@ def locked(root=ROOT, environment=None):
     project = tomllib.loads((root / "pyproject.toml").read_text(encoding="utf-8"))
     lock = tomllib.loads((root / "uv.lock").read_text(encoding="utf-8"))
     packages = {item["name"]: item for item in lock["package"]}
-    roles = {name: set() for name in packages if name != "opendoc"}
-    for profile, dependencies in packages["opendoc"].get("optional-dependencies", {}).items():
+    roles = {name: set() for name in packages if name != "opendoc-model"}
+    for profile, dependencies in packages["opendoc-model"].get("optional-dependencies", {}).items():
         pending = list(dependencies)
         seen = set()
         while pending:

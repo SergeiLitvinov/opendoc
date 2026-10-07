@@ -79,18 +79,18 @@ jobs:
             git merge-base --is-ancestor "$GITHUB_SHA" "$TAG^{commit}"
             git merge-base --is-ancestor "$TAG^{commit}" origin/main
           else
-            if ! git diff --quiet -- src/opendoc/__init__.py; then
-              git add src/opendoc/__init__.py
+            if ! git diff --quiet -- src/opendoc_model/__init__.py; then
+              git add src/opendoc_model/__init__.py
               git commit -m "Release $TAG"
             fi
-            git tag -a "$TAG" -m "OpenDoc $RELEASE_VERSION"
+            git tag -a "$TAG" -m "OpenDoc Model $RELEASE_VERSION"
             git push --atomic origin HEAD:main "refs/tags/$TAG"
           fi
       - name: Publish verified assets
         run: |
           TAG="v$RELEASE_VERSION"
           if ! gh release view "$TAG" > /dev/null 2>&1; then
-            gh release create "$TAG" --verify-tag --draft --title "OpenDoc $RELEASE_VERSION" --generate-notes
+            gh release create "$TAG" --verify-tag --draft --title "OpenDoc Model $RELEASE_VERSION" --generate-notes
           fi
           test "$(gh release view "$TAG" --json isDraft --jq .isDraft)" = true
           gh release upload "$TAG" .opendoc/release-dist/* --clobber

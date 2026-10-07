@@ -1,6 +1,6 @@
 """List membership survives JSON and remains independent during composition."""
 
-from opendoc import (
+from opendoc_model import (
     DocumentModel,
     ListItem,
     Paragraph,

@@ -6,13 +6,13 @@ from pathlib import Path
 
 import pytest
 
-import opendoc
+import opendoc_model
 
 
 def _check_imports(root):
     paths = list(root.rglob("*.py"))
     assert paths
-    allowed = sys.stdlib_module_names | {"opendoc", "lxml"}
+    allowed = sys.stdlib_module_names | {"opendoc_model", "lxml"}
     for path in paths:
         tree = ast.parse(path.read_text(encoding="utf-8"))
         for node in ast.walk(tree):
@@ -26,7 +26,7 @@ def _check_imports(root):
 
 
 def test_production_imports_are_standard_library_or_document_modules():
-    _check_imports(Path(opendoc.__file__).parent)
+    _check_imports(Path(opendoc_model.__file__).parent)
 
 
 def test_example_names_do_not_shadow_standard_library_modules():

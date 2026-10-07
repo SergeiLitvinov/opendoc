@@ -6,7 +6,7 @@ from dataclasses import FrozenInstanceError
 
 import pytest
 
-from opendoc import (
+from opendoc_model import (
     SECTION_CONTENT_FIELDS,
     ArtifactLimitError,
     DocumentLimits,
@@ -33,7 +33,7 @@ from opendoc import (
     iter_sections,
     walk_model,
 )
-from opendoc.object_inventory import inspect_objects
+from opendoc_model.object_inventory import inspect_objects
 
 
 def _document():

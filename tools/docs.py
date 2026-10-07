@@ -39,7 +39,7 @@ def imports(tree, module, package=False):
 
 
 def definitions(root=ROOT):
-    source = root / "src/opendoc"
+    source = root / "src/opendoc_model"
     modules = {
         module_name(path, source): (path, ast.parse(path.read_text(encoding="utf-8-sig")))
         for path in sorted(source.rglob("*.py"))
@@ -89,25 +89,25 @@ def generated(root=ROOT):
     api = [
         "# Справочник API",
         "",
-        "Корневые экспорты `opendoc` извлечены из явных импортов. Ссылки ведут к объявлениям и точным строкам исходников.",
+        "Корневые экспорты `opendoc_model` извлечены из явных импортов. Ссылки ведут к объявлениям и точным строкам исходников.",
         "",
         "| Имя | Модуль | Объявление |",
         "|---|---|---|",
     ]
-    for node in modules["opendoc"][1].body:
+    for node in modules["opendoc_model"][1].body:
         if not isinstance(node, ast.ImportFrom) or node.level != 1 or not node.module:
             continue
-        module = "opendoc." + node.module
+        module = "opendoc_model." + node.module
         path, tree = modules[module]
         for alias in node.names:
             public = alias.asname or alias.name
             declared = next((item for item in tree.body if getattr(item, "name", None) == alias.name), None)
             api.append(f"| `{public}` | `{module}` | {source_link(root, path, declared.lineno if declared else None)} |")
     api += ["", "## Объявления", ""]
-    for node in modules["opendoc"][1].body:
+    for node in modules["opendoc_model"][1].body:
         if not isinstance(node, ast.ImportFrom) or node.level != 1 or not node.module:
             continue
-        path, tree = modules["opendoc." + node.module]
+        path, tree = modules["opendoc_model." + node.module]
         for alias in node.names:
             declared = next((item for item in tree.body if getattr(item, "name", None) == alias.name), None)
             if declared is None:

@@ -2,7 +2,7 @@
 
 import pytest
 
-from opendoc import (
+from opendoc_model import (
     DocumentModel,
     PackageGraph,
     PackagePart,

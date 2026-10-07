@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from opendoc import (
+from opendoc_model import (
     SECTION_CONTENT_FIELDS,
     ArtifactLimitError,
     Box,
@@ -44,7 +44,7 @@ from opendoc import (
     transform_elements,
     walk_model,
 )
-from opendoc.properties import ParagraphProperties
+from opendoc_model.properties import ParagraphProperties
 
 
 def _paragraph(text):

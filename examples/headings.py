@@ -1,6 +1,6 @@
 """Create, edit, find, save and compare a semantic heading independently."""
 
-from opendoc import (
+from opendoc_model import (
     DocumentModel,
     Heading,
     Paragraph,
@@ -25,4 +25,4 @@ set_heading(next(iter_headings(changed)).node, Heading(2))
 comparison = compare_documents(restored, changed)
 assert comparison.metrics["comparison"]["object_diff"]["changed_headings"] == 1
 assert get_heading(paragraph) == Heading(1)
-print("OpenDoc heading example: OK")
+print("OpenDoc Model heading example: OK")

@@ -3,7 +3,7 @@
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from opendoc import (
+from opendoc_model import (
     DocumentModel,
     Image,
     Paragraph,
@@ -45,4 +45,4 @@ with TemporaryDirectory(prefix="resource-example-", dir=workspace) as temporary:
     replace_resource(portable, copy_id, Resource("replacement", ResourceKind.RASTER_IMAGE, "image/png", b"updated"))
     assert portable.validate() == []
     assert load_document(save_document(portable, directory / "document.json")) == portable
-print("OpenDoc resources example: OK")
+print("OpenDoc Model resources example: OK")

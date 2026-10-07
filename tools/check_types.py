@@ -18,11 +18,11 @@ import json
 import sys
 from importlib.metadata import distributions
 from pathlib import Path
-import opendoc
-module = Path(opendoc.__file__).resolve()
+import opendoc_model
+module = Path(opendoc_model.__file__).resolve()
 assert module.is_relative_to(Path(sys.prefix).resolve()), module
 assert (module.parent / 'py.typed').is_file()
-assert {dist.metadata['Name'].lower() for dist in distributions()} == {'opendoc'}
+assert {dist.metadata['Name'].lower() for dist in distributions()} == {'opendoc-model'}
 print(json.dumps({'module': str(module), 'python': sys.executable}))
 """
 
@@ -73,13 +73,13 @@ def verify(python):
         if negative.returncode != 1 or not expected or actual != expected or len(errors) != len(expected):
             raise RuntimeError("Expected consumer errors were not detected exactly:\n" + negative.stdout + negative.stderr)
         # If src/editable imports leak into this run, disabling site-packages
-        # would still find OpenDoc. Require its installed imports to disappear.
+        # would still find OpenDoc Model. Require its installed imports to disappear.
         hidden = subprocess.run(
             base + ["--no-site-packages", "consumer.py"], cwd=working, env=environment, text=True, capture_output=True
         )
-        if hidden.returncode != 1 or "[import-not-found]" not in hidden.stdout or '"opendoc"' not in hidden.stdout:
+        if hidden.returncode != 1 or "[import-not-found]" not in hidden.stdout or '"opendoc_model"' not in hidden.stdout:
             raise RuntimeError(
-                "Consumer unexpectedly found OpenDoc without installed packages:\n" + hidden.stdout + hidden.stderr
+                "Consumer unexpectedly found OpenDoc Model without installed packages:\n" + hidden.stdout + hidden.stderr
             )
         subprocess.run([python, "-I", "consumer.py"], cwd=working, env=environment, check=True)
         print(f"Installed types: positive consumer passed; all {len(expected)} deliberate errors detected; src excluded")
@@ -87,5 +87,5 @@ def verify(python):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--python", required=True, help="Empty environment with only the OpenDoc wheel installed")
+    parser.add_argument("--python", required=True, help="Empty environment with only the OpenDoc Model wheel installed")
     verify(parser.parse_args().python)

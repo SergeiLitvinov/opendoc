@@ -7,7 +7,7 @@ from types import MappingProxyType
 
 import pytest
 
-from opendoc import (
+from opendoc_model import (
     SECTION_CONTENT_FIELDS,
     ArtifactLimitError,
     DiagnosticIssue,

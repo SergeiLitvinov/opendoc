@@ -4,7 +4,7 @@
 
 ```python
 from pathlib import Path
-from opendoc import (
+from opendoc_model import (
     ConversionReport,
     DocumentModel,
     ObjectLossPolicy,

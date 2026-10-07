@@ -1,9 +1,9 @@
 # Обход, поиск и ресурсные ссылки
 
-OpenDoc обходит документ и любое структурное поддерево без пользовательской рекурсии. `walk_model()` возвращает структурные вхождения; фильтры находят секции, блоки, inline или нужные типы элементов. Обход используется также в валидации, инспекции и инвентаризации.
+OpenDoc Model обходит документ и любое структурное поддерево без пользовательской рекурсии. `walk_model()` возвращает структурные вхождения; фильтры находят секции, блоки, inline или нужные типы элементов. Обход используется также в валидации, инспекции и инвентаризации.
 
 ```python
-from opendoc import DocumentModel, Image, Paragraph, Section, Table, TableCell, TableRow, TextRun, iter_elements
+from opendoc_model import DocumentModel, Image, Paragraph, Section, Table, TableCell, TableRow, TextRun, iter_elements
 
 paragraph = Paragraph([TextRun("Текст"), Image("diagram", "Схема")])
 document = DocumentModel(sections=[Section(blocks=[Table([TableRow([TableCell([paragraph])])])])])
@@ -78,7 +78,7 @@ for reference in iter_elements(document, TextRun):
 Ссылки идут в порядке владельцев при обходе, для одного изображения — основная, fallback, surrogate; для текста — ресурсная ссылка, затем surrogate. Отсутствующие необязательные ссылки пропускаются. Неизвестный непустой идентификатор выдаётся как ссылка; пустой/нетекстовый идентификатор и повреждённая форма полей вызывают `ValueError`.
 
 ```python
-from opendoc import iter_resource_references
+from opendoc_model import iter_resource_references
 
 references = list(iter_resource_references(document))
 assert references[0].resource_id == "diagram"

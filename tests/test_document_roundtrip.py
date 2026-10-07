@@ -5,7 +5,7 @@ import json
 
 import pytest
 
-from opendoc import (
+from opendoc_model import (
     Box,
     ColorSpace,
     ColorValue,
@@ -39,7 +39,7 @@ from opendoc import (
     load_document,
     save_document,
 )
-from opendoc.properties import VersionedProperties
+from opendoc_model.properties import VersionedProperties
 
 COLLECTIONS = (
     "blocks",

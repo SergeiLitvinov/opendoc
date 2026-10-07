@@ -2,8 +2,8 @@
 
 import pytest
 
-from opendoc import ArtifactLimitError, DocumentLimits
-from opendoc.properties import (
+from opendoc_model import ArtifactLimitError, DocumentLimits
+from opendoc_model.properties import (
     ImageProperties,
     ParagraphProperties,
     SectionProperties,

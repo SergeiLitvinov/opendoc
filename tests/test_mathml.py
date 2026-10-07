@@ -4,9 +4,9 @@ from xml.sax.saxutils import escape
 
 import pytest
 
-from opendoc import Formula, FormulaFormat
-from opendoc.formula_quality_policy import formula_fingerprint
-from opendoc.mathml import mathml_to_omml
+from opendoc_model import Formula, FormulaFormat
+from opendoc_model.formula_quality_policy import formula_fingerprint
+from opendoc_model.mathml import mathml_to_omml
 
 etree = pytest.importorskip("lxml.etree")
 MATHML = "http://www.w3.org/1998/Math/MathML"

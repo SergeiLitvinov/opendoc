@@ -3,7 +3,7 @@
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from opendoc import (
+from opendoc_model import (
     DocumentModel,
     Image,
     Paragraph,
@@ -62,7 +62,7 @@ def main():
     extracted.styles["base~2"].bold = False
     assert merged.document.styles["base~2"].bold is True
     assert [document_to_json(item) for item in (first, second)] == before
-    print("OpenDoc composition example: OK")
+    print("OpenDoc Model composition example: OK")
 
 
 if __name__ == "__main__":

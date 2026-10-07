@@ -1,6 +1,6 @@
-site_name: OpenDoc — документация
-site_url: https://SergeiLitvinov.github.io/opendoc/
-repo_url: https://github.com/SergeiLitvinov/opendoc
+site_name: OpenDoc Model — документация
+site_url: https://SergeiLitvinov.github.io/opendoc-model/
+repo_url: https://github.com/SergeiLitvinov/opendoc-model
 site_description: Структуры документов, руководство и навигатор по коду
 docs_dir: .opendoc/docs-source
 site_dir: .opendoc/docs-site

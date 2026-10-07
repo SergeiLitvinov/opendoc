@@ -1,9 +1,9 @@
 # Пользовательские расширения
 
-OpenDoc сохраняет JSON-данные в `properties` и `metadata`. Для нового контракта
+OpenDoc Model сохраняет JSON-данные в `properties` и `metadata`. Для нового контракта
 используйте принадлежащее потребителю пространство имён, например `org.example.review`.
 Ключ содержит минимум два сегмента из строчных ASCII-букв, цифр, `_` и `-`;
-каждый сегмент начинается с буквы. Префикс `opendoc.*` зарезервирован библиотекой.
+каждый сегмент начинается с буквы. Префикс `opendoc_model.*` зарезервирован библиотекой.
 Обратное доменное имя помогает избежать конфликтов; библиотека не проверяет владение доменом.
 Существующие свободные ключи сохраняются без переименования.
 
@@ -36,7 +36,7 @@ minor по [правилам совместимости](compatibility.md).
 любой JSON payload поддержанной версии. Список схем передаётся на каждый вызов:
 
 ```python
-from opendoc import DocumentModel, ExtensionSchema, check_extensions, set_extension
+from opendoc_model import DocumentModel, ExtensionSchema, check_extensions, set_extension
 
 document = DocumentModel()
 set_extension(document.metadata, "org.example.review", {"approved": True})
@@ -73,7 +73,7 @@ assert check_extensions(document, schemas).success
 Неизвестная версия зарегистрированной схемы, неверная область, повреждённый конверт
 или непрозрачное значение зарегистрированного ключа остаются ошибками даже в этом режиме.
 Встроенные роли проверяет модель; объявление известной роли на неподдержанном носителе
-выявляет `extension.builtin-scope`. Новая неизвестная роль `opendoc.*` не получает
+выявляет `extension.builtin-scope`. Новая неизвестная роль `opendoc_model.*` не получает
 пользовательскую схему и учитывается как неизвестная.
 
 ## Явные миграции

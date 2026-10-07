@@ -1,22 +1,26 @@
-<img src="https://raw.githubusercontent.com/SergeiLitvinov/opendoc/main/docs/assets/documentation-logo.svg" width="64" height="64" align="right" alt="OpenDoc">
+<img src="https://raw.githubusercontent.com/SergeiLitvinov/opendoc-model/main/docs/assets/documentation-logo.svg" width="64" height="64" align="right" alt="OpenDoc Model">
 
-# OpenDoc
+# OpenDoc Model
 
 **Структура документа и операции над ней.**
 
-[![CI](https://github.com/SergeiLitvinov/opendoc/actions/workflows/ci.yml/badge.svg)](https://github.com/SergeiLitvinov/opendoc/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/SergeiLitvinov/opendoc)](https://github.com/SergeiLitvinov/opendoc/releases)
+[![CI](https://github.com/SergeiLitvinov/opendoc-model/actions/workflows/ci.yml/badge.svg)](https://github.com/SergeiLitvinov/opendoc-model/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/SergeiLitvinov/opendoc-model)](https://github.com/SergeiLitvinov/opendoc-model/releases)
 [![MIT](https://img.shields.io/badge/license-MIT-blue)](docs/LICENSE)
 
-[Документация](https://SergeiLitvinov.github.io/opendoc/) · [Руководство](docs/guide/index.md) · [API](docs/reference/api.md) · [Выпуски](https://github.com/SergeiLitvinov/opendoc/releases)
+[Документация](https://SergeiLitvinov.github.io/opendoc-model/) · [Руководство](docs/guide/index.md) · [API](docs/reference/api.md) · [Выпуски](https://github.com/SergeiLitvinov/opendoc-model/releases)
 
 Независимая Python-библиотека модели документов и операций в памяти.
-Пакет и импорт: `opendoc`; Python 3.11+. Обязательных внешних зависимостей нет.
+Пакет: `opendoc-model`; импорт: `opendoc_model`; Python 3.11+. Обязательных внешних зависимостей нет.
+
+С версии 0.3.0 библиотека переименована из `opendoc`. Замените импорты
+`from opendoc ...` на `from opendoc_model ...` и имя зависимости на
+`opendoc-model`. API и идентификаторы сохранённых JSON не изменены.
 
 Модель, свойства, геометрия, цвета, ресурсы, формулы, обход и изменения, объединение/извлечение с зависимостями, JSON-сериализация, валидация и сравнение структуры работают самостоятельно. Обязательных внешних зависимостей нет. Дополнение `math` предоставляет `lxml` для сравнения поддержанного MathML/Office Math. Без него непроверяемая формула диагностируется, строгий допуск не считается соблюдённым.
 
 ```python
-from opendoc import DocumentModel, Paragraph, Section, TextRun, load_document, save_document
+from opendoc_model import DocumentModel, Paragraph, Section, TextRun, load_document, save_document
 
 document = DocumentModel(sections=[Section(blocks=[Paragraph(content=[TextRun("Мой документ")])])])
 save_document(document, "document.json")
@@ -24,7 +28,7 @@ restored = load_document("document.json")
 assert restored.validate() == []
 ```
 
-Установка: скачайте wheel из [GitHub Releases](https://github.com/SergeiLitvinov/opendoc/releases) и выполните `uv pip install путь/к/opendoc-<версия>-py3-none-any.whl`. Сборка из исходников: `uv build --out-dir .opendoc/release-dist`. Для XML-формул добавьте extra: `uv pip install "./opendoc-<версия>-py3-none-any.whl[math]"`. Публикация на PyPI пока не выполнялась.
+Установка: скачайте wheel из [GitHub Releases](https://github.com/SergeiLitvinov/opendoc-model/releases) и выполните `uv pip install путь/к/opendoc_model-<версия>-py3-none-any.whl`. Сборка из исходников: `uv build --out-dir .opendoc/release-dist`. Для XML-формул добавьте extra: `uv pip install "./opendoc_model-<версия>-py3-none-any.whl[math]"`. Публикация на PyPI пока не выполнялась.
 
 JSON сохраняет идентификатор `opendoc.document` и версию 2, читает версию 1. Версии пакета и JSON независимы. Дополнительные ключи `properties` и `metadata` сохраняются; неизвестные версии и типы блоков отклоняются. Это не обещание чтения произвольной будущей схемы без миграции.
 

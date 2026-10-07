@@ -42,7 +42,7 @@ def safe_path(name):
 
 def check_metadata(payload, version):
     data = BytesParser().parsebytes(payload)
-    expected = {"Name": "opendoc", "Version": version, "Requires-Python": ">=3.11", "License-Expression": "MIT"}
+    expected = {"Name": "opendoc-model", "Version": version, "Requires-Python": ">=3.11", "License-Expression": "MIT"}
     if any(data[key] != value for key, value in expected.items()):
         raise ValueError("Incorrect release metadata")
     if data.get_all("License-File") != ["docs/LICENSE"] or set(data.get_all("Provides-Extra", [])) != {"math", "dev", "docs"}:
@@ -52,14 +52,14 @@ def check_metadata(payload, version):
 
 
 def read_wheel(path, version, license_bytes):
-    info = f"opendoc-{version}.dist-info"
+    info = f"opendoc_model-{version}.dist-info"
     with zipfile.ZipFile(path) as archive:
         names = archive.namelist()
         if len(names) != len(set(names)):
             raise ValueError("Duplicate wheel entries")
         for name in names:
             parts = safe_path(name)
-            package = parts[0] == "opendoc" and (name.endswith(".py") or name == "opendoc/py.typed")
+            package = parts[0] == "opendoc_model" and (name.endswith(".py") or name == "opendoc_model/py.typed")
             metadata = name in {
                 f"{info}/{entry}" for entry in ("METADATA", "WHEEL", "RECORD", "top_level.txt", "licenses/docs/LICENSE")
             }
@@ -67,9 +67,9 @@ def read_wheel(path, version, license_bytes):
                 raise ValueError("Unexpected wheel entry: " + name)
         contents = {name: archive.read(name) for name in names}
     check_metadata(contents[f"{info}/METADATA"], version)
-    if contents[f"{info}/licenses/docs/LICENSE"] != license_bytes or "opendoc/py.typed" not in contents:
+    if contents[f"{info}/licenses/docs/LICENSE"] != license_bytes or "opendoc_model/py.typed" not in contents:
         raise ValueError("Missing or incorrect license/py.typed")
-    if source_version(contents["opendoc/__init__.py"]) != version:
+    if source_version(contents["opendoc_model/__init__.py"]) != version:
         raise ValueError("Wheel source version differs from metadata")
     return contents
 
@@ -79,39 +79,43 @@ def read_sdist(path, version, license_bytes):
     with tarfile.open(path, "r:gz") as archive:
         for member in archive.getmembers():
             parts = safe_path(member.name)
-            if not parts or parts[0] != f"opendoc-{version}" or not (member.isfile() or member.isdir()):
+            if not parts or parts[0] != f"opendoc_model-{version}" or not (member.isfile() or member.isdir()):
                 raise ValueError("Unexpected sdist entry: " + member.name)
             if member.isdir():
                 continue
             name = str(PurePosixPath(*parts[1:]))
             allowed = name in ROOT_FILES if len(parts) == 2 else parts[1] in {"src", "docs", "tools", "tests", "examples"}
             if parts[1] == "src":
-                allowed = len(parts) > 2 and parts[2] in {"opendoc", "opendoc.egg-info"}
+                allowed = len(parts) > 2 and parts[2] in {"opendoc_model", "opendoc_model.egg-info"}
             if not allowed or name in contents or name.endswith((".pyc", ".pyo")):
                 raise ValueError("Unexpected/duplicate sdist payload: " + name)
             stream = archive.extractfile(member)
             assert stream is not None
             contents[name] = stream.read()
     check_metadata(contents["PKG-INFO"], version)
-    if contents["docs/LICENSE"] != license_bytes or "src/opendoc/py.typed" not in contents:
+    if contents["docs/LICENSE"] != license_bytes or "src/opendoc_model/py.typed" not in contents:
         raise ValueError("Missing or incorrect sdist license/py.typed")
     project = tomllib.loads(contents["pyproject.toml"].decode("utf-8"))
-    if "version" in project["project"] or project["tool"]["setuptools"]["dynamic"]["version"] != {"attr": "opendoc.__version__"}:
+    if "version" in project["project"] or project["tool"]["setuptools"]["dynamic"]["version"] != {
+        "attr": "opendoc_model.__version__"
+    }:
         raise ValueError("Expected single runtime version source")
-    if source_version(contents["src/opendoc/__init__.py"]) != version:
+    if source_version(contents["src/opendoc_model/__init__.py"]) != version:
         raise ValueError("Sdist version differs from metadata")
     return contents
 
 
 def verify(dist, rebuilt=None):
-    version = source_version((ROOT / "src/opendoc/__init__.py").read_bytes())
+    version = source_version((ROOT / "src/opendoc_model/__init__.py").read_bytes())
     license_bytes = (ROOT / "docs/LICENSE").read_bytes()
-    wheel = read_wheel(Path(dist) / f"opendoc-{version}-py3-none-any.whl", version, license_bytes)
-    sdist = read_sdist(Path(dist) / f"opendoc-{version}.tar.gz", version, license_bytes)
+    wheel = read_wheel(Path(dist) / f"opendoc_model-{version}-py3-none-any.whl", version, license_bytes)
+    sdist = read_sdist(Path(dist) / f"opendoc_model-{version}.tar.gz", version, license_bytes)
     for name, value in wheel.items():
-        if name.startswith("opendoc/") and sdist.get("src/" + name) != value:
+        if name.startswith("opendoc_model/") and sdist.get("src/" + name) != value:
             raise ValueError("Wheel/sdist package disagreement: " + name)
-    if rebuilt is not None and wheel != read_wheel(Path(rebuilt) / f"opendoc-{version}-py3-none-any.whl", version, license_bytes):
+    if rebuilt is not None and wheel != read_wheel(
+        Path(rebuilt) / f"opendoc_model-{version}-py3-none-any.whl", version, license_bytes
+    ):
         raise ValueError("Rebuilt wheel payload differs from direct wheel")
     print(f"Release {version}: license, metadata, archive boundaries and package parity OK")
 

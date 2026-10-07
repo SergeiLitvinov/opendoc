@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from opendoc import (
+from opendoc_model import (
     Box,
     ConversionReport,
     DocumentInspection,
@@ -32,9 +32,9 @@ from opendoc import (
     compare_inspections,
     inspect_document_model,
 )
-from opendoc.emphasis_quality import MAX_EMPHASIS_RUNS, EmphasisInventory
-from opendoc.text_edit_budget import MAX_DISTANCE_CELLS, bounded_word_distance
-from opendoc.text_flow import MAX_TEXT_TOKENS, TextFlowFingerprint
+from opendoc_model.emphasis_quality import MAX_EMPHASIS_RUNS, EmphasisInventory
+from opendoc_model.text_edit_budget import MAX_DISTANCE_CELLS, bounded_word_distance
+from opendoc_model.text_flow import MAX_TEXT_TOKENS, TextFlowFingerprint
 
 
 def _report():
@@ -249,9 +249,9 @@ def test_bounded_distance_agrees_with_independent_full_matrix():
 
 
 def test_word_work_budget_exact_boundary(monkeypatch):
-    monkeypatch.setattr("opendoc.text_edit_budget.MAX_DISTANCE_CELLS", 12)
+    monkeypatch.setattr("opendoc_model.text_edit_budget.MAX_DISTANCE_CELLS", 12)
     assert bounded_word_distance(["a"] * 3, ["b"] * 3, 3) == (3, True)
-    monkeypatch.setattr("opendoc.text_edit_budget.MAX_DISTANCE_CELLS", 11)
+    monkeypatch.setattr("opendoc_model.text_edit_budget.MAX_DISTANCE_CELLS", 11)
     assert bounded_word_distance(["a"] * 3, ["b"] * 3, 3) == (None, False)
 
 

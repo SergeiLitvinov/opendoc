@@ -1,6 +1,6 @@
 """A missing measurement cannot satisfy a selected strict object policy."""
 
-from opendoc import DocumentModel, MatchingLimits, ObjectLossPolicy, Paragraph, Section, TextRun, compare_documents
+from opendoc_model import DocumentModel, MatchingLimits, ObjectLossPolicy, Paragraph, Section, TextRun, compare_documents
 
 document = DocumentModel(sections=[Section(blocks=[Paragraph([TextRun("kept")])])])
 unknown = compare_documents(document, document, matching_limits=MatchingLimits(max_work=0))
@@ -12,4 +12,4 @@ strict = compare_documents(document, document, matching_limits=MatchingLimits(0)
 assert not strict.success and strict.metrics["object_quality_gate"]["reason"] == "unavailable"
 complete = compare_documents(document, document, matching_limits=MatchingLimits(100), policies=[ObjectLossPolicy()])
 assert complete.success and complete.metrics["object_quality_gate"]["verified"]
-print("OpenDoc bounded matching and unavailable evidence example: OK")
+print("OpenDoc Model bounded matching and unavailable evidence example: OK")

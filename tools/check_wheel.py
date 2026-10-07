@@ -11,14 +11,14 @@ PROBE = """
 import importlib.util
 from importlib.metadata import distribution, distributions
 from pathlib import Path
-import opendoc as core
-from opendoc.formula_quality_policy import formula_fingerprint
-from opendoc.mathml import mathml_to_omml
+import opendoc_model as core
+from opendoc_model.formula_quality_policy import formula_fingerprint
+from opendoc_model.mathml import mathml_to_omml
 
 for name in ('fastapi', 'docx', 'pptx', 'fitz', 'lxml'):
     assert importlib.util.find_spec(name) is None, name
-assert {dist.metadata['Name'].lower() for dist in distributions()} == {'opendoc'}
-dist = distribution('opendoc')
+assert {dist.metadata['Name'].lower() for dist in distributions()} == {'opendoc-model'}
+dist = distribution('opendoc_model')
 assert dist.version == core.__version__, (dist.version, core.__version__)
 assert all('extra ==' in requirement for requirement in dist.requires or []), dist.requires
 assert Path(core.__file__).is_relative_to(Path(__import__('sys').prefix)), core.__file__

@@ -15,8 +15,8 @@ from pathlib import Path
 
 
 def _cases(size):
-    core = importlib.import_module("opendoc")
-    matching = importlib.import_module("opendoc.object_matching")
+    core = importlib.import_module("opendoc_model")
+    matching = importlib.import_module("opendoc_model.object_matching")
     paragraphs = [core.Paragraph([core.TextRun(f"Paragraph {index}: UTF-8 привет")]) for index in range(size)]
     flat = core.DocumentModel(sections=[core.Section(blocks=paragraphs)])
     nested = core.Table(rows=[core.TableRow(cells=[core.TableCell(blocks=paragraphs)])])
@@ -96,7 +96,7 @@ def measure(sizes, repeats):
                 row["result"] = result_metadata
             rows.append(row)
             print(f"{name} {size}: {row['median_seconds']:.6f} s, {peak} traced bytes", flush=True)
-    core = importlib.import_module("opendoc")
+    core = importlib.import_module("opendoc_model")
     return {
         "format": "opendoc.performance",
         "version": 1,
