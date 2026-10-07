@@ -18,7 +18,7 @@ OpenDoc Model распространяется под [MIT](../LICENSE). Copyrig
 | Extra / роль | Прямые зависимости | Назначение |
 | --- | --- | --- |
 | `math` | `lxml>=5.0.0` | Безопасный ограниченный XML-разбор, преобразование и сравнение поддержанного MathML/Office Math |
-| `dev` | `mypy>=2.4,<3`, `pytest>=8.0`, `ruff>=0.9.0`, `types-lxml>=2026.2.16` | Типы, тесты, стиль и XML-stubs при разработке |
+| `dev` | `mypy>=2.4,<3`, `pytest>=8.0`, `ruff>=0.9.0` | Типы, тесты и стиль при разработке |
 | `docs` | `mkdocs>=1.6,<2` | Сборка, поиск и локальный просмотр документации |
 | Сборка | `setuptools==84.0.0` | Изолированная сборка wheel и исходного архива |
 
@@ -28,6 +28,12 @@ OpenDoc Model распространяется под [MIT](../LICENSE). Copyrig
 Wheel OpenDoc Model не включает lxml, его native-библиотеки или инструменты разработки.
 
 ## Полный состав Python-пакетов
+
+Используемый XML API описан собственными MIT-аннотациями в
+`tools/typing/lxml/`. Они нужны только mypy, не исполняются и не входят в wheel.
+Проверка типов не отключена; верные и ошибочные XML-вызовы проверяются тестами.
+Замена полного `types-lxml` убрала шесть служебных пакетов и сократила
+документированный состав с 35 до 29 без изменения runtime-кода.
 
 Таблица включает прямые и транзитивные зависимости всех extras, а также backend
 сборки. `math` относится к optional runtime; `dev`, `docs`, `build` — к поддержке
@@ -40,10 +46,8 @@ Wheel OpenDoc Model не включает lxml, его native-библиотек
 | Пакет | Версия в lock/build | Профиль | Основная лицензия |
 | --- | --- | --- | --- |
 | `ast-serialize` | 0.12.1 | dev | MIT |
-| `beautifulsoup4` | 4.15.0 | dev | MIT |
 | `click` | 8.5.0 | docs | BSD-3-Clause |
 | `colorama` | 0.4.6 | dev, docs | BSD-3-Clause |
-| `cssselect` | 1.5.0 | dev | BSD-3-Clause |
 | `ghp-import` | 2.1.0 | docs | Apache-2.0 |
 | `iniconfig` | 2.3.0 | dev | MIT |
 | `jinja2` | 3.1.6 | docs | BSD-3-Clause |
@@ -68,10 +72,6 @@ Wheel OpenDoc Model не включает lxml, его native-библиотек
 | `ruff` | 0.16.9 | dev | MIT |
 | `setuptools` | 84.0.0 | build | MIT |
 | `six` | 1.17.0 | docs | MIT |
-| `soupsieve` | 2.10 | dev | MIT |
-| `types-html5lib` | 1.1.11.20260518 | dev | Apache-2.0 |
-| `types-lxml` | 2026.2.16 | dev | Apache-2.0 |
-| `types-webencodings` | 0.6.0.20260907 | dev | Apache-2.0 |
 | `typing-extensions` | 4.16.0 | dev | PSF-2.0 |
 | `watchdog` | 6.0.0 | docs | Apache-2.0 |
 

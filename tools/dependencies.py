@@ -13,10 +13,8 @@ ROOT = Path(__file__).resolve().parent.parent
 INVENTORY = ROOT / "docs/development/dependency-inventory.json"
 LICENSES = {
     "ast-serialize": "MIT",
-    "beautifulsoup4": "MIT",
     "click": "BSD-3-Clause",
     "colorama": "BSD-3-Clause",
-    "cssselect": "BSD-3-Clause",
     "ghp-import": "Apache-2.0",
     "iniconfig": "MIT",
     "jinja2": "BSD-3-Clause",
@@ -40,10 +38,6 @@ LICENSES = {
     "pyyaml-env-tag": "MIT",
     "ruff": "MIT",
     "six": "MIT",
-    "soupsieve": "MIT",
-    "types-html5lib": "Apache-2.0",
-    "types-lxml": "Apache-2.0",
-    "types-webencodings": "Apache-2.0",
     "typing-extensions": "PSF-2.0",
     "watchdog": "Apache-2.0",
     "setuptools": "MIT",

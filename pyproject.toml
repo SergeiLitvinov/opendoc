@@ -24,7 +24,6 @@ dev = [
     "mypy>=2.4,<3",
     "pytest>=8.0",
     "ruff>=0.9.0",
-    "types-lxml>=2026.2.16",
 ]
 docs = ["mkdocs>=1.6,<2"]
 
@@ -50,6 +49,7 @@ testpaths = ["tests"]
 pythonpath = ["."]
 
 [tool.mypy]
+mypy_path = "$MYPY_CONFIG_FILE_DIR/tools/typing"
 python_version = "3.11"
 files = ["src/opendoc_model"]
 strict = true

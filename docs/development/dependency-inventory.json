@@ -23,24 +23,6 @@
       ]
     },
     {
-      "name": "beautifulsoup4",
-      "version": "4.15.0",
-      "profiles": [
-        "dev"
-      ],
-      "dependencies": [
-        "soupsieve",
-        "typing-extensions"
-      ],
-      "license": "MIT",
-      "notices": [
-        {
-          "path": "beautifulsoup4-4.15.0.dist-info/licenses/LICENSE",
-          "sha256": "55b4d8d4b1e5bc86d10efac91b74c87bcb77526b0f5b9edaf8b9cd2adc7397b2"
-        }
-      ]
-    },
-    {
       "name": "click",
       "version": "8.5.0",
       "profiles": [
@@ -68,21 +50,6 @@
         {
           "path": "colorama-0.4.6.dist-info/licenses/LICENSE.txt",
           "sha256": "cac35c02686e5d04a5a7140bfb3b36e73aed496656e891102e428886d7930318"
-        }
-      ]
-    },
-    {
-      "name": "cssselect",
-      "version": "1.5.0",
-      "profiles": [
-        "dev"
-      ],
-      "dependencies": [],
-      "license": "BSD-3-Clause",
-      "notices": [
-        {
-          "path": "cssselect-1.5.0.dist-info/licenses/LICENSE",
-          "sha256": "5c8da9f744e0afba81a48c9b5dbe73048f798b3287d6f1af8a05ee08ebb10892"
         }
       ]
     },
@@ -567,73 +534,6 @@
         {
           "path": "six-1.17.0.dist-info/LICENSE",
           "sha256": "4375ba20e2b9c6c4e7cad2940a628fd90e95cc3d50ee92aae755715d8ba1fbd0"
-        }
-      ]
-    },
-    {
-      "name": "soupsieve",
-      "version": "2.10",
-      "profiles": [
-        "dev"
-      ],
-      "dependencies": [],
-      "license": "MIT",
-      "notices": [
-        {
-          "path": "soupsieve-2.10.dist-info/licenses/LICENSE.md",
-          "sha256": "76a0acdb98c3a63681e20b6f096699ef8cad5fb35d56eef8387e0fa71d797a9a"
-        }
-      ]
-    },
-    {
-      "name": "types-html5lib",
-      "version": "1.1.11.20260518",
-      "profiles": [
-        "dev"
-      ],
-      "dependencies": [
-        "types-webencodings"
-      ],
-      "license": "Apache-2.0",
-      "notices": [
-        {
-          "path": "types_html5lib-1.1.11.20260518.dist-info/licenses/LICENSE",
-          "sha256": "295f8538c94ae5c3043301cf7cff1c852dab6a786a8ddee471e061b40d5ecabe"
-        }
-      ]
-    },
-    {
-      "name": "types-lxml",
-      "version": "2026.2.16",
-      "profiles": [
-        "dev"
-      ],
-      "dependencies": [
-        "beautifulsoup4",
-        "cssselect",
-        "types-html5lib",
-        "typing-extensions"
-      ],
-      "license": "Apache-2.0",
-      "notices": [
-        {
-          "path": "types_lxml-2026.2.16.dist-info/licenses/LICENSE",
-          "sha256": "e11b2ea82d70c0237ffd15c8a93ce86b0f1f006dbab67fcb7d3407b47bdb3f3b"
-        }
-      ]
-    },
-    {
-      "name": "types-webencodings",
-      "version": "0.6.0.20260907",
-      "profiles": [
-        "dev"
-      ],
-      "dependencies": [],
-      "license": "Apache-2.0",
-      "notices": [
-        {
-          "path": "types_webencodings-0.6.0.20260907.dist-info/licenses/LICENSE",
-          "sha256": "295f8538c94ae5c3043301cf7cff1c852dab6a786a8ddee471e061b40d5ecabe"
         }
       ]
     },
