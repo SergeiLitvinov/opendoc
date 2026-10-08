@@ -333,3 +333,22 @@ def test_large_span_uses_intervals_and_explicit_work_budget():
     clone_model(document, limits=budget)  # Input tree fits; the grid work does not.
     with pytest.raises(ArtifactLimitError):
         document.validate(limits=budget)
+
+
+@pytest.mark.parametrize("reverse", [False, True])
+def test_headers_depth_budget_is_independent_of_cell_order(reverse):
+    cells = []
+    for index in range(13):
+        cell = TableCell()
+        set_table_cell_semantics(cell, TableCellSemantics(f"h{index}", "header", headers=(f"h{index - 1}",) if index else ()))
+        cells.append(cell)
+    if reverse:
+        cells.reverse()
+    document = DocumentModel(sections=[Section([Table([TableRow([cell]) for cell in cells])])])
+    budget = DocumentLimits(max_depth=12)
+    clone_model(document, limits=budget)
+    assert document.validate(limits=DocumentLimits(max_depth=13)) == []
+    before = document_to_json(document)
+    with pytest.raises(ArtifactLimitError, match="headers depth"):
+        document.validate(limits=budget)
+    assert document_to_json(document) == before

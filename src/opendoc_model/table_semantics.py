@@ -361,7 +361,7 @@ def _validate_table(table: Table, record: TableSemantics, path: str, limits: Doc
             target = cells.get(identifier)
             if target is None or target[0].role != "header":
                 _error(cell_path, f"headers target {identifier!r} is not a local header")
-    done: set[str] = set()
+    depths: dict[str, int] = {}
     for identifier in cells:
         pending: list[tuple[str, bool]] = [(identifier, False)]
         active: set[str] = set()
@@ -369,8 +369,11 @@ def _validate_table(table: Table, record: TableSemantics, path: str, limits: Doc
             key, leaving = pending.pop()
             if leaving:
                 active.remove(key)
-                done.add(key)
-            elif key not in done:
+                depth = 1 + max((depths[target] for target in cells[key][0].headers), default=0)
+                if depth > limits.max_depth:
+                    _quota(path, "headers depth", limits.max_depth)
+                depths[key] = depth
+            elif key not in depths:
                 if key in active:
                     _error(cells[key][1], "cyclic headers association")
                 if len(active) >= limits.max_depth:

@@ -179,3 +179,14 @@ def test_transform_invalid_and_overflow_inputs_are_explicit():
     huge = PageGeometry(Rect2D(-1e308, 0, 1e308, 10))
     with pytest.raises(ValueError):
         page_point_to_display(huge, Point2D(1e308, 0))
+
+
+@pytest.mark.parametrize("opaque", [None, False, 0, "private", []])
+def test_unmarked_geometry_key_is_never_replaced_or_removed(opaque):
+    page = DocumentPage("page", 600, 800, extra={PAGE_GEOMETRY_PROPERTY: opaque})
+    before = deepcopy(page.extra)
+    assert get_page_geometry(page) is None
+    for value in (PageGeometry(Rect2D(0, 0, 600, 800)), None):
+        with pytest.raises(ValueError, match="opaque"):
+            with_page_geometry(page, value)
+        assert page.extra == before

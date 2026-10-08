@@ -229,3 +229,15 @@ def test_new_outline_and_none_do_not_require_existing_integration():
     set_outline(document, Outline((OutlineEntry("external", "", 0, target=OutlineTarget("external", uri="urn:test")),)))
     assert len(get_outline(document).entries) == 1
     assert document.validate() == []
+
+
+@pytest.mark.parametrize("opaque", [None, False, 0, "private", []])
+def test_unmarked_outline_key_is_never_replaced_or_removed(opaque):
+    document = DocumentModel()
+    set_integration(document, IntegrationModel(extra={OUTLINE_PROPERTY: opaque}))
+    before = document_to_json(document)
+    assert get_outline(document) is None
+    for value in (Outline(), None):
+        with pytest.raises(ValueError, match="opaque"):
+            set_outline(document, value)
+        assert document_to_json(document) == before

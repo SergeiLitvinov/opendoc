@@ -179,8 +179,7 @@ def with_page_geometry(
     budget = _resolve_limits(limits)
     _guard_model(page, budget)
     previous = get_page_geometry(page, limits=budget)
-    raw = page.extra.get(PAGE_GEOMETRY_PROPERTY)
-    if raw is not None and previous is None:
+    if PAGE_GEOMETRY_PROPERTY in page.extra and previous is None:
         _error("occupied geometry key contains opaque data")
     extra = deepcopy(page.extra)
     if geometry is None:

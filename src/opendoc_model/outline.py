@@ -160,7 +160,7 @@ def _read_outline(model: IntegrationModel, limits: DocumentLimits) -> Outline | 
 
 def _with_outline(model: IntegrationModel, outline: Outline | None, limits: DocumentLimits) -> IntegrationModel:
     previous = _read_outline(model, limits)
-    if model.extra.get(OUTLINE_PROPERTY) is not None and previous is None:
+    if OUTLINE_PROPERTY in model.extra and previous is None:
         _error("outline", "occupied outline key contains opaque data")
     extra = deepcopy(model.extra)
     if outline is None:
