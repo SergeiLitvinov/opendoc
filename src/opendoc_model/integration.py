@@ -312,7 +312,10 @@ def _validate_integration(model: IntegrationModel, document: DocumentModel, limi
         for start, end in diagram.edges:
             _reference(start, shapes, "diagram.edges")
             _reference(end, shapes, "diagram.edges")
+    from opendoc_model.page_geometry import get_page_geometry
+
     for page in model.pages:
+        get_page_geometry(page, limits=limits)
         if page.width <= 0 or page.height <= 0 or len(set(page.reading_order)) != len(page.reading_order):
             _error("page", "invalid dimensions or duplicate reading-order entries")
         for key in page.reading_order:

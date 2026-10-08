@@ -100,13 +100,13 @@
 | `inspect_document_model` | `opendoc_model.inspection` | [src/opendoc_model/inspection.py](../../src/opendoc_model/inspection.py#L810) |
 | `INTEGRATION_PROPERTY` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py) |
 | `INTEGRATION_VERSION` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py) |
-| `edit_anchored_text` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L531) |
-| `get_integration` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L395) |
-| `integration_resource_uses` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L644) |
-| `negotiate_capabilities` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L478) |
-| `preservation_result` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L451) |
-| `resolve_scene_style` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L505) |
-| `set_integration` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L411) |
+| `edit_anchored_text` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L534) |
+| `get_integration` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L398) |
+| `integration_resource_uses` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L647) |
+| `negotiate_capabilities` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L481) |
+| `preservation_result` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L454) |
+| `resolve_scene_style` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L508) |
+| `set_integration` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L414) |
 | `Accessibility` | `opendoc_model.integration_types` | [src/opendoc_model/integration_types.py](../../src/opendoc_model/integration_types.py#L267) |
 | `AffineTransform` | `opendoc_model.integration_types` | [src/opendoc_model/integration_types.py](../../src/opendoc_model/integration_types.py#L162) |
 | `Annotation` | `opendoc_model.integration_types` | [src/opendoc_model/integration_types.py](../../src/opendoc_model/integration_types.py#L283) |
@@ -164,6 +164,15 @@
 | `remove_node` | `opendoc_model.operations` | [src/opendoc_model/operations.py](../../src/opendoc_model/operations.py#L179) |
 | `replace_node` | `opendoc_model.operations` | [src/opendoc_model/operations.py](../../src/opendoc_model/operations.py#L159) |
 | `transform_elements` | `opendoc_model.operations` | [src/opendoc_model/operations.py](../../src/opendoc_model/operations.py#L255) |
+| `PAGE_GEOMETRY_PROPERTY` | `opendoc_model.page_geometry` | [src/opendoc_model/page_geometry.py](../../src/opendoc_model/page_geometry.py) |
+| `PageGeometry` | `opendoc_model.page_geometry` | [src/opendoc_model/page_geometry.py](../../src/opendoc_model/page_geometry.py#L47) |
+| `get_page_geometry` | `opendoc_model.page_geometry` | [src/opendoc_model/page_geometry.py](../../src/opendoc_model/page_geometry.py#L148) |
+| `page_display_size` | `opendoc_model.page_geometry` | [src/opendoc_model/page_geometry.py](../../src/opendoc_model/page_geometry.py#L81) |
+| `page_point_from_display` | `opendoc_model.page_geometry` | [src/opendoc_model/page_geometry.py](../../src/opendoc_model/page_geometry.py#L110) |
+| `page_point_to_display` | `opendoc_model.page_geometry` | [src/opendoc_model/page_geometry.py](../../src/opendoc_model/page_geometry.py#L94) |
+| `page_rect_from_display` | `opendoc_model.page_geometry` | [src/opendoc_model/page_geometry.py](../../src/opendoc_model/page_geometry.py#L143) |
+| `page_rect_to_display` | `opendoc_model.page_geometry` | [src/opendoc_model/page_geometry.py](../../src/opendoc_model/page_geometry.py#L138) |
+| `with_page_geometry` | `opendoc_model.page_geometry` | [src/opendoc_model/page_geometry.py](../../src/opendoc_model/page_geometry.py#L175) |
 | `PROPERTY_SCHEMA_VERSION` | `opendoc_model.properties` | [src/opendoc_model/properties.py](../../src/opendoc_model/properties.py) |
 | `QualityPolicy` | `opendoc_model.quality_policy` | [src/opendoc_model/quality_policy.py](../../src/opendoc_model/quality_policy.py#L11) |
 | `ANCHOR_PROPERTY` | `opendoc_model.references` | [src/opendoc_model/references.py](../../src/opendoc_model/references.py) |
@@ -226,6 +235,8 @@
 | `iter_resource_references` | `opendoc_model.traversal` | [src/opendoc_model/traversal.py](../../src/opendoc_model/traversal.py#L253) |
 | `iter_sections` | `opendoc_model.traversal` | [src/opendoc_model/traversal.py](../../src/opendoc_model/traversal.py#L193) |
 | `walk_model` | `opendoc_model.traversal` | [src/opendoc_model/traversal.py](../../src/opendoc_model/traversal.py#L178) |
+| `Point2D` | `opendoc_model.units` | [src/opendoc_model/units.py](../../src/opendoc_model/units.py#L22) |
+| `Rect2D` | `opendoc_model.units` | [src/opendoc_model/units.py](../../src/opendoc_model/units.py#L28) |
 | `WidthMeasure` | `opendoc_model.widths` | [src/opendoc_model/widths.py](../../src/opendoc_model/widths.py#L17) |
 | `get_preferred_width` | `opendoc_model.widths` | [src/opendoc_model/widths.py](../../src/opendoc_model/widths.py#L100) |
 | `set_preferred_width` | `opendoc_model.widths` | [src/opendoc_model/widths.py](../../src/opendoc_model/widths.py#L128) |
@@ -735,7 +746,7 @@ inspect_document_model(document: DocumentModel, *, source_path: str | Path | Non
 
 ### edit_anchored_text
 
-[src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L531)
+[src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L534)
 
 ```python
 edit_anchored_text(document: DocumentModel, node_id: str, start: int, end: int, text: str, *, limits: DocumentLimits | None=None)
@@ -748,7 +759,7 @@ to affinity. Structural anchor IDs stay stable. No field/formula code executes.
 
 ### get_integration
 
-[src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L395)
+[src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L398)
 
 ```python
 get_integration(document: DocumentModel, *, limits: DocumentLimits | None=None)
@@ -758,7 +769,7 @@ Read schema v1 independently; no I/O, parsing, actions or implicit migration.
 
 ### integration_resource_uses
 
-[src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L644)
+[src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L647)
 
 ```python
 integration_resource_uses(document: DocumentModel, resource_id: str, *, limits: DocumentLimits | None=None)
@@ -768,7 +779,7 @@ Return typed optional-schema resource paths, complementing structural resource u
 
 ### negotiate_capabilities
 
-[src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L478)
+[src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L481)
 
 ```python
 negotiate_capabilities(source: CapabilityProfile, target: CapabilityProfile, *, limits: DocumentLimits | None=None)
@@ -778,7 +789,7 @@ Return an explicit intersection per source feature; absent/version-mismatched fe
 
 ### preservation_result
 
-[src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L451)
+[src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L454)
 
 ```python
 preservation_result(model: IntegrationModel, *, limits: DocumentLimits | None=None)
@@ -788,7 +799,7 @@ Reuse CheckResult; explicit incomplete/opaque/visual assessments cannot prove lo
 
 ### resolve_scene_style
 
-[src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L505)
+[src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L508)
 
 ```python
 resolve_scene_style(model: IntegrationModel, style_id: str, *, limits: DocumentLimits | None=None)
@@ -798,7 +809,7 @@ Resolve explicit theme/master/layout/local inheritance on an independent snapsho
 
 ### set_integration
 
-[src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L411)
+[src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L414)
 
 ```python
 set_integration(document: DocumentModel, model: IntegrationModel | None, *, limits: DocumentLimits | None=None)
@@ -1129,6 +1140,85 @@ before parents and later siblings before earlier ones. Return an element to
 retain/replace the occurrence, None to delete it. New nodes are not revisited.
 Root deletion or replacement by another class is rejected. Callback failures
 propagate; no partial result is returned, and library edits never touch input.
+
+### PageGeometry
+
+[src/opendoc_model/page_geometry.py](../../src/opendoc_model/page_geometry.py#L47)
+
+Unrotated source regions in points; clockwise rotation after crop translation.
+
+Source coordinates use the canonical top-left origin with x right and y down.
+Crop defaults to media; display coordinates start at the rotated crop&#x27;s top left.
+
+### get_page_geometry
+
+[src/opendoc_model/page_geometry.py](../../src/opendoc_model/page_geometry.py#L148)
+
+```python
+get_page_geometry(page: DocumentPage, *, limits: DocumentLimits | None=None)
+```
+
+Read independent tagged geometry; missing or unmarked data stays unknown.
+
+### page_display_size
+
+[src/opendoc_model/page_geometry.py](../../src/opendoc_model/page_geometry.py#L81)
+
+```python
+page_display_size(geometry: PageGeometry)
+```
+
+Return rotated crop width/height; no content measurement is performed.
+
+### page_point_from_display
+
+[src/opendoc_model/page_geometry.py](../../src/opendoc_model/page_geometry.py#L110)
+
+```python
+page_point_from_display(geometry: PageGeometry, point: Point2D)
+```
+
+Invert the crop translation and clockwise quarter-turn rotation.
+
+### page_point_to_display
+
+[src/opendoc_model/page_geometry.py](../../src/opendoc_model/page_geometry.py#L94)
+
+```python
+page_point_to_display(geometry: PageGeometry, point: Point2D)
+```
+
+Translate then rotate a source point; outside points are not clipped.
+
+### page_rect_from_display
+
+[src/opendoc_model/page_geometry.py](../../src/opendoc_model/page_geometry.py#L143)
+
+```python
+page_rect_from_display(geometry: PageGeometry, rect: Rect2D)
+```
+
+Invert an axis-aligned display rectangle; quarter turns preserve its shape.
+
+### page_rect_to_display
+
+[src/opendoc_model/page_geometry.py](../../src/opendoc_model/page_geometry.py#L138)
+
+```python
+page_rect_to_display(geometry: PageGeometry, rect: Rect2D)
+```
+
+Transform an axis-aligned source rectangle, without clipping or element rotation.
+
+### with_page_geometry
+
+[src/opendoc_model/page_geometry.py](../../src/opendoc_model/page_geometry.py#L175)
+
+```python
+with_page_geometry(page: DocumentPage, geometry: PageGeometry | None, *, limits: DocumentLimits | None=None)
+```
+
+Return an independent page; refuse opaque collisions, keep unknown fields and dimensions.
 
 ### QualityPolicy
 
@@ -1568,6 +1658,14 @@ The root path is empty, children use field names and list indices. Scalar
 edits are allowed during iteration; structural edits require a fresh walk.
 Shape violations raise ValueError, budget exhaustion ArtifactLimitError.
 This is a structural walk, not semantic validation of fields or references.
+
+### Point2D
+
+[src/opendoc_model/units.py](../../src/opendoc_model/units.py#L22)
+
+### Rect2D
+
+[src/opendoc_model/units.py](../../src/opendoc_model/units.py#L28)
 
 ### WidthMeasure
 

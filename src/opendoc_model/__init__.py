@@ -400,6 +400,15 @@ from .operations import (
 from .operations import (
     transform_elements as transform_elements,
 )
+from .page_geometry import PAGE_GEOMETRY_PROPERTY as PAGE_GEOMETRY_PROPERTY
+from .page_geometry import PageGeometry as PageGeometry
+from .page_geometry import get_page_geometry as get_page_geometry
+from .page_geometry import page_display_size as page_display_size
+from .page_geometry import page_point_from_display as page_point_from_display
+from .page_geometry import page_point_to_display as page_point_to_display
+from .page_geometry import page_rect_from_display as page_rect_from_display
+from .page_geometry import page_rect_to_display as page_rect_to_display
+from .page_geometry import with_page_geometry as with_page_geometry
 from .properties import (
     PROPERTY_SCHEMA_VERSION as PROPERTY_SCHEMA_VERSION,
 )
@@ -548,11 +557,24 @@ from .traversal import (
 from .traversal import (
     walk_model as walk_model,
 )
+from .units import Point2D as Point2D
+from .units import Rect2D as Rect2D
 from .widths import WidthMeasure as WidthMeasure
 from .widths import get_preferred_width as get_preferred_width
 from .widths import set_preferred_width as set_preferred_width
 
 __all__ = [
+    "PAGE_GEOMETRY_PROPERTY",
+    "PageGeometry",
+    "Point2D",
+    "Rect2D",
+    "get_page_geometry",
+    "with_page_geometry",
+    "page_display_size",
+    "page_point_to_display",
+    "page_point_from_display",
+    "page_rect_to_display",
+    "page_rect_from_display",
     "TABLE_SEMANTICS_PROPERTY",
     "TABLE_ROW_SEMANTICS_PROPERTY",
     "TABLE_CELL_SEMANTICS_PROPERTY",

@@ -34,6 +34,7 @@ nav:
       - JSON и ошибки: docs/guide/json.md
       - Пользовательские расширения: docs/guide/extensions.md
       - Расширенная модель документа: docs/guide/integration.md
+      - Геометрия страниц: docs/guide/page-geometry.md
       - Непрозрачные пакеты: docs/guide/packages.md
       - Лимиты документа: docs/guide/limits.md
       - Стоимость операций: docs/guide/performance.md

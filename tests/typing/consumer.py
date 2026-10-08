@@ -18,14 +18,18 @@ from opendoc_model import (
     DocumentComparison,
     DocumentInspection,
     DocumentModel,
+    DocumentPage,
     Footnote,
     InspectionData,
     IntegrationModel,
     IssueSeverity,
     NodeLocation,
+    PageGeometry,
     Paragraph,
     ParagraphProperties,
+    Point2D,
     PreservationState,
+    Rect2D,
     Section,
     Table,
     TableCell,
@@ -44,6 +48,7 @@ from opendoc_model import (
     document_to_json,
     edit_anchored_text,
     get_integration,
+    get_page_geometry,
     get_preferred_width,
     get_table_cell_semantics,
     get_table_row_semantics,
@@ -52,17 +57,24 @@ from opendoc_model import (
     iter_elements,
     iter_footnotes,
     negotiate_capabilities,
+    page_point_to_display,
     preservation_result,
     set_anchor,
     set_integration,
     set_preferred_width,
     set_table_semantics,
+    with_page_geometry,
 )
 from opendoc_model.object_matching import ObjectMatch, match_objects
 from opendoc_model.text_flow import TextFlowData, TextFlowFingerprint
 
 
 def main() -> None:
+    geometry = PageGeometry(Rect2D(0, 0, 600, 800), rotation=90)
+    page = with_page_geometry(DocumentPage("typed-page", 600, 800), geometry)
+    assert_type(page, DocumentPage)
+    assert_type(get_page_geometry(page), PageGeometry | None)
+    assert_type(page_point_to_display(geometry, Point2D(0, 0)), Point2D)
     table, cell = Table(), TableCell()
     set_table_semantics(table, TableSemantics())
     assert_type(get_table_semantics(table), TableSemantics | None)
