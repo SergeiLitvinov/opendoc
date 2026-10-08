@@ -7,8 +7,10 @@ from typing import Any
 
 from opendoc_model.document_model import Footnote, Formula, Image, Paragraph, Resource, Table, TableCell, TextRun
 from opendoc_model.emphasis_quality import EmphasisInventory
+from opendoc_model.limits import DocumentLimits
 from opendoc_model.lists import LIST_PROPERTY, _list_payload
 from opendoc_model.semantics import HEADING_PROPERTY, _heading_payload
+from opendoc_model.storage import ArtifactLimitError
 from opendoc_model.text_flow import TextFlowFingerprint
 from opendoc_model.traversal import ModelNode, NodeLocation, walk_model
 
@@ -64,6 +66,7 @@ def _object_entry(
     text_flow: TextFlowFingerprint | None = None,
     emphasis: EmphasisInventory | None = None,
     content_cache: dict[int, str | None] | None = None,
+    limits: DocumentLimits | None = None,
 ) -> dict[str, Any]:
     provenance = getattr(value, "provenance", None)
     provenance_data = None
@@ -131,18 +134,20 @@ def _object_entry(
 
         def preference(node: Table | TableCell) -> dict[str, Any] | None:
             try:
-                measure = get_preferred_width(node)
+                measure = get_preferred_width(node, limits=limits)
+            except ArtifactLimitError:
+                raise
             except ValueError:
                 # Malformed legacy fields were historically opaque. They do
                 # not become a fabricated known measure in the inventory.
                 return None
-            return measure.to_dict() if measure is not None else None
+            return measure.to_dict(limits=limits) if measure is not None else None
 
         semantic_data["preferred_widths"] = {
             "table": preference(value),
             "cells": [[preference(cell) for cell in row.cells] for row in value.rows],
         }
-        semantic_data["table_semantics"] = _table_snapshot(value)
+        semantic_data["table_semantics"] = _table_snapshot(value, limits)
     return {
         **semantic_data,
         **formula_data,

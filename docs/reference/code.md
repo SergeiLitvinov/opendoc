@@ -391,11 +391,11 @@ Explicit list membership and deterministic per-level numbering.
 
 Recursive inventory of model objects, independent of run segmentation.
 
-- `inspect_objects` — [src/opendoc_model/object_inventory.py](../../src/opendoc_model/object_inventory.py#L18)
+- `inspect_objects` — [src/opendoc_model/object_inventory.py](../../src/opendoc_model/object_inventory.py#L20)
 
-Импорты: [opendoc_model.document_model](#opendoc_model-document_model), [opendoc_model.emphasis_quality](#opendoc_model-emphasis_quality), [opendoc_model.formula_quality_policy](#opendoc_model-formula_quality_policy), [opendoc_model.lists](#opendoc_model-lists), [opendoc_model.semantics](#opendoc_model-semantics), [opendoc_model.table_semantics](#opendoc_model-table_semantics), [opendoc_model.text_flow](#opendoc_model-text_flow), [opendoc_model.traversal](#opendoc_model-traversal), [opendoc_model.widths](#opendoc_model-widths).
+Импорты: [opendoc_model.document_model](#opendoc_model-document_model), [opendoc_model.emphasis_quality](#opendoc_model-emphasis_quality), [opendoc_model.formula_quality_policy](#opendoc_model-formula_quality_policy), [opendoc_model.limits](#opendoc_model-limits), [opendoc_model.lists](#opendoc_model-lists), [opendoc_model.semantics](#opendoc_model-semantics), [opendoc_model.storage](#opendoc_model-storage), [opendoc_model.table_semantics](#opendoc_model-table_semantics), [opendoc_model.text_flow](#opendoc_model-text_flow), [opendoc_model.traversal](#opendoc_model-traversal), [opendoc_model.widths](#opendoc_model-widths).
 
-Прямые импорты в тестах: [tests/test_traversal.py](../../tests/test_traversal.py).
+Прямые импорты в тестах: [tests/test_traversal.py](../../tests/test_traversal.py), [tests/test_widths.py](../../tests/test_widths.py).
 
 <a id="opendoc_model-object_matching"></a>
 ## opendoc_model.object_matching
@@ -737,8 +737,8 @@ Canonical physical units, rounding, and page coordinate transforms.
 Inert, format-neutral preferred table widths; no layout is computed.
 
 - `WidthMeasure` — [src/opendoc_model/widths.py](../../src/opendoc_model/widths.py#L17)
-- `get_preferred_width` — [src/opendoc_model/widths.py](../../src/opendoc_model/widths.py#L100)
-- `set_preferred_width` — [src/opendoc_model/widths.py](../../src/opendoc_model/widths.py#L128)
+- `get_preferred_width` — [src/opendoc_model/widths.py](../../src/opendoc_model/widths.py#L103)
+- `set_preferred_width` — [src/opendoc_model/widths.py](../../src/opendoc_model/widths.py#L131)
 
 Импорты: [opendoc_model._json_validation](#opendoc_model-_json_validation), [opendoc_model.document_model](#opendoc_model-document_model), [opendoc_model.limits](#opendoc_model-limits), [opendoc_model.properties](#opendoc_model-properties).
 

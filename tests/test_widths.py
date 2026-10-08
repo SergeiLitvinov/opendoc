@@ -23,6 +23,7 @@ from opendoc_model import (
     document_to_json,
     extract_document,
     get_preferred_width,
+    inspect_document_model,
     iter_elements,
     merge_documents,
     set_preferred_width,
@@ -185,3 +186,32 @@ def test_unknown_fields_and_missing_preference_survive_old_json():
     assert document_from_json(document_to_json(restored)).validate() == []
     with pytest.raises(ValueError):
         get_preferred_width(restored.sections[0].blocks[0].rows[0].cells[0])
+
+
+def test_explicit_depth_budget_preserves_width_unknown_fields_in_inspection():
+    nested = {"leaf": True}
+    for _ in range(70):
+        nested = {"next": nested}
+    table = Table(properties={"preferred_width": {"kind": "absolute", "value": 480, "unit": "pt", "future": nested}})
+    document = DocumentModel(sections=[Section([table])])
+    budget = DocumentLimits(max_depth=96)
+    measure = get_preferred_width(table, limits=budget)
+    assert measure.extra["future"] == nested
+    set_preferred_width(table, measure, limits=budget)
+    assert document.validate(limits=budget) == []
+    report = inspect_document_model(document, limits=budget, check_external_sources=False)
+    assert report.objects[0]["preferred_widths"]["table"]["future"] == nested
+    assert compare_documents(document, document, limits=budget).success
+    with pytest.raises(ArtifactLimitError):
+        get_preferred_width(table)
+
+
+def test_standalone_inventory_does_not_hide_width_limit_exhaustion():
+    from opendoc_model.object_inventory import inspect_objects
+
+    nested = {"leaf": True}
+    for _ in range(70):
+        nested = {"next": nested}
+    table = Table(properties={"preferred_width": {"kind": "absolute", "value": 1, "unit": "pt", "future": nested}})
+    with pytest.raises(ArtifactLimitError):
+        list(inspect_objects(table, "table", 0, {}))

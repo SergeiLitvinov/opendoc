@@ -879,6 +879,7 @@ def inspect_document_model(
                     text_flow=text_flow,
                     emphasis=emphasis,
                     content_cache=content_cache,
+                    limits=limits,
                 )
             )
         if isinstance(node, Paragraph):

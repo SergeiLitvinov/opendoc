@@ -90,8 +90,11 @@ def _read_width(value: Any, reference: str, limits: DocumentLimits | None = None
         value.get("value"),
         value.get("unit"),
         value.get("reference"),
-        extra={key: deepcopy(item) for key, item in value.items() if key not in known},
     )
+    # The complete JSON was checked against the caller's budget above. Populate
+    # its independent unknown fields after primitive constructor validation so
+    # the constructor's default budget does not override explicit limits.
+    measure.extra.update({key: deepcopy(item) for key, item in value.items() if key not in known})
     if measure.kind == "relative" and measure.reference != reference:
         raise ValueError(f"preferred_width.reference: expected {reference}")
     return measure

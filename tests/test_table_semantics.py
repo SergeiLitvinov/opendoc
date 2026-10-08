@@ -39,6 +39,7 @@ from opendoc_model import (
     get_table_cell_semantics,
     get_table_row_semantics,
     get_table_semantics,
+    inspect_document_model,
     iter_elements,
     merge_documents,
     remove_node,
@@ -352,3 +353,33 @@ def test_headers_depth_budget_is_independent_of_cell_order(reverse):
     with pytest.raises(ArtifactLimitError, match="headers depth"):
         document.validate(limits=budget)
     assert document_to_json(document) == before
+
+
+@pytest.mark.parametrize("owner", ["table", "row", "cell"])
+def test_inspection_preserves_semantics_with_explicit_deeper_budget(owner):
+    nested = {"leaf": True}
+    for _ in range(70):
+        nested = {"next": nested}
+    cell = TableCell()
+    row = TableRow([cell])
+    table = Table([row])
+    budget = DocumentLimits(max_depth=96)
+    if owner == "table":
+        set_table_semantics(table, TableSemantics(extra={"future": nested}), limits=budget)
+    elif owner == "row":
+        set_table_row_semantics(row, TableRowSemantics("row", extra={"future": nested}), limits=budget)
+    else:
+        set_table_cell_semantics(cell, TableCellSemantics("cell", "data", extra={"future": nested}), limits=budget)
+    document = DocumentModel(sections=[Section([table])])
+    assert document.validate(limits=budget) == []
+    report = inspect_document_model(document, limits=budget, check_external_sources=False)
+    snapshot = report.objects[0]["table_semantics"]
+    record = (
+        snapshot["table"]
+        if owner == "table"
+        else snapshot["rows"][0]["record"]
+        if owner == "row"
+        else snapshot["rows"][0]["cells"][0]
+    )
+    assert record["future"] == nested
+    assert compare_documents(document, document, limits=budget).success

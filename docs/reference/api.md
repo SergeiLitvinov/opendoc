@@ -245,8 +245,8 @@
 | `Point2D` | `opendoc_model.units` | [src/opendoc_model/units.py](../../src/opendoc_model/units.py#L22) |
 | `Rect2D` | `opendoc_model.units` | [src/opendoc_model/units.py](../../src/opendoc_model/units.py#L28) |
 | `WidthMeasure` | `opendoc_model.widths` | [src/opendoc_model/widths.py](../../src/opendoc_model/widths.py#L17) |
-| `get_preferred_width` | `opendoc_model.widths` | [src/opendoc_model/widths.py](../../src/opendoc_model/widths.py#L100) |
-| `set_preferred_width` | `opendoc_model.widths` | [src/opendoc_model/widths.py](../../src/opendoc_model/widths.py#L128) |
+| `get_preferred_width` | `opendoc_model.widths` | [src/opendoc_model/widths.py](../../src/opendoc_model/widths.py#L103) |
+| `set_preferred_width` | `opendoc_model.widths` | [src/opendoc_model/widths.py](../../src/opendoc_model/widths.py#L131) |
 
 ## Объявления
 
@@ -1739,7 +1739,7 @@ unspecified carry no number. Unknown JSON fields are retained in extra.
 
 ### get_preferred_width
 
-[src/opendoc_model/widths.py](../../src/opendoc_model/widths.py#L100)
+[src/opendoc_model/widths.py](../../src/opendoc_model/widths.py#L103)
 
 ```python
 get_preferred_width(node: Table | TableCell, *, limits: DocumentLimits | None=None)
@@ -1752,7 +1752,7 @@ distinct from an explicit unspecified or zero; actual width is not measured.
 
 ### set_preferred_width
 
-[src/opendoc_model/widths.py](../../src/opendoc_model/widths.py#L128)
+[src/opendoc_model/widths.py](../../src/opendoc_model/widths.py#L131)
 
 ```python
 set_preferred_width(node: Table | TableCell, width: WidthMeasure | None, *, limits: DocumentLimits | None=None)

@@ -409,15 +409,15 @@ def _get_at(node: Any, key: str, path: str, limits: DocumentLimits) -> Any:
         _error(f"{path}.properties[{key!r}]", error.message)
 
 
-def _table_snapshot(table: Table) -> dict[str, Any]:
+def _table_snapshot(table: Table, limits: DocumentLimits | None = None) -> dict[str, Any]:
     """Comparable declarations; no role or association is inferred."""
-    record = get_table_semantics(table)
+    record = get_table_semantics(table, limits=limits)
     rows = []
     for row in table.rows:
-        row_record = get_table_row_semantics(row)
+        row_record = get_table_row_semantics(row, limits=limits)
         cells = []
         for cell in row.cells:
-            cell_record = get_table_cell_semantics(cell)
+            cell_record = get_table_cell_semantics(cell, limits=limits)
             cells.append(_convert(cell_record, TableCellSemantics, "cell", encode=True) if cell_record else None)
         rows.append(
             {"record": _convert(row_record, TableRowSemantics, "row", encode=True) if row_record else None, "cells": cells}
