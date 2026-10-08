@@ -400,6 +400,13 @@ from .operations import (
 from .operations import (
     transform_elements as transform_elements,
 )
+from .outline import OUTLINE_PROPERTY as OUTLINE_PROPERTY
+from .outline import Outline as Outline
+from .outline import OutlineEntry as OutlineEntry
+from .outline import OutlineTarget as OutlineTarget
+from .outline import get_outline as get_outline
+from .outline import remap_outline as remap_outline
+from .outline import set_outline as set_outline
 from .page_geometry import PAGE_GEOMETRY_PROPERTY as PAGE_GEOMETRY_PROPERTY
 from .page_geometry import PageGeometry as PageGeometry
 from .page_geometry import get_page_geometry as get_page_geometry
@@ -564,6 +571,13 @@ from .widths import get_preferred_width as get_preferred_width
 from .widths import set_preferred_width as set_preferred_width
 
 __all__ = [
+    "OUTLINE_PROPERTY",
+    "Outline",
+    "OutlineEntry",
+    "OutlineTarget",
+    "get_outline",
+    "set_outline",
+    "remap_outline",
     "PAGE_GEOMETRY_PROPERTY",
     "PageGeometry",
     "Point2D",

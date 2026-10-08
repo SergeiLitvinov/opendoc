@@ -100,13 +100,13 @@
 | `inspect_document_model` | `opendoc_model.inspection` | [src/opendoc_model/inspection.py](../../src/opendoc_model/inspection.py#L810) |
 | `INTEGRATION_PROPERTY` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py) |
 | `INTEGRATION_VERSION` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py) |
-| `edit_anchored_text` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L534) |
-| `get_integration` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L398) |
-| `integration_resource_uses` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L647) |
-| `negotiate_capabilities` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L481) |
-| `preservation_result` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L454) |
-| `resolve_scene_style` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L508) |
-| `set_integration` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L414) |
+| `edit_anchored_text` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L537) |
+| `get_integration` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L401) |
+| `integration_resource_uses` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L658) |
+| `negotiate_capabilities` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L484) |
+| `preservation_result` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L457) |
+| `resolve_scene_style` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L511) |
+| `set_integration` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L417) |
 | `Accessibility` | `opendoc_model.integration_types` | [src/opendoc_model/integration_types.py](../../src/opendoc_model/integration_types.py#L267) |
 | `AffineTransform` | `opendoc_model.integration_types` | [src/opendoc_model/integration_types.py](../../src/opendoc_model/integration_types.py#L162) |
 | `Annotation` | `opendoc_model.integration_types` | [src/opendoc_model/integration_types.py](../../src/opendoc_model/integration_types.py#L283) |
@@ -164,6 +164,13 @@
 | `remove_node` | `opendoc_model.operations` | [src/opendoc_model/operations.py](../../src/opendoc_model/operations.py#L179) |
 | `replace_node` | `opendoc_model.operations` | [src/opendoc_model/operations.py](../../src/opendoc_model/operations.py#L159) |
 | `transform_elements` | `opendoc_model.operations` | [src/opendoc_model/operations.py](../../src/opendoc_model/operations.py#L255) |
+| `OUTLINE_PROPERTY` | `opendoc_model.outline` | [src/opendoc_model/outline.py](../../src/opendoc_model/outline.py) |
+| `Outline` | `opendoc_model.outline` | [src/opendoc_model/outline.py](../../src/opendoc_model/outline.py#L101) |
+| `OutlineEntry` | `opendoc_model.outline` | [src/opendoc_model/outline.py](../../src/opendoc_model/outline.py#L80) |
+| `OutlineTarget` | `opendoc_model.outline` | [src/opendoc_model/outline.py](../../src/opendoc_model/outline.py#L42) |
+| `get_outline` | `opendoc_model.outline` | [src/opendoc_model/outline.py](../../src/opendoc_model/outline.py#L185) |
+| `remap_outline` | `opendoc_model.outline` | [src/opendoc_model/outline.py](../../src/opendoc_model/outline.py#L223) |
+| `set_outline` | `opendoc_model.outline` | [src/opendoc_model/outline.py](../../src/opendoc_model/outline.py#L194) |
 | `PAGE_GEOMETRY_PROPERTY` | `opendoc_model.page_geometry` | [src/opendoc_model/page_geometry.py](../../src/opendoc_model/page_geometry.py) |
 | `PageGeometry` | `opendoc_model.page_geometry` | [src/opendoc_model/page_geometry.py](../../src/opendoc_model/page_geometry.py#L47) |
 | `get_page_geometry` | `opendoc_model.page_geometry` | [src/opendoc_model/page_geometry.py](../../src/opendoc_model/page_geometry.py#L148) |
@@ -746,7 +753,7 @@ inspect_document_model(document: DocumentModel, *, source_path: str | Path | Non
 
 ### edit_anchored_text
 
-[src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L534)
+[src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L537)
 
 ```python
 edit_anchored_text(document: DocumentModel, node_id: str, start: int, end: int, text: str, *, limits: DocumentLimits | None=None)
@@ -759,7 +766,7 @@ to affinity. Structural anchor IDs stay stable. No field/formula code executes.
 
 ### get_integration
 
-[src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L398)
+[src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L401)
 
 ```python
 get_integration(document: DocumentModel, *, limits: DocumentLimits | None=None)
@@ -769,7 +776,7 @@ Read schema v1 independently; no I/O, parsing, actions or implicit migration.
 
 ### integration_resource_uses
 
-[src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L647)
+[src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L658)
 
 ```python
 integration_resource_uses(document: DocumentModel, resource_id: str, *, limits: DocumentLimits | None=None)
@@ -779,7 +786,7 @@ Return typed optional-schema resource paths, complementing structural resource u
 
 ### negotiate_capabilities
 
-[src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L481)
+[src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L484)
 
 ```python
 negotiate_capabilities(source: CapabilityProfile, target: CapabilityProfile, *, limits: DocumentLimits | None=None)
@@ -789,7 +796,7 @@ Return an explicit intersection per source feature; absent/version-mismatched fe
 
 ### preservation_result
 
-[src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L454)
+[src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L457)
 
 ```python
 preservation_result(model: IntegrationModel, *, limits: DocumentLimits | None=None)
@@ -799,7 +806,7 @@ Reuse CheckResult; explicit incomplete/opaque/visual assessments cannot prove lo
 
 ### resolve_scene_style
 
-[src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L508)
+[src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L511)
 
 ```python
 resolve_scene_style(model: IntegrationModel, style_id: str, *, limits: DocumentLimits | None=None)
@@ -809,7 +816,7 @@ Resolve explicit theme/master/layout/local inheritance on an independent snapsho
 
 ### set_integration
 
-[src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L414)
+[src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L417)
 
 ```python
 set_integration(document: DocumentModel, model: IntegrationModel | None, *, limits: DocumentLimits | None=None)
@@ -1140,6 +1147,60 @@ before parents and later siblings before earlier ones. Return an element to
 retain/replace the occurrence, None to delete it. New nodes are not revisited.
 Root deletion or replacement by another class is rejected. Callback failures
 propagate; no partial result is returned, and library edits never touch input.
+
+### Outline
+
+[src/opendoc_model/outline.py](../../src/opendoc_model/outline.py#L101)
+
+Entries are stored independently of tuple order; roots have parent_id=None.
+
+### OutlineEntry
+
+[src/opendoc_model/outline.py](../../src/opendoc_model/outline.py#L80)
+
+Stable outline-local ID, plain title and explicit nonnegative sibling order.
+
+### OutlineTarget
+
+[src/opendoc_model/outline.py](../../src/opendoc_model/outline.py#L42)
+
+Anchor/page ID or inert external URI; page points are source coordinates in pt.
+
+Zoom is a positive ratio, not a percentage. Missing point/zoom means unknown.
+No URI, action, layout or destination is executed or resolved externally.
+
+### get_outline
+
+[src/opendoc_model/outline.py](../../src/opendoc_model/outline.py#L185)
+
+```python
+get_outline(document: DocumentModel, *, limits: DocumentLimits | None=None)
+```
+
+Read independent declarations and hierarchy; document validation checks targets.
+
+### remap_outline
+
+[src/opendoc_model/outline.py](../../src/opendoc_model/outline.py#L223)
+
+```python
+remap_outline(outline: Outline, *, entry_ids: dict[str, str] | None=None, anchor_ids: dict[str, str] | None=None, page_ids: dict[str, str] | None=None, limits: DocumentLimits | None=None)
+```
+
+Independently remap explicit IDs; missing map keys retain their IDs.
+
+This checks hierarchy and budgets, not destination existence in a document.
+It neither combines outlines nor modifies external URI or private extra fields.
+
+### set_outline
+
+[src/opendoc_model/outline.py](../../src/opendoc_model/outline.py#L194)
+
+```python
+set_outline(document: DocumentModel, outline: Outline | None, *, limits: DocumentLimits | None=None)
+```
+
+Validate and atomically replace declarations in the existing integration envelope.
 
 ### PageGeometry
 

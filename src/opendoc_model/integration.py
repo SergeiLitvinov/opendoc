@@ -148,6 +148,9 @@ def _validate_integration(model: IntegrationModel, document: DocumentModel, limi
     )
     for name in collections:
         registries[name] = _index(getattr(model, name), name)
+    from opendoc_model.outline import _validate_outline
+
+    _validate_outline(model, nodes, limits)
     ranges, bibliography = registries["ranges"], registries["bibliography"]
     for profile in model.profiles:
         _integer(profile.version, "profile.version", minimum=1)
@@ -617,6 +620,14 @@ def _integration_links(document: DocumentModel, limits: DocumentLimits) -> tuple
                     pending.append((item, location))
         elif isinstance(value, (tuple, list)):
             pending.extend((item, f"{path}[{index}]") for index, item in enumerate(value))
+    from opendoc_model.outline import _read_outline
+
+    outline = _read_outline(model, limits)
+    if outline is not None:
+        for index, entry in enumerate(outline.entries):
+            if entry.target is not None and entry.target.kind == "anchor":
+                assert entry.target.target_id is not None
+                result.append(("anchor", entry.target.target_id, f"outline.entries[{index}].target"))
     return tuple(result)
 
 
@@ -692,7 +703,13 @@ def _remap_integration(
             return [rewrite(item) for item in value]
         return value
 
-    document.metadata[INTEGRATION_PROPERTY]["data"] = _encode_integration(rewrite(model), limits)
+    from opendoc_model.outline import _read_outline, _with_outline, remap_outline
+
+    rewritten = rewrite(model)
+    outline = _read_outline(model, limits)
+    if outline is not None:
+        rewritten = _with_outline(rewritten, remap_outline(outline, anchor_ids=anchors, limits=limits), limits)
+    document.metadata[INTEGRATION_PROPERTY]["data"] = _encode_integration(rewritten, limits)
 
 
 __all__ = [

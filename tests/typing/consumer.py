@@ -24,6 +24,9 @@ from opendoc_model import (
     IntegrationModel,
     IssueSeverity,
     NodeLocation,
+    Outline,
+    OutlineEntry,
+    OutlineTarget,
     PageGeometry,
     Paragraph,
     ParagraphProperties,
@@ -48,6 +51,7 @@ from opendoc_model import (
     document_to_json,
     edit_anchored_text,
     get_integration,
+    get_outline,
     get_page_geometry,
     get_preferred_width,
     get_table_cell_semantics,
@@ -61,6 +65,7 @@ from opendoc_model import (
     preservation_result,
     set_anchor,
     set_integration,
+    set_outline,
     set_preferred_width,
     set_table_semantics,
     with_page_geometry,
@@ -70,6 +75,9 @@ from opendoc_model.text_flow import TextFlowData, TextFlowFingerprint
 
 
 def main() -> None:
+    navigation_document = DocumentModel()
+    set_outline(navigation_document, Outline((OutlineEntry("root", "", 0, target=OutlineTarget("external", uri="urn:test")),)))
+    assert_type(get_outline(navigation_document), Outline | None)
     geometry = PageGeometry(Rect2D(0, 0, 600, 800), rotation=90)
     page = with_page_geometry(DocumentPage("typed-page", 600, 800), geometry)
     assert_type(page, DocumentPage)
