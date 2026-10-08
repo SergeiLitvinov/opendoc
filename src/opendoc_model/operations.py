@@ -108,10 +108,15 @@ def _commit_edit(
     from opendoc_model.integration import _guard_integration_edit, _integration_edit_snapshot
 
     snapshot = _integration_edit_snapshot(root, limits) if isinstance(root, DocumentModel) else None
+    from opendoc_model.table_semantics import _has_table_semantics, _validate_tables
+
+    table_semantics = _has_table_semantics(root, limits) or any(_has_table_semantics(node, limits) for node in added)
     committed = False
     values[index : index + removed] = added
     try:
         _check_tree(root, limits)
+        if table_semantics:
+            _validate_tables(root, limits)
         if isinstance(root, DocumentModel):
             _guard_integration_edit(root, snapshot, limits)
         committed = True
@@ -270,6 +275,9 @@ def transform_elements(
     from opendoc_model.integration import _guard_integration_edit, _integration_edit_snapshot
 
     snapshot = _integration_edit_snapshot(root, budget) if isinstance(root, DocumentModel) else None
+    from opendoc_model.table_semantics import _has_table_semantics, _validate_tables
+
+    table_semantics = _has_table_semantics(root, budget)
     selected = list(iter_elements(result, types, limits=budget))
     if predicate is not None:
         selected = [reference for reference in selected if predicate(reference)]
@@ -292,6 +300,8 @@ def transform_elements(
         elif replacement is not reference.node:
             values[index] = _copy_for_slot(replacement, expected, budget)
     _check_tree(result, budget)
+    if table_semantics or _has_table_semantics(result, budget):
+        _validate_tables(result, budget)
     if isinstance(result, DocumentModel):
         _guard_integration_edit(result, snapshot, budget)
     return result

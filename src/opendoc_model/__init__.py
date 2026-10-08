@@ -464,6 +464,48 @@ from .semantics import set_heading as set_heading
 from .storage import ArtifactLimitError as ArtifactLimitError
 from .styles import effective_text_style as effective_text_style
 from .styles import resolve_style as resolve_style
+from .table_semantics import (
+    TABLE_CELL_SEMANTICS_PROPERTY as TABLE_CELL_SEMANTICS_PROPERTY,
+)
+from .table_semantics import (
+    TABLE_ROW_SEMANTICS_PROPERTY as TABLE_ROW_SEMANTICS_PROPERTY,
+)
+from .table_semantics import (
+    TABLE_SEMANTICS_PROPERTY as TABLE_SEMANTICS_PROPERTY,
+)
+from .table_semantics import (
+    TableCellSemantics as TableCellSemantics,
+)
+from .table_semantics import (
+    TableColumnGroup as TableColumnGroup,
+)
+from .table_semantics import (
+    TableRowGroup as TableRowGroup,
+)
+from .table_semantics import (
+    TableRowSemantics as TableRowSemantics,
+)
+from .table_semantics import (
+    TableSemantics as TableSemantics,
+)
+from .table_semantics import (
+    get_table_cell_semantics as get_table_cell_semantics,
+)
+from .table_semantics import (
+    get_table_row_semantics as get_table_row_semantics,
+)
+from .table_semantics import (
+    get_table_semantics as get_table_semantics,
+)
+from .table_semantics import (
+    set_table_cell_semantics as set_table_cell_semantics,
+)
+from .table_semantics import (
+    set_table_row_semantics as set_table_row_semantics,
+)
+from .table_semantics import (
+    set_table_semantics as set_table_semantics,
+)
 from .text_quality_policy import (
     TextPreservationPolicy as TextPreservationPolicy,
 )
@@ -511,6 +553,20 @@ from .widths import get_preferred_width as get_preferred_width
 from .widths import set_preferred_width as set_preferred_width
 
 __all__ = [
+    "TABLE_SEMANTICS_PROPERTY",
+    "TABLE_ROW_SEMANTICS_PROPERTY",
+    "TABLE_CELL_SEMANTICS_PROPERTY",
+    "TableSemantics",
+    "TableRowSemantics",
+    "TableCellSemantics",
+    "TableRowGroup",
+    "TableColumnGroup",
+    "get_table_semantics",
+    "set_table_semantics",
+    "get_table_row_semantics",
+    "set_table_row_semantics",
+    "get_table_cell_semantics",
+    "set_table_cell_semantics",
     "WidthMeasure",
     "get_preferred_width",
     "set_preferred_width",

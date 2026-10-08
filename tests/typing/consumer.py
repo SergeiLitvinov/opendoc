@@ -29,6 +29,10 @@ from opendoc_model import (
     Section,
     Table,
     TableCell,
+    TableCellSemantics,
+    TableRow,
+    TableRowSemantics,
+    TableSemantics,
     TextPosition,
     TextRange,
     TextRun,
@@ -41,6 +45,9 @@ from opendoc_model import (
     edit_anchored_text,
     get_integration,
     get_preferred_width,
+    get_table_cell_semantics,
+    get_table_row_semantics,
+    get_table_semantics,
     inspect_document_model,
     iter_elements,
     iter_footnotes,
@@ -49,6 +56,7 @@ from opendoc_model import (
     set_anchor,
     set_integration,
     set_preferred_width,
+    set_table_semantics,
 )
 from opendoc_model.object_matching import ObjectMatch, match_objects
 from opendoc_model.text_flow import TextFlowData, TextFlowFingerprint
@@ -56,6 +64,11 @@ from opendoc_model.text_flow import TextFlowData, TextFlowFingerprint
 
 def main() -> None:
     table, cell = Table(), TableCell()
+    set_table_semantics(table, TableSemantics())
+    assert_type(get_table_semantics(table), TableSemantics | None)
+    assert_type(get_table_cell_semantics(cell), TableCellSemantics | None)
+    assert_type(get_table_row_semantics(TableRow()), TableRowSemantics | None)
+    assert get_table_cell_semantics(cell) is None
     set_preferred_width(table, WidthMeasure("absolute", 480, "pt"))
     set_preferred_width(cell, WidthMeasure("relative", 0.1, "ratio", "table"))
     assert_type(get_preferred_width(cell), WidthMeasure | None)

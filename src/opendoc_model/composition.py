@@ -278,6 +278,9 @@ def _rewrite(document: DocumentModel, identifiers: DocumentIdMap, limits: Docume
     from opendoc_model.integration import _remap_integration
 
     _remap_integration(document, identifiers.anchors, identifiers.resources, limits)
+    from opendoc_model.table_semantics import _remap_tables
+
+    _remap_tables(document, identifiers.anchors, limits)
 
 
 def merge_documents(
@@ -470,6 +473,9 @@ def _owner(location: NodeLocation[ModelNode]) -> tuple[str, str | int]:
 
 
 def _semantic_links(root: ModelNode, limits: DocumentLimits) -> Iterator[tuple[str, str]]:
+    from opendoc_model.table_semantics import _table_links
+
+    yield from (("anchor", key) for key in _table_links(root, limits))
     if isinstance(root, DocumentModel):
         from opendoc_model.integration import _integration_links
 
@@ -502,9 +508,20 @@ def _anchor_dependencies(
         anchor = get_anchor(reference.node, limits=limits)
         assert anchor is not None
         targets[anchor.id] = _owner(reference)
+    from opendoc_model.table_semantics import get_table_semantics
+
+    caption_owners: dict[str, str] = {}
+    for table_location in _walk_locations(source, limits):
+        if isinstance(table_location.node, Table):
+            record = get_table_semantics(table_location.node, limits=limits)
+            if record is not None and record.caption_ids:
+                owner_anchor = get_anchor(table_location.node, limits=limits)
+                assert owner_anchor is not None
+                caption_owners.update({key: owner_anchor.id for key in record.caption_ids})
     available = set(_anchor_ids(selected, limits))
     available_notes = {note.id for note in selected.footnotes}
     pending = deque(_semantic_links(selected, limits))
+    pending.extend(("anchor", caption_owners[key]) for key in available if key in caption_owners)
     expanded: set[tuple[str, str | int]] = set()
     while pending:
         kind, identifier = pending.popleft()
@@ -518,7 +535,9 @@ def _anchor_dependencies(
         containers[target] = container
         if isinstance(container, Footnote):
             available_notes.add(container.id)
-        available.update(_anchor_ids(container, limits))
+        added_anchors = _anchor_ids(container, limits)
+        available.update(added_anchors)
+        pending.extend(("anchor", caption_owners[key]) for key in added_anchors if key in caption_owners)
         pending.extend(_semantic_links(container, limits))
     selected.sections = [
         cast(Section, containers[("section", index)]) for index in range(len(source.sections)) if ("section", index) in containers

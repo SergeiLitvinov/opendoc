@@ -45,6 +45,7 @@ nav:
       - Копирование и изменения: docs/guide/operations.md
       - Объединение и извлечение: docs/guide/composition.md
       - Свойства и стили: docs/guide/styles.md
+      - Семантика таблиц: docs/guide/table-semantics.md
       - Ресурсы и переносимость: docs/guide/resources.md
       - Проверка в памяти: docs/guide/checks.md
       - Семантические заголовки: docs/guide/headings.md

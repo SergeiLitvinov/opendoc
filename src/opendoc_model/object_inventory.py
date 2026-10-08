@@ -126,6 +126,7 @@ def _object_entry(
         if item is None or item.kind == "unordered":
             semantic_data["list_number"] = None
     if isinstance(value, Table):
+        from opendoc_model.table_semantics import _table_snapshot
         from opendoc_model.widths import get_preferred_width
 
         def preference(node: Table | TableCell) -> dict[str, Any] | None:
@@ -141,6 +142,7 @@ def _object_entry(
             "table": preference(value),
             "cells": [[preference(cell) for cell in row.cells] for row in value.rows],
         }
+        semantic_data["table_semantics"] = _table_snapshot(value)
     return {
         **semantic_data,
         **formula_data,

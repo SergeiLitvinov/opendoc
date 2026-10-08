@@ -296,6 +296,9 @@ def _compare_objects(
         if before.get("type") == "table" and "preferred_widths" in before and "preferred_widths" in after:
             if before["preferred_widths"] != after["preferred_widths"]:
                 changes.append("preferred_widths")
+        if before.get("type") == "table" and "table_semantics" in before and "table_semantics" in after:
+            if before["table_semantics"] != after["table_semantics"]:
+                changes.append("table_semantics")
         if headings_available and before.get("type") == "paragraph" and before["heading"] != after["heading"]:
             changes.append("heading")
         if lists_available and before.get("type") == "paragraph":
@@ -346,6 +349,17 @@ def _compare_objects(
         for item in lost
     ]
     for item in changed:
+        if "table_semantics" in item["changes"]:
+            source_semantics, target_semantics = item["source"]["table_semantics"], item["target"]["table_semantics"]
+            removed = _table_semantics_removed(source_semantics, target_semantics)
+            issues.append(
+                ConversionIssue(
+                    IssueSeverity.LOSS if removed else IssueSeverity.WARNING,
+                    "table-semantics-loss" if removed else "table-semantics-change",
+                    "Table semantic declaration removed" if removed else "Table semantic declaration changed",
+                    item["source"]["location"],
+                )
+            )
         if "preferred_widths" in item["changes"]:
             before_widths, after_widths = item["source"]["preferred_widths"], item["target"]["preferred_widths"]
             removed = before_widths["table"] is not None and after_widths["table"] is None
@@ -422,6 +436,37 @@ def _compare_objects(
             "ambiguous": sum(item["ambiguous"] for item in matches),
         },
     }, issues
+
+
+def _table_semantics_removed(source: dict[str, Any], target: dict[str, Any]) -> bool:
+    before, after = source["table"], target["table"]
+    if before is not None:
+        if after is None or not set(before["caption_ids"]) <= set(after["caption_ids"]):
+            return True
+        for name in ("row_groups", "column_groups"):
+            if not {value["id"] for value in before[name]} <= {value["id"] for value in after[name]}:
+                return True
+    target_rows = {row["record"]["id"]: row["record"] for row in target["rows"] if row["record"] is not None}
+    target_cells = {cell["id"]: cell for row in target["rows"] for cell in row["cells"] if cell is not None}
+    for row in source["rows"]:
+        record = row["record"]
+        if record is not None:
+            next_row = target_rows.get(record["id"])
+            if next_row is None or record["group_id"] is not None and next_row["group_id"] is None:
+                return True
+        for cell in row["cells"]:
+            if cell is None:
+                continue
+            next_cell = target_cells.get(cell["id"])
+            if next_cell is None:
+                return True
+            if cell["role"] == "header" and next_cell["role"] != "header":
+                return True
+            if cell["scope"] is not None and next_cell["scope"] is None:
+                return True
+            if not set(cell["headers"]) <= set(next_cell["headers"]):
+                return True
+    return False
 
 
 def _compare_page_geometry(

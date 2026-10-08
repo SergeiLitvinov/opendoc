@@ -616,6 +616,15 @@ def _validate_model(
                 measurement={"identifier": identifier},
             )
     if not validator.errors:
+        from opendoc_model.table_semantics import _validate_tables
+
+        try:
+            _validate_tables(document, validator.limits)
+        except ArtifactLimitError:
+            raise
+        except ValueError as error:
+            validator.capture(error, "table semantics")
+    if not validator.errors:
         from opendoc_model.integration import _integration_issue
 
         issue = _integration_issue(document, validator.limits)

@@ -144,6 +144,12 @@ def _comparison_issue(issue: ConversionIssue, comparison: DocumentComparison) ->
         )
         if change is not None:
             measurement = {"source": change["source"].get("preferred_widths"), "target": change["target"].get("preferred_widths")}
+    elif issue.feature.startswith("table-semantics-"):
+        change = next(
+            (item for item in comparison.object_diff.get("changed", []) if item["source"].get("location") == issue.location), None
+        )
+        if change is not None:
+            measurement = {"source": change["source"].get("table_semantics"), "target": change["target"].get("table_semantics")}
     return DiagnosticIssue(issue.feature, issue.severity, issue.message, issue.location, deepcopy(measurement), reason)
 
 
