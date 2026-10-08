@@ -8,6 +8,8 @@ from collections.abc import Iterator, Mapping, MutableMapping
 from copy import deepcopy
 from typing import TYPE_CHECKING, Any, ClassVar, TypedDict, cast
 
+from opendoc_model.widths import WidthMeasure, _read_width
+
 if TYPE_CHECKING:
     from opendoc_model.limits import DocumentLimits
 
@@ -71,7 +73,15 @@ class VersionedProperties(MutableMapping[str, Any]):
 
     def set_typed(self, key: str, value: Any, *, limits: DocumentLimits | None = None) -> None:
         """Normalize a known field before assignment; failure leaves it intact."""
-        self[key] = _typed_value(self, key, value, limits)
+        normalized = _typed_value(self, key, value, limits)
+        if isinstance(normalized, WidthMeasure):
+            normalized = normalized.to_dict(limits=limits)
+        self[key] = normalized
+        if isinstance(self, TableCellProperties):
+            if key == "preferred_width":
+                self.pop("width_twips", None)
+            elif key == "width_twips":
+                self.pop("preferred_width", None)
 
 
 class SectionProperties(VersionedProperties):
@@ -292,6 +302,10 @@ class TableProperties(VersionedProperties):
     schema_name = "opendoc.table-properties"
 
     @property
+    def preferred_width(self) -> WidthMeasure | None:
+        return _read_width(self.get("preferred_width"), "content")
+
+    @property
     def style_name(self) -> str | None:
         return _optional_str(self.get("style_name"))
 
@@ -319,6 +333,10 @@ class TableRowProperties(VersionedProperties):
 
 class TableCellProperties(VersionedProperties):
     schema_name = "opendoc.table-cell-properties"
+
+    @property
+    def preferred_width(self) -> WidthMeasure | None:
+        return _read_width(self.get("preferred_width"), "table")
 
     @property
     def fill(self) -> str | None:
@@ -399,6 +417,8 @@ def _typed_value(bag: VersionedProperties, key: str, value: Any, limits: Documen
     path = f"{bag.schema_name}.{key}"
     if kind is None:
         raise ValueError(f"{path}: unknown typed field")
+    if kind == "WidthMeasure":
+        return _read_width(value, "table" if isinstance(bag, TableCellProperties) else "content", limits)
     _json_tree(value, path, _resolve_limits(limits))
     if value is None:
         return None

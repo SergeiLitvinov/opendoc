@@ -5,7 +5,7 @@ from collections.abc import Iterator
 from dataclasses import asdict
 from typing import Any
 
-from opendoc_model.document_model import Footnote, Formula, Image, Paragraph, Resource, Table, TextRun
+from opendoc_model.document_model import Footnote, Formula, Image, Paragraph, Resource, Table, TableCell, TextRun
 from opendoc_model.emphasis_quality import EmphasisInventory
 from opendoc_model.lists import LIST_PROPERTY, _list_payload
 from opendoc_model.semantics import HEADING_PROPERTY, _heading_payload
@@ -125,6 +125,22 @@ def _object_entry(
         semantic_data["list_item"] = asdict(item) if item is not None else None
         if item is None or item.kind == "unordered":
             semantic_data["list_number"] = None
+    if isinstance(value, Table):
+        from opendoc_model.widths import get_preferred_width
+
+        def preference(node: Table | TableCell) -> dict[str, Any] | None:
+            try:
+                measure = get_preferred_width(node)
+            except ValueError:
+                # Malformed legacy fields were historically opaque. They do
+                # not become a fabricated known measure in the inventory.
+                return None
+            return measure.to_dict() if measure is not None else None
+
+        semantic_data["preferred_widths"] = {
+            "table": preference(value),
+            "cells": [[preference(cell) for cell in row.cells] for row in value.rows],
+        }
     return {
         **semantic_data,
         **formula_data,

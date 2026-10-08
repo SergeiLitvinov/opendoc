@@ -506,8 +506,14 @@ from .traversal import (
 from .traversal import (
     walk_model as walk_model,
 )
+from .widths import WidthMeasure as WidthMeasure
+from .widths import get_preferred_width as get_preferred_width
+from .widths import set_preferred_width as set_preferred_width
 
 __all__ = [
+    "WidthMeasure",
+    "get_preferred_width",
+    "set_preferred_width",
     "Accessibility",
     "AffineTransform",
     "Annotation",

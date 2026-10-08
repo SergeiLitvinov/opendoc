@@ -293,6 +293,9 @@ def _compare_objects(
     for match in matches:
         before, after = match["source"], match["target"]
         changes = [name for name in ("content_hash", "geometry", "style_id", "location") if before.get(name) != after.get(name)]
+        if before.get("type") == "table" and "preferred_widths" in before and "preferred_widths" in after:
+            if before["preferred_widths"] != after["preferred_widths"]:
+                changes.append("preferred_widths")
         if headings_available and before.get("type") == "paragraph" and before["heading"] != after["heading"]:
             changes.append("heading")
         if lists_available and before.get("type") == "paragraph":
@@ -342,6 +345,27 @@ def _compare_objects(
         )
         for item in lost
     ]
+    for item in changed:
+        if "preferred_widths" in item["changes"]:
+            before_widths, after_widths = item["source"]["preferred_widths"], item["target"]["preferred_widths"]
+            removed = before_widths["table"] is not None and after_widths["table"] is None
+            for row_index, row in enumerate(before_widths["cells"]):
+                for column_index, width in enumerate(row):
+                    target_rows = after_widths["cells"]
+                    if width is not None and (
+                        row_index >= len(target_rows)
+                        or column_index >= len(target_rows[row_index])
+                        or target_rows[row_index][column_index] is None
+                    ):
+                        removed = True
+            issues.append(
+                ConversionIssue(
+                    IssueSeverity.LOSS if removed else IssueSeverity.WARNING,
+                    "table-width-loss" if removed else "table-width-change",
+                    "Preferred table/cell width removed" if removed else "Preferred table/cell width changed",
+                    item["source"]["location"],
+                )
+            )
     if headings_available:
         for item in changed:
             if "heading" in item["changes"] and item["source"].get("heading") is not None:

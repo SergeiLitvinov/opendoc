@@ -27,9 +27,12 @@ from opendoc_model import (
     ParagraphProperties,
     PreservationState,
     Section,
+    Table,
+    TableCell,
     TextPosition,
     TextRange,
     TextRun,
+    WidthMeasure,
     check_document,
     clone_model,
     compare_inspections,
@@ -37,6 +40,7 @@ from opendoc_model import (
     document_to_json,
     edit_anchored_text,
     get_integration,
+    get_preferred_width,
     inspect_document_model,
     iter_elements,
     iter_footnotes,
@@ -44,12 +48,20 @@ from opendoc_model import (
     preservation_result,
     set_anchor,
     set_integration,
+    set_preferred_width,
 )
 from opendoc_model.object_matching import ObjectMatch, match_objects
 from opendoc_model.text_flow import TextFlowData, TextFlowFingerprint
 
 
 def main() -> None:
+    table, cell = Table(), TableCell()
+    set_preferred_width(table, WidthMeasure("absolute", 480, "pt"))
+    set_preferred_width(cell, WidthMeasure("relative", 0.1, "ratio", "table"))
+    assert_type(get_preferred_width(cell), WidthMeasure | None)
+    assert_type(table.properties.preferred_width, WidthMeasure | None)
+    assert_type(cell.properties.preferred_width, WidthMeasure | None)
+    assert get_preferred_width(cell) == WidthMeasure("relative", 0.1, "ratio", "table")
     paragraph = Paragraph([TextRun("Typed consumer")], properties=ParagraphProperties({"custom": {"revision": 3}}))
     document = DocumentModel(sections=[Section(blocks=[paragraph])], footnotes=[Footnote("note")])
     assert_type(clone_model(document), DocumentModel)

@@ -21,11 +21,11 @@ OpenDoc Model — библиотека структур документов д�
 
 Для разработки выполните `uv sync --all-extras --locked`. Для установки скачайте wheel из GitHub Releases
 или соберите `uv build --out-dir .opendoc/release-dist`, затем установите его через
-`uv pip install путь/к/opendoc_model-0.3.1-py3-none-any.whl`. На PyPI пакет пока не опубликован.
+`uv pip install путь/к/opendoc_model-0.4.0-py3-none-any.whl`. На PyPI пакет пока не опубликован.
 Импорт — `opendoc_model`, имя дистрибутива — `opendoc-model`.
 
 Основная библиотека использует стандартную библиотеку Python. Для XML-формул
-добавьте extra: `uv pip install "путь/к/opendoc_model-0.3.1-py3-none-any.whl[math]"`.
+добавьте extra: `uv pip install "путь/к/opendoc_model-0.4.0-py3-none-any.whl[math]"`.
 Без него XML-проверка недоступна; строгий лимит не считает отсутствие измерения успехом.
 [Полный состав и лицензии](../development/dependencies.md) описывают границы optional-компонентов.
 

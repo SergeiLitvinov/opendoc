@@ -8,7 +8,7 @@
 |---|---|---|
 | `CheckPolicy` | `opendoc_model.checks` | [src/opendoc_model/checks.py](../../src/opendoc_model/checks.py) |
 | `check_document` | `opendoc_model.checks` | [src/opendoc_model/checks.py](../../src/opendoc_model/checks.py#L40) |
-| `compare_documents` | `opendoc_model.checks` | [src/opendoc_model/checks.py](../../src/opendoc_model/checks.py#L144) |
+| `compare_documents` | `opendoc_model.checks` | [src/opendoc_model/checks.py](../../src/opendoc_model/checks.py#L150) |
 | `ColorSpace` | `opendoc_model.color` | [src/opendoc_model/color.py](../../src/opendoc_model/color.py#L22) |
 | `ColorValue` | `opendoc_model.color` | [src/opendoc_model/color.py](../../src/opendoc_model/color.py#L28) |
 | `DocumentIdMap` | `opendoc_model.composition` | [src/opendoc_model/composition.py](../../src/opendoc_model/composition.py#L55) |
@@ -97,7 +97,7 @@
 | `DocumentComparison` | `opendoc_model.inspection` | [src/opendoc_model/inspection.py](../../src/opendoc_model/inspection.py#L95) |
 | `DocumentInspection` | `opendoc_model.inspection` | [src/opendoc_model/inspection.py](../../src/opendoc_model/inspection.py#L45) |
 | `compare_inspections` | `opendoc_model.inspection` | [src/opendoc_model/inspection.py](../../src/opendoc_model/inspection.py#L142) |
-| `inspect_document_model` | `opendoc_model.inspection` | [src/opendoc_model/inspection.py](../../src/opendoc_model/inspection.py#L741) |
+| `inspect_document_model` | `opendoc_model.inspection` | [src/opendoc_model/inspection.py](../../src/opendoc_model/inspection.py#L765) |
 | `INTEGRATION_PROPERTY` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py) |
 | `INTEGRATION_VERSION` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py) |
 | `edit_anchored_text` | `opendoc_model.integration` | [src/opendoc_model/integration.py](../../src/opendoc_model/integration.py#L531) |
@@ -212,6 +212,9 @@
 | `iter_resource_references` | `opendoc_model.traversal` | [src/opendoc_model/traversal.py](../../src/opendoc_model/traversal.py#L253) |
 | `iter_sections` | `opendoc_model.traversal` | [src/opendoc_model/traversal.py](../../src/opendoc_model/traversal.py#L193) |
 | `walk_model` | `opendoc_model.traversal` | [src/opendoc_model/traversal.py](../../src/opendoc_model/traversal.py#L178) |
+| `WidthMeasure` | `opendoc_model.widths` | [src/opendoc_model/widths.py](../../src/opendoc_model/widths.py#L17) |
+| `get_preferred_width` | `opendoc_model.widths` | [src/opendoc_model/widths.py](../../src/opendoc_model/widths.py#L100) |
+| `set_preferred_width` | `opendoc_model.widths` | [src/opendoc_model/widths.py](../../src/opendoc_model/widths.py#L128) |
 
 ## Объявления
 
@@ -231,7 +234,7 @@ and hashes. DocumentLimits exhaustion continues to raise ArtifactLimitError.
 
 ### compare_documents
 
-[src/opendoc_model/checks.py](../../src/opendoc_model/checks.py#L144)
+[src/opendoc_model/checks.py](../../src/opendoc_model/checks.py#L150)
 
 ```python
 compare_documents(source: DocumentModel, target: DocumentModel, *, policies: Iterable[CheckPolicy] | None=None, limits: DocumentLimits | None=None, extensions: Iterable[ExtensionSchema] | None=None, unknown_extensions: UnknownExtensionPolicy='error', matching_limits: MatchingLimits | None=None)
@@ -708,7 +711,7 @@ compare_inspections(source: DocumentInspection, target: DocumentInspection, *, m
 
 ### inspect_document_model
 
-[src/opendoc_model/inspection.py](../../src/opendoc_model/inspection.py#L741)
+[src/opendoc_model/inspection.py](../../src/opendoc_model/inspection.py#L765)
 
 ```python
 inspect_document_model(document: DocumentModel, *, source_path: str | Path | None=None, source_format: str | None=None, limits: DocumentLimits | None=None, check_external_sources: bool=True)
@@ -1471,4 +1474,39 @@ The root path is empty, children use field names and list indices. Scalar
 edits are allowed during iteration; structural edits require a fresh walk.
 Shape violations raise ValueError, budget exhaustion ArtifactLimitError.
 This is a structural walk, not semantic validation of fields or references.
+
+### WidthMeasure
+
+[src/opendoc_model/widths.py](../../src/opendoc_model/widths.py#L17)
+
+Preferred width in points or a ratio of an explicitly named containing area.
+
+Ratios above one are allowed (overflow is a layout decision). Auto and
+unspecified carry no number. Unknown JSON fields are retained in extra.
+
+### get_preferred_width
+
+[src/opendoc_model/widths.py](../../src/opendoc_model/widths.py#L100)
+
+```python
+get_preferred_width(node: Table | TableCell, *, limits: DocumentLimits | None=None)
+```
+
+Read an independent preference, falling back to legacy cell width_twips.
+
+Inconsistent duplicate legacy values fail. Missing means unknown preference,
+distinct from an explicit unspecified or zero; actual width is not measured.
+
+### set_preferred_width
+
+[src/opendoc_model/widths.py](../../src/opendoc_model/widths.py#L128)
+
+```python
+set_preferred_width(node: Table | TableCell, width: WidthMeasure | None, *, limits: DocumentLimits | None=None)
+```
+
+Set a validated preference atomically; cell legacy duplicate is removed.
+
+None removes both cell width declarations; unrelated native extensions and
+grid widths are preserved without interpretation.
 

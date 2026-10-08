@@ -138,6 +138,12 @@ def _comparison_issue(issue: ConversionIssue, comparison: DocumentComparison) ->
                 measurement.update(
                     source_number=change["source"].get("list_number"), target_number=change["target"].get("list_number")
                 )
+    elif issue.feature.startswith("table-width-"):
+        change = next(
+            (item for item in comparison.object_diff.get("changed", []) if item["source"].get("location") == issue.location), None
+        )
+        if change is not None:
+            measurement = {"source": change["source"].get("preferred_widths"), "target": change["target"].get("preferred_widths")}
     return DiagnosticIssue(issue.feature, issue.severity, issue.message, issue.location, deepcopy(measurement), reason)
 
 

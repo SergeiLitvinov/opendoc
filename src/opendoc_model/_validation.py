@@ -297,6 +297,8 @@ class _Validator:
 
     def element(self, value: Any, path: str) -> None:
         properties = self.properties(value.properties, f"{path}.properties")
+        if isinstance(value, Table):
+            self.preferred_width(value, path)
         for key in (ANCHOR_PROPERTY, INTERNAL_LINK_PROPERTY):
             if key == INTERNAL_LINK_PROPERTY and not isinstance(value, TextRun):
                 continue
@@ -418,6 +420,20 @@ class _Validator:
             if type(item) is not int or item < 1:
                 self.error(f"{path}.{name}", "span must be a positive integer")
         self.properties(value.properties, f"{path}.properties")
+        self.preferred_width(value, path)
+
+    def preferred_width(self, value: Table | TableCell, path: str) -> None:
+        from opendoc_model.widths import get_preferred_width
+
+        # Old bags retain their existing permissive semantics until a new
+        # preference is explicitly present.
+        if isinstance(value.properties, (dict, VersionedProperties)) and value.properties.get("preferred_width") is not None:
+            try:
+                get_preferred_width(value, limits=self.limits)
+            except ArtifactLimitError:
+                raise
+            except ValueError as error:
+                self.error(f"{path}.properties.preferred_width", str(error), code="model.width.invalid")
 
     def resource(self, value: Resource, path: str) -> None:
         self.string(value.id, f"{path}.id", nonempty=True)
